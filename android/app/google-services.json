@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "640930139288",
+    "project_id": "sandc-e01dd",
+    "storage_bucket": "sandc-e01dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640930139288:android:3fe658737be65197e314ed",
+        "android_client_info": {
+          "package_name": "com.sandc.sandc_pos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "640930139288-slcbb7t5f3rkgisjnnutltmvn31vehcr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3441AwoaXUbn0Mtim3Hohh5CqVDy68hQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "640930139288-slcbb7t5f3rkgisjnnutltmvn31vehcr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

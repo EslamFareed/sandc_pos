@@ -5,8 +5,8 @@ import 'package:sandc_pos/core/components/app_language.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/core/style/text/app_text_style.dart';
 import 'package:sandc_pos/layouts/main_screen.dart';
+import 'package:sandc_pos/modules/about/contact_us.dart';
 
-import '../../core/components/default_buttons.dart';
 import 'forget_password.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -19,7 +19,7 @@ class LoginScreen extends StatelessWidget {
   _buildBody(BuildContext context) {
     return Container(
         width: Get.width.w,
-        height: Get.height.h,
+        height: Get.height,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/background_splash.jpg"),
@@ -41,7 +41,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   width: Get.width * 0.7,
-                  height: Get.height * 0.5,
+                  height: Get.height * 0.6,
                   child: Card(
                     color: AppColors.whitBackGroundColor,
                     shape: RoundedRectangleBorder(
@@ -125,8 +125,10 @@ class LoginScreen extends StatelessWidget {
                               SizedBox(width: 5.w),
                               GestureDetector(
                                 onTap: () {
-                                  Get.to(const ForgetPasswordScreen(),
-                                      transition: Transition.zoom);
+                                  Get.to(
+                                    ContactUsScreen(),
+                                    transition: Transition.zoom,
+                                  );
                                 },
                                 child: const Text(
                                   "Contact us",

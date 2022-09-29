@@ -5,11 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
+import 'package:sandc_pos/modules/about/about_us.dart';
+import 'package:sandc_pos/modules/about/contact_us.dart';
 
 import '../core/components/build_popup.dart';
 import '../core/components/default_buttons.dart';
 import '../core/style/text/app_text_style.dart';
 import '../core/utils/navigation_utility.dart';
+import '../modules/about/contact_with_admin_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -174,17 +177,28 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     SizedBox(height: 10.h),
                     ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(
+                            ContactWithAdminScreen(
+                              userID: '1',
+                            ),
+                            transition: Transition.zoom);
+                      },
                       title: const Text("Chat With Admin"),
                       trailing: const Icon(Icons.chat),
                     ),
                     ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(const AboutScreen(),
+                            transition: Transition.zoom);
+                      },
                       title: const Text("More Information"),
                       trailing: const Icon(Icons.info),
                     ),
                     ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(ContactUsScreen(), transition: Transition.zoom);
+                      },
                       title: const Text("Contact with us"),
                       trailing: const Icon(Icons.contact_support),
                     ),
@@ -193,7 +207,7 @@ class _MainScreenState extends State<MainScreen> {
                 Container(
                   margin: EdgeInsets.only(bottom: 10.h),
                   child: Card(
-                    color: const Color.fromARGB(255, 215, 215, 215) ,
+                    color: const Color.fromARGB(255, 215, 215, 215),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0.r),
                     ),

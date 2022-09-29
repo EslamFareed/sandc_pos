@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:sandc_pos/cubits/chat_cubit/chat_cubit.dart';
 
 import '../../core/style/dark/dark.dart';
 import '../core/style/light/light.dart';
@@ -20,6 +21,7 @@ class AppRoot extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (BuildContext context) => MainCubit()),
+        BlocProvider(create: (BuildContext context) => ChatCubit()),
       ],
       child: BlocConsumer<MainCubit, MainStates>(
         listener: (context, state) {},
