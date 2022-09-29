@@ -13,6 +13,7 @@ import '../core/components/default_buttons.dart';
 import '../core/style/text/app_text_style.dart';
 import '../core/utils/navigation_utility.dart';
 import '../modules/about/contact_with_admin_screen.dart';
+import '../modules/sales/sales.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -82,7 +83,7 @@ class _MainScreenState extends State<MainScreen> {
       "title": "Sales",
       "image": "assets/images/logo.jpg",
       "onTap": () {
-        print("sales");
+        Get.to(SalesScreen(), transition: Transition.zoom);
       }
     },
     {"title": "Customers", "image": "assets/images/logo.jpg", "onTap": () {}},
