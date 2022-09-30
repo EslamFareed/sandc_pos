@@ -10,7 +10,8 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(""),
+        title: Text("About us"),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -23,7 +24,9 @@ class AboutScreen extends StatelessWidget {
             SizedBox(
               height: 35.0.h,
             ),
-            buildServiceItem(context, "", "", "", 1)
+            buildServiceItem(context, "", "name", "content", 1),
+            buildServiceItem(context, "", "name", "content", 2),
+            buildServiceItem(context, "", "name", "content", 3),
           ],
         ),
       ),
@@ -37,28 +40,30 @@ class AboutScreen extends StatelessWidget {
     String serviceContent,
     int index,
   ) =>
-      Stack(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(
-              20.0,
-            ),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                15.0,
-              ),
-              color: AppColors.primaryColor,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [],
-                ),
-              ],
-            ),
+      Container(
+        padding: const EdgeInsets.all(
+          20.0,
+        ),
+        margin: const EdgeInsets.all(10),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(
+            15.0,
           ),
-        ],
+          color: AppColors.primaryColor,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              serviceName,
+              style: TextStyle(color: Colors.white),
+            ),
+            Text(
+              serviceContent,
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
       );
 }

@@ -23,16 +23,10 @@ class _ContactWithAdminScreenState extends State<ContactWithAdminScreen> {
   final TextEditingController messageController = TextEditingController();
 
   @override
-  void initState() {
-    ChatCubit.get(context)
-        .getMessages(senderId: widget.userID, receiverId: 'admin');
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
+      ChatCubit.get(context)
+          .getMessages(senderId: widget.userID, receiverId: 'admin');
       return BlocConsumer<ChatCubit, ChatState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -41,7 +35,7 @@ class _ContactWithAdminScreenState extends State<ContactWithAdminScreen> {
             appBar: AppBar(
               title: Text(
                 "Contact with admin",
-                style: AppTextStyle.appBarText(),
+                style: AppTextStyle.appBarText().copyWith(color: Colors.white),
               ),
               centerTitle: true,
             ),

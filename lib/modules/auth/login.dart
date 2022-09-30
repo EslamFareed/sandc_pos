@@ -18,7 +18,7 @@ class LoginScreen extends StatelessWidget {
 
   _buildBody(BuildContext context) {
     return Container(
-        width: Get.width.w,
+        width: Get.width,
         height: Get.height,
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -29,7 +29,7 @@ class LoginScreen extends StatelessWidget {
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: SizedBox(
-            width: Get.width.w,
+            width: Get.width,
             height: Get.height,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
