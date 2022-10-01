@@ -18,7 +18,7 @@ class ContactUsScreen extends StatelessWidget {
         child: Column(
           children: [
             Image.asset(
-              "assets/images/logo.jpg",
+              "assets/images/logo.png",
               width: MediaQuery.of(context).size.width / 2,
             ),
             SizedBox(

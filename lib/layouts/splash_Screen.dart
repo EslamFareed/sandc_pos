@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Image.asset(
-              "assets/images/logo.jpg",
+              "assets/images/logo.png",
               width: 300.w,
               height: 200.h,
             ),

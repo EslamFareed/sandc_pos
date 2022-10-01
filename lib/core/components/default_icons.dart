@@ -9,7 +9,7 @@ class LogoIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return const ImageIcon(
       AssetImage(
-        "assets/images/logo.jpg",
+        "assets/images/logo.png",
       ),
       size: 130,
     );

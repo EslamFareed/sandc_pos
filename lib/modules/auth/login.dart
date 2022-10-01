@@ -35,7 +35,7 @@ class LoginScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Image.asset(
-                  "assets/images/logo.jpg",
+                  "assets/images/logo.png",
                   width: Get.width * 0.5,
                   height: Get.height * 0.15,
                 ),

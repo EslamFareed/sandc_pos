@@ -19,7 +19,7 @@ class AboutScreen extends StatelessWidget {
         child: Column(
           children: [
             Image.asset(
-              "assets/images/logo.jpg",
+              "assets/images/logo.png",
             ),
             SizedBox(
               height: 35.0.h,

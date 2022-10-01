@@ -7,6 +7,7 @@ import 'package:responsive_grid/responsive_grid.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/modules/about/about_us.dart';
 import 'package:sandc_pos/modules/about/contact_us.dart';
+import 'package:sandc_pos/modules/customers/customers_home.dart';
 
 import '../core/components/build_popup.dart';
 import '../core/components/default_buttons.dart';
@@ -30,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
         "Want To Exit",
         style: AppTextStyle.bodyText(),
       ),
-      title: Image.asset("assets/images/logo.jpg"),
+      title: Image.asset("assets/images/logo.png"),
       actions: [
         DefaultButton(
           onPress: () {
@@ -81,20 +82,26 @@ class _MainScreenState extends State<MainScreen> {
   List<Map<String, dynamic>> items = [
     {
       "title": "Sales",
-      "image": "assets/images/logo.jpg",
+      "image": "assets/images/logo.png",
       "onTap": () {
-        Get.to(SalesScreen(), transition: Transition.zoom);
+        Get.to(const SalesScreen(), transition: Transition.zoom);
       }
     },
-    {"title": "Customers", "image": "assets/images/logo.jpg", "onTap": () {}},
-    {"title": "Stock", "image": "assets/images/logo.jpg", "onTap": () {}},
-    {"title": "Reports", "image": "assets/images/logo.jpg", "onTap": () {}},
+    {
+      "title": "Customers",
+      "image": "assets/images/logo.png",
+      "onTap": () {
+        Get.to(const CustomersHome(), transition: Transition.zoom);
+      }
+    },
+    {"title": "Stock", "image": "assets/images/logo.png", "onTap": () {}},
+    {"title": "Reports", "image": "assets/images/logo.png", "onTap": () {}},
     {
       "title": "Sales Returns",
-      "image": "assets/images/logo.jpg",
+      "image": "assets/images/logo.png",
       "onTap": () {}
     },
-    {"title": "Settings", "image": "assets/images/logo.jpg", "onTap": () {}},
+    {"title": "Settings", "image": "assets/images/logo.png", "onTap": () {}},
   ];
 
   _buildItemCard(String image, String title, void Function() onTap) {
@@ -127,12 +134,14 @@ class _MainScreenState extends State<MainScreen> {
 
   _buildAppBar() {
     return AppBar(
+      elevation: 8,
+      backgroundColor: AppColors.whitBackGroundColor,
       title: Image.asset(
-        "assets/images/logo.jpg",
+        "assets/images/logo.png",
         width: 50.w,
-        fit: BoxFit.fill,
       ),
       centerTitle: true,
+      iconTheme: IconThemeData(color: AppColors.primaryColor),
     );
   }
 
@@ -146,7 +155,7 @@ class _MainScreenState extends State<MainScreen> {
               width: Get.width,
               child: Center(
                 child: Image.asset(
-                  "assets/images/logo.jpg",
+                  "assets/images/logo.png",
                   height: 100.h,
                 ),
               )),

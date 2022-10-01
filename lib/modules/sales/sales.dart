@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
+import 'package:sandc_pos/layouts/main_screen.dart';
 import 'package:sandc_pos/modules/sales/print_screen.dart';
 import 'package:sandc_pos/modules/sales/scan_code.dart';
 import 'package:sandc_pos/modules/sales/search_products.dart';
 
+import '../../core/components/build_popup.dart';
+import '../../core/components/default_buttons.dart';
+import '../../core/style/text/app_text_style.dart';
+import '../../core/utils/navigation_utility.dart';
 import 'table.dart';
 
 class SalesScreen extends StatelessWidget {
@@ -27,11 +34,41 @@ class SalesScreen extends StatelessWidget {
     );
   }
 
+  _onWillPop(BuildContext context) {
+    return buildPopUpMessage(
+      context: context,
+      content: Text(
+        "Want To Exit",
+        style: AppTextStyle.bodyText(),
+      ),
+      title: Image.asset("assets/images/logo.png"),
+      actions: [
+        DefaultButton(
+          onPress: () {
+            Get.offAll(const MainScreen(), transition: Transition.zoom);
+          },
+          buttonText: "yes",
+          buttonWidth: 70.w,
+          buttonHeight: 30.h,
+        ),
+        DefaultButton(
+          onPress: () {
+            Get.back();
+          },
+          buttonText: "No",
+          buttonWidth: 70.w,
+          buttonHeight: 30.h,
+        ),
+      ],
+    ) as Future<bool>;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: _buildBody(),
+      body: WillPopScope(
+          child: _buildBody(), onWillPop: () => _onWillPop(context)),
       floatingActionButton: FloatingActionButton(
         child: const Icon(
           Icons.arrow_circle_up,
