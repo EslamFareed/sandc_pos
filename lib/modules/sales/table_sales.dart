@@ -10,8 +10,8 @@ import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/models/order_item.dart';
 import 'package:sandc_pos/models/product.dart';
 
-class TableWidget extends StatelessWidget {
-  TableWidget({Key? key}) : super(key: key);
+class TableSales extends StatelessWidget {
+  TableSales({Key? key}) : super(key: key);
 
   // List<Product> products = [
   //   Product(id: 1, name: "Samsung a21s", price: 5500),

@@ -22,4 +22,12 @@ class MainCubit extends Cubit<MainStates> {
           (route) => false);
     });
   }
+
+  String currency = CacheKeysManger.getCurrencyFromCache();
+  void changeCurrency(BuildContext context, {required String curn}) {
+    CacheHelper.saveData(key: 'currency', value: curn).then((value) {
+      currency = curn;
+      emit(ChangeAppCurrencyState());
+    });
+  }
 }

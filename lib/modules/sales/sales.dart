@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,8 +10,7 @@ import 'package:sandc_pos/modules/sales/search_products.dart';
 import '../../core/components/build_popup.dart';
 import '../../core/components/default_buttons.dart';
 import '../../core/style/text/app_text_style.dart';
-import '../../core/utils/navigation_utility.dart';
-import 'table.dart';
+import 'table_sales.dart';
 
 class SalesScreen extends StatelessWidget {
   const SalesScreen({Key? key}) : super(key: key);
@@ -35,7 +32,7 @@ class SalesScreen extends StatelessWidget {
   }
 
   _onWillPop(BuildContext context) {
-    return buildPopUpMessage(
+    buildPopUpMessage(
       context: context,
       content: Text(
         "Want To Exit",
@@ -69,77 +66,77 @@ class SalesScreen extends StatelessWidget {
       appBar: _buildAppBar(),
       body: WillPopScope(
           child: _buildBody(), onWillPop: () => _onWillPop(context)),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(
-          Icons.arrow_circle_up,
-          size: 50,
-        ),
-        onPressed: () {
-          Get.dialog(
-            Dialog(
-              insetAnimationDuration: const Duration(milliseconds: 100),
-              alignment: Alignment.bottomCenter,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-              ),
-              child: SizedBox(
-                width: Get.width * .8,
-                height: Get.height * .25,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          //close dialog
-                          FloatingActionButton(
-                            elevation: 0,
-                            onPressed: () {
-                              Get.back();
-                            },
-                            child: const Icon(
-                              Icons.arrow_downward,
-                              size: 30,
-                            ),
-                          ),
-                          //open categories
-                          FloatingActionButton(
-                            elevation: 0,
-                            onPressed: () {},
-                            child: const Icon(
-                              Icons.category_outlined,
-                              size: 30,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Text("Total = 50000"),
-                    Container(
-                      width: Get.width * .7,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: Text("Finish Order"),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            barrierDismissible: false,
-          );
-        },
+      floatingActionButton: _buildFAB(),
+    );
+  }
+
+  _buildFAB() {
+    return FloatingActionButton(
+      child: const Icon(
+        Icons.arrow_circle_up,
+        size: 50,
       ),
+      onPressed: () {
+        _buildBottom();
+      },
     );
   }
 
   _buildBottom() {
-    return Column(
-      children: [
-        Text("data"),
-      ],
+    Get.dialog(
+      Dialog(
+        insetAnimationDuration: const Duration(milliseconds: 100),
+        alignment: Alignment.bottomCenter,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+        child: SizedBox(
+          width: Get.width * .8,
+          height: Get.height * .25,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //close dialog
+                    FloatingActionButton(
+                      elevation: 0,
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: const Icon(
+                        Icons.arrow_downward,
+                        size: 30,
+                      ),
+                    ),
+                    //open categories
+                    FloatingActionButton(
+                      elevation: 0,
+                      onPressed: () {},
+                      child: const Icon(
+                        Icons.category_outlined,
+                        size: 30,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Text("Total = 50000"),
+              Container(
+                width: Get.width * .7,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: Text("Finish Order"),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+      barrierDismissible: false,
     );
   }
 
@@ -232,7 +229,7 @@ class SalesScreen extends StatelessWidget {
     return Column(
       children: [
         _buildSearchBar(),
-        Expanded(child: TableWidget()),
+        Expanded(child: TableSales()),
       ],
     );
   }

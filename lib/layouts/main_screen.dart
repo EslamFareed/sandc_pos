@@ -8,12 +8,14 @@ import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/modules/about/about_us.dart';
 import 'package:sandc_pos/modules/about/contact_us.dart';
 import 'package:sandc_pos/modules/customers/customers_home.dart';
+import 'package:sandc_pos/modules/products/products_home.dart';
 
 import '../core/components/build_popup.dart';
 import '../core/components/default_buttons.dart';
 import '../core/style/text/app_text_style.dart';
 import '../core/utils/navigation_utility.dart';
 import '../modules/about/contact_with_admin_screen.dart';
+import '../modules/home/settings.dart';
 import '../modules/sales/sales.dart';
 
 class MainScreen extends StatefulWidget {
@@ -94,14 +96,26 @@ class _MainScreenState extends State<MainScreen> {
         Get.to(const CustomersHome(), transition: Transition.zoom);
       }
     },
-    {"title": "Stock", "image": "assets/images/logo.png", "onTap": () {}},
+    {
+      "title": "Stock",
+      "image": "assets/images/logo.png",
+      "onTap": () {
+        Get.to(const ProductsHome(), transition: Transition.zoom);
+      }
+    },
     {"title": "Reports", "image": "assets/images/logo.png", "onTap": () {}},
     {
       "title": "Sales Returns",
       "image": "assets/images/logo.png",
       "onTap": () {}
     },
-    {"title": "Settings", "image": "assets/images/logo.png", "onTap": () {}},
+    {
+      "title": "Settings",
+      "image": "assets/images/logo.png",
+      "onTap": () {
+        Get.to(SettingsScreen(), transition: Transition.zoom);
+      }
+    },
   ];
 
   _buildItemCard(String image, String title, void Function() onTap) {

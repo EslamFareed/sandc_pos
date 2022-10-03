@@ -6,3 +6,7 @@ class MainCubitInitialState extends MainStates {}
 ///////////////////////////////////////////////////////
 
 class ChangeAppLanguageState extends MainStates {}
+
+///////////////////////////////////////////////////////
+
+class ChangeAppCurrencyState extends MainStates {}

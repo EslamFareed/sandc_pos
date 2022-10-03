@@ -2,5 +2,7 @@ class Product {
   int? id;
   String? name;
   double? price;
-  Product({this.name, this.price, this.id});
+  String? image;
+  int? quantity;
+  Product({this.name, this.price, this.id, this.image, this.quantity});
 }

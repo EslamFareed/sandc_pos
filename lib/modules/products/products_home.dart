@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sandc_pos/modules/products/show_categories.dart';
+import 'package:sandc_pos/modules/products/show_products.dart';
 
 import '../../core/components/default_buttons.dart';
 import '../../core/style/color/app_colors.dart';
-import 'add_customer.dart';
-import 'show_customers.dart';
 
-class CustomersHome extends StatelessWidget {
-  const CustomersHome({super.key});
+class ProductsHome extends StatelessWidget {
+  const ProductsHome({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Customers"),
+        title: const Text("Products"),
       ),
       body: Stack(
         children: [
@@ -43,26 +43,22 @@ class CustomersHome extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CircleAvatar(
-                    radius: 50.r,
-                    child: SvgPicture.asset(
-                      "assets/icons/clients.svg",
-                      semanticsLabel: 'A red up arrow',
-                    ),
-                  ),
+                      radius: 50.r,
+                      child: Image.asset("assets/icons/products.png")),
                   DefaultButton(
                     onPress: () {
-                      Get.to(const ShowCustomers(),
-                          transition: Transition.zoom);
+                      Get.to(const ShowProducts(), transition: Transition.zoom);
                     },
-                    buttonText: "Show Customers",
+                    buttonText: "Show Prodcuts",
                     buttonBorderCircular: 16.r,
                     buttonHeight: 35.h,
                   ),
                   DefaultButton(
                     onPress: () {
-                      Get.to(const AddCustomer(), transition: Transition.zoom);
+                      Get.to(const ShowCategories(),
+                          transition: Transition.zoom);
                     },
-                    buttonText: "Add New Customer",
+                    buttonText: "Show Categories",
                     buttonBorderCircular: 16.r,
                     buttonHeight: 35.h,
                   ),
