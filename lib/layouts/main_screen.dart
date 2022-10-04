@@ -115,6 +115,13 @@ class _MainScreenState extends State<MainScreen> {
       "onTap": () {
         Get.to(SettingsScreen(), transition: Transition.zoom);
       }
+    },    
+    {
+      "title": "Printer",
+      "image": "assets/images/logo.png",
+      "onTap": () {
+        Get.to(SettingsScreen(), transition: Transition.zoom);
+      }
     },
   ];
 
