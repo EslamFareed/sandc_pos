@@ -4,9 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
+import 'package:sandc_pos/core/local/cache/cache_helper.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
+import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
+import 'package:sandc_pos/models/branch.dart';
+import 'package:sandc_pos/models/company.dart';
+import 'package:sandc_pos/models/currency.dart';
+import 'package:sandc_pos/models/emp_types.dart';
+import 'package:sandc_pos/models/employee.dart';
 import 'package:sandc_pos/modules/about/about_us.dart';
 import 'package:sandc_pos/modules/about/contact_us.dart';
+import 'package:sandc_pos/modules/auth/login.dart';
 import 'package:sandc_pos/modules/customers/customers_home.dart';
 import 'package:sandc_pos/modules/products/products_home.dart';
 
@@ -27,6 +35,17 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  @override
+  void initState() {
+    _getData();
+
+    super.initState();
+  }
+
+  _getData() async {
+    await DataCubit.get(context).getCurrentCompany();
+  }
+
   _onWillPop() {
     return buildPopUpMessage(
       context: context,
@@ -233,6 +252,15 @@ class _MainScreenState extends State<MainScreen> {
                       },
                       title: const Text("Contact with us"),
                       trailing: const Icon(Icons.contact_support),
+                    ),
+                    ListTile(
+                      onTap: () async {
+                        await CacheHelper.saveData(
+                            key: "userToken", value: "NO");
+                        Get.offAll(LoginScreen(), transition: Transition.zoom);
+                      },
+                      title: const Text("Logout"),
+                      trailing: const Icon(Icons.exit_to_app),
                     ),
                   ],
                 ),

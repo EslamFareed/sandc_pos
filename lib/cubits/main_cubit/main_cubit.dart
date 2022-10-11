@@ -16,10 +16,10 @@ class MainCubit extends Cubit<MainStates> {
     CacheHelper.saveData(key: 'lang', value: lang).then((value) {
       language = lang;
       emit(ChangeAppLanguageState());
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (bu) => const AppRoot()),
-          (route) => false);
+      // Navigator.pushAndRemoveUntil(
+      //     context,
+      //     MaterialPageRoute(builder: (bu) => const AppRoot()),
+      //     (route) => false);
     });
   }
 

@@ -1,60 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'dart:io';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
-import 'package:sandc_pos/models/customer.dart';
-import 'package:sandc_pos/models/order_item.dart';
-import 'package:sandc_pos/models/product.dart';
-
+import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
+import 'package:get/get_navigation/src/routes/transitions_type.dart' as tran;
 import 'view_customer_details.dart';
 
-class TableCustomer extends StatelessWidget {
+class TableCustomer extends StatefulWidget {
   TableCustomer({Key? key}) : super(key: key);
 
-  List<Customer> items = [
-    Customer(
-        amountRest: 100,
-        maxDepit: 1000,
-        name: "eslam fareed abd alrahman ",
-        phone: "+201016361173"),
-    Customer(
-        amountRest: 500,
-        maxDepit: 5000,
-        name: "احمد ممدوح اكرام",
-        phone: "+905454564"),
-    Customer(
-        amountRest: 50,
-        maxDepit: 100,
-        name: "eslam fareed abd alrahman",
-        phone: "+201016361173"),
-  ];
+  @override
+  State<TableCustomer> createState() => _TableCustomerState();
+}
+
+class _TableCustomerState extends State<TableCustomer> {
+  @override
+  void initState() {
+    _getData();
+    super.initState();
+  }
+
+  _getData() async {
+    await DataCubit.get(context).getAllClientTable();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return HorizontalDataTable(
-      leftHandSideColumnWidth: Get.width * .5,
-      rightHandSideColumnWidth: Get.width * .5,
-      isFixedHeader: true,
-      headerWidgets: _getTitleWidget(),
-      // refreshIndicator: RefreshProgressIndicator(),
-      // htdRefreshController: HDTRefreshController(),
-      // onRefresh: () {},
-      // enablePullToRefresh: true,
-      leftSideItemBuilder: _generateFirstColumnRow,
-      rightSideItemBuilder: _generateRightHandSideColumnRow,
-      itemCount: items.length,
-      rowSeparatorWidget: const Divider(
-        color: Colors.black54,
-        height: 1.0,
-        thickness: 0.0,
-      ),
-      leftHandSideColBackgroundColor: const Color(0xFFFFFFFF),
-      rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
-    );
+    return BlocConsumer<DataCubit, DataState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          var cubit = DataCubit.get(context);
+          return cubit.clientModels.isNotEmpty
+              ? HorizontalDataTable(
+                  leftHandSideColumnWidth: Get.width * .5,
+                  rightHandSideColumnWidth: Get.width * .5,
+                  isFixedHeader: true,
+                  headerWidgets: _getTitleWidget(),
+                  // refreshIndicator: RefreshProgressIndicator(),
+                  // htdRefreshController: HDTRefreshController(),
+                  // onRefresh: () {},
+                  // enablePullToRefresh: true,
+                  leftSideItemBuilder: _generateFirstColumnRow,
+                  rightSideItemBuilder: _generateRightHandSideColumnRow,
+                  itemCount: cubit.clientModels.length,
+                  rowSeparatorWidget: const Divider(
+                    color: Colors.black54,
+                    height: 1.0,
+                    thickness: 0.0,
+                  ),
+                  leftHandSideColBackgroundColor: const Color(0xFFFFFFFF),
+                  rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
+                )
+              : const Scaffold(
+                  body: Center(
+                    child: Text("No items found.."),
+                  ),
+                );
+        });
   }
 
   List<Widget> _getTitleWidget() {
@@ -86,12 +91,12 @@ class TableCustomer extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: GestureDetector(
         onTap: () {
-          Get.to(ViewCustomerDetails(), transition: Transition.zoom);
+          Get.to(ViewCustomerDetails(), transition: tran.Transition.zoom);
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(Icons.info),
+            // Icon(Icons.info),
             SizedBox(width: 5.w),
             Expanded(
               child: Column(
@@ -99,14 +104,14 @@ class TableCustomer extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      items[index].name!,
+                      DataCubit.get(context).clientModels[index].name!,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
                   ),
                   Expanded(
                     child: Text(
-                      items[index].phone!,
+                      DataCubit.get(context).clientModels[index].phone!,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
@@ -128,14 +133,16 @@ class TableCustomer extends StatelessWidget {
           height: 52.h,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child: Text("${items[index].amountRest!}"),
+          child: Text(
+              "${DataCubit.get(context).clientModels[index].ammountTobePaid!}"),
         ),
         Container(
           width: Get.width * .25,
           height: 52.h,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child: Text("${items[index].maxDepit!}"),
+          child: Text(
+              "${DataCubit.get(context).clientModels[index].maxDebitLimit!}"),
         ),
       ],
     );

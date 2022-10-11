@@ -20,16 +20,16 @@ class ShowCustomers extends StatelessWidget {
 
   _buildAppBar() {
     return AppBar(
-      title: const Text("Sales"),
+      title: const Text("Clients"),
       centerTitle: true,
       actions: [
         //open printer page
-        IconButton(
-          onPressed: () {
-            Get.to(const PrintScreen(), transition: Transition.zoom);
-          },
-          icon: SvgPicture.asset("assets/icons/reports.svg", height: 25.h),
-        )
+        // IconButton(
+        //   onPressed: () {
+        //     Get.to(const PrintScreen(), transition: Transition.zoom);
+        //   },
+        //   icon: SvgPicture.asset("assets/icons/reports.svg", height: 25.h),
+        // )
       ],
     );
   }
@@ -86,7 +86,8 @@ class ShowCustomers extends StatelessWidget {
   _buildBody() {
     return Column(
       children: [
-        _buildSearchBar(),
+        // _buildSearchBar(),
+        SizedBox(height: 25.h),
         Expanded(child: TableCustomer()),
       ],
     );

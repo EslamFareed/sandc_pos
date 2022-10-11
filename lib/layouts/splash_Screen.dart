@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:sandc_pos/core/local/cache/cache_keys.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/layouts/main_screen.dart';
 import 'package:sandc_pos/modules/auth/login.dart';
@@ -49,7 +50,9 @@ class _SplashScreenState extends State<SplashScreen> {
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
     Future.delayed(const Duration(seconds: 4)).then((value) => Get.off(
-        const LoginScreen(),
+        CacheKeysManger.getUserTokenFromCache() == "NO"
+            ? LoginScreen()
+            : const MainScreen(),
         transition: Transition.fade,
         duration: const Duration(seconds: 1)));
 

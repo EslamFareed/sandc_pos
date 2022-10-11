@@ -60,7 +60,7 @@ class CustomersHome extends StatelessWidget {
                   ),
                   DefaultButton(
                     onPress: () {
-                      Get.to(const AddCustomer(), transition: Transition.zoom);
+                      Get.to(AddCustomer(), transition: Transition.zoom);
                     },
                     buttonText: "Add New Customer",
                     buttonBorderCircular: 16.r,

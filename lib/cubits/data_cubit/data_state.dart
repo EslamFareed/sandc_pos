@@ -4,3 +4,5 @@ part of 'data_cubit.dart';
 abstract class DataState {}
 
 class DataInitial extends DataState {}
+
+class GetAllClients extends DataState {}

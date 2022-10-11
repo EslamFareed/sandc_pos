@@ -6,8 +6,8 @@ class CacheKeysManger {
   static String getCurrencyFromCache() =>
       CacheHelper.getData(key: 'currency') ?? 'USD';
 
-  // static String getUserTokenFromCache() =>
-  //     CacheHelper.getData(key: 'userToken') ?? "NO";
+  static String getUserTokenFromCache() =>
+      CacheHelper.getData(key: 'userToken') ?? "NO";
 
   // static String getFirebaseUserTokenFromCache() =>
   //     CacheHelper.getData(key: 'firebaseToken') ?? "NO";
