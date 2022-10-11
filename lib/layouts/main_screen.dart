@@ -16,6 +16,7 @@ import '../core/style/text/app_text_style.dart';
 import '../core/utils/navigation_utility.dart';
 import '../modules/about/contact_with_admin_screen.dart';
 import '../modules/home/settings.dart';
+import '../modules/home/settings_printer.dart';
 import '../modules/sales/sales.dart';
 
 class MainScreen extends StatefulWidget {
@@ -115,12 +116,12 @@ class _MainScreenState extends State<MainScreen> {
       "onTap": () {
         Get.to(SettingsScreen(), transition: Transition.zoom);
       }
-    },    
+    },
     {
       "title": "Printer",
       "image": "assets/images/logo.png",
       "onTap": () {
-        Get.to(SettingsScreen(), transition: Transition.zoom);
+        Get.to(SettingsPrinter(), transition: Transition.zoom);
       }
     },
   ];
@@ -207,17 +208,17 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     ),
                     SizedBox(height: 10.h),
-                    ListTile(
-                      onTap: () {
-                        Get.to(
-                            ContactWithAdminScreen(
-                              userID: '1',
-                            ),
-                            transition: Transition.zoom);
-                      },
-                      title: const Text("Chat With Admin"),
-                      trailing: const Icon(Icons.chat),
-                    ),
+                    // ListTile(
+                    //   onTap: () {
+                    //     Get.to(
+                    //         ContactWithAdminScreen(
+                    //           userID: '1',
+                    //         ),
+                    //         transition: Transition.zoom);
+                    //   },
+                    //   title: const Text("Chat With Admin"),
+                    //   trailing: const Icon(Icons.chat),
+                    // ),
                     ListTile(
                       onTap: () {
                         Get.to(const AboutScreen(),

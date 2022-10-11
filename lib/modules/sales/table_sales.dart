@@ -35,51 +35,6 @@ class TableSales extends StatelessWidget {
         product: Product(id: 3, name: "pepsi", price: 5),
         quantity: 2,
         total: 10),
-    OrderItem(
-        id: 1,
-        product: Product(id: 1, name: "Samsung a21s", price: 5500),
-        quantity: 1,
-        total: 5500),
-    OrderItem(
-        id: 2,
-        product: Product(id: 2, name: "shoes", price: 500),
-        quantity: 5,
-        total: 2500),
-    OrderItem(
-        id: 3,
-        product: Product(id: 3, name: "pepsi", price: 5),
-        quantity: 2,
-        total: 10),
-    OrderItem(
-        id: 1,
-        product: Product(id: 1, name: "Samsung a21s", price: 5500),
-        quantity: 1,
-        total: 5500),
-    OrderItem(
-        id: 2,
-        product: Product(id: 2, name: "shoes", price: 500),
-        quantity: 5,
-        total: 2500),
-    OrderItem(
-        id: 3,
-        product: Product(id: 3, name: "pepsi", price: 5),
-        quantity: 2,
-        total: 10),
-    OrderItem(
-        id: 1,
-        product: Product(id: 1, name: "Samsung a21s", price: 5500),
-        quantity: 1,
-        total: 5500),
-    OrderItem(
-        id: 2,
-        product: Product(id: 2, name: "shoes", price: 500),
-        quantity: 5,
-        total: 2500),
-    OrderItem(
-        id: 3,
-        product: Product(id: 3, name: "pepsi", price: 5),
-        quantity: 2,
-        total: 10),
   ];
   @override
   Widget build(BuildContext context) {
