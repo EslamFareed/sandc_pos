@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 
 class ScanCodeScreen extends StatefulWidget {
   const ScanCodeScreen({Key? key}) : super(key: key);
@@ -29,6 +31,11 @@ class _ScanCodeScreenState extends State<ScanCodeScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -37,14 +44,14 @@ class _ScanCodeScreenState extends State<ScanCodeScreen> {
       ),
       body: Column(
         children: <Widget>[
-          Expanded(flex: 6, child: _buildQrView(context)),
-          Expanded(
-            flex: 1,
-            child: result != null
-                ? Text(
-                    'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                : const Text('Scan a code'),
-          )
+          Expanded(child: _buildQrView(context)),
+          // Expanded(
+          //   flex: 1,
+          //   child: result != null
+          //       ? Text(
+          //           'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+          //       : const Text('Scan a code'),
+          // )
         ],
       ),
     );
@@ -78,9 +85,27 @@ class _ScanCodeScreenState extends State<ScanCodeScreen> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
+      if (DataCubit.get(context).productsCurrentOrder.contains(
+          DataCubit.get(context)
+              .productModels
+              .where((element) => element.qrCode == scanData.code)
+              .first)) {
+        DataCubit.get(context).addQuantityProdcut(
+            DataCubit.get(context)
+                .productModels
+                .where((element) => element.qrCode == scanData.code)
+                .first,
+            context);
+      } else {
+        DataCubit.get(context).addNewProduct(
+            DataCubit.get(context)
+                .productModels
+                .where((element) => element.qrCode == scanData.code)
+                .first,
+            context);
+      }
+      Get.back(closeOverlays: true);
+      controller.stopCamera();
     });
   }
 

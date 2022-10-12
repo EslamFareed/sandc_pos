@@ -8,15 +8,15 @@ import '../../core/components/default_buttons.dart';
 import '../../core/style/color/app_colors.dart';
 import '../categories/show_categories.dart';
 
-class ProductsHome extends StatelessWidget {
-  const ProductsHome({super.key});
+class ReportsHome extends StatelessWidget {
+  const ReportsHome({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Products"),
+        title: const Text("Reports"),
       ),
       body: Stack(
         children: [
@@ -44,21 +44,12 @@ class ProductsHome extends StatelessWidget {
                 children: [
                   CircleAvatar(
                       radius: 50.r,
-                      child: Image.asset("assets/icons/products.png")),
+                      child: SvgPicture.asset("assets/icons/reports.svg")),
                   DefaultButton(
                     onPress: () {
-                      Get.to(const ShowProducts(), transition: Transition.zoom);
+                      // Get.to(const ShowProducts(), transition: Transition.zoom);
                     },
-                    buttonText: "Show Prodcuts",
-                    buttonBorderCircular: 16.r,
-                    buttonHeight: 35.h,
-                  ),
-                  DefaultButton(
-                    onPress: () {
-                      Get.to(const ShowCategories(),
-                          transition: Transition.zoom);
-                    },
-                    buttonText: "Show Categories",
+                    buttonText: "Sales Reports",
                     buttonBorderCircular: 16.r,
                     buttonHeight: 35.h,
                   ),

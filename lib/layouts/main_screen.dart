@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,15 +9,19 @@ import 'package:sandc_pos/core/local/cache/cache_helper.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/models/branch.dart';
+import 'package:sandc_pos/models/category.dart';
 import 'package:sandc_pos/models/company.dart';
 import 'package:sandc_pos/models/currency.dart';
 import 'package:sandc_pos/models/emp_types.dart';
 import 'package:sandc_pos/models/employee.dart';
+import 'package:sandc_pos/models/products.dart';
+import 'package:sandc_pos/models/unit.dart';
 import 'package:sandc_pos/modules/about/about_us.dart';
 import 'package:sandc_pos/modules/about/contact_us.dart';
 import 'package:sandc_pos/modules/auth/login.dart';
 import 'package:sandc_pos/modules/customers/customers_home.dart';
 import 'package:sandc_pos/modules/products/products_home.dart';
+import 'package:uuid/uuid.dart';
 
 import '../core/components/build_popup.dart';
 import '../core/components/default_buttons.dart';
@@ -25,6 +30,7 @@ import '../core/utils/navigation_utility.dart';
 import '../modules/about/contact_with_admin_screen.dart';
 import '../modules/home/settings.dart';
 import '../modules/home/settings_printer.dart';
+import '../modules/reports/reports_home.dart';
 import '../modules/sales/sales.dart';
 
 class MainScreen extends StatefulWidget {
@@ -44,6 +50,97 @@ class _MainScreenState extends State<MainScreen> {
 
   _getData() async {
     await DataCubit.get(context).getCurrentCompany();
+
+    // await DataCubit.get(context).deleteAllProductModel();
+    // var id = Uuid().v1();
+    // print(id);
+    // await DataCubit.get(context).insertProductTable(
+    //   ProductModel(
+    //     buyingPrice: 150,
+    //     catID: 1,
+    //     compID: 1,
+    //     createDate: DateTime.now().toString(),
+    //     description: "shoes with color black",
+    //     discount: 50,
+    //     expirationDate:
+    //         DateTime.now().add(const Duration(days: 365)).toString(),
+    //     image: "https://m.media-amazon.com/images/I/71D9ImsvEtL._UY500_.jpg",
+    //     isActive: true,
+    //     isPetrolGas: false,
+    //     name: "shoes bata",
+    //     priceOne: 150,
+    //     priceThree: 175,
+    //     priceTwo: 150,
+    //     prodId: id,
+    //     productNumber: id,
+    //     qrCode: id,
+    //     stockQuantity: 50,
+    //     unitID: 1,
+    //     unitPackage: 1,
+    //     updateDate: DateTime.now().toString(),
+    //   ),
+    // );
+    // var id1 = Uuid().v1();
+    // print(id1);
+    // await DataCubit.get(context).insertProductTable(
+    //   ProductModel(
+    //     buyingPrice: 2000,
+    //     catID: 1,
+    //     compID: 1,
+    //     createDate: DateTime.now().toString(),
+    //     description: "Samsung s21s",
+    //     discount: 0,
+    //     expirationDate:
+    //         DateTime.now().add(const Duration(days: 365)).toString(),
+    //     image:
+    //         "https://zkartbw.com/32-large_default/samsung-galaxy-a21s-32gb.jpg",
+    //     isActive: true,
+    //     isPetrolGas: false,
+    //     name: "Samsung s21s",
+    //     priceOne: 2500,
+    //     priceThree: 2700,
+    //     priceTwo: 3000,
+    //     prodId: id1,
+    //     productNumber: id1,
+    //     qrCode: id1,
+    //     stockQuantity: 10,
+    //     unitID: 1,
+    //     unitPackage: 1,
+    //     updateDate: DateTime.now().toString(),
+    //   ),
+    // );
+    // var id2 = Uuid().v1();
+    // print(id2);
+    // await DataCubit.get(context).insertProductTable(
+    //   ProductModel(
+    //     buyingPrice: 5,
+    //     catID: 1,
+    //     compID: 1,
+    //     createDate: DateTime.now().toString(),
+    //     description: "pepsi cans",
+    //     discount: 0,
+    //     expirationDate:
+    //         DateTime.now().add(const Duration(days: 365)).toString(),
+    //     image:
+    //         "https://cdnprod.mafretailproxy.com/sys-master-root/hc1/hc4/14539671175198/3813_main.jpg_480Wx480H",
+    //     isActive: true,
+    //     isPetrolGas: false,
+    //     name: "pepsi",
+    //     priceOne: 6,
+    //     priceThree: 7,
+    //     priceTwo: 10,
+    //     prodId: id2,
+    //     productNumber: id2,
+    //     qrCode: id2,
+    //     stockQuantity: 1000,
+    //     unitID: 1,
+    //     unitPackage: 1,
+    //     updateDate: DateTime.now().toString(),
+    //   ),
+    // );
+
+    // await DataCubit.get(context).getAllProductTable();
+    // print(DataCubit.get(context).productModels);
   }
 
   _onWillPop() {
@@ -106,7 +203,7 @@ class _MainScreenState extends State<MainScreen> {
       "title": "Sales",
       "image": "assets/images/logo.png",
       "onTap": () {
-        Get.to(const SalesScreen(), transition: Transition.zoom);
+        Get.to(SalesScreen(), transition: Transition.zoom);
       }
     },
     {
@@ -123,7 +220,13 @@ class _MainScreenState extends State<MainScreen> {
         Get.to(const ProductsHome(), transition: Transition.zoom);
       }
     },
-    {"title": "Reports", "image": "assets/images/logo.png", "onTap": () {}},
+    {
+      "title": "Reports",
+      "image": "assets/images/logo.png",
+      "onTap": () {
+        Get.to(const ReportsHome(), transition: Transition.zoom);
+      }
+    },
     {
       "title": "Sales Returns",
       "image": "assets/images/logo.png",
@@ -136,13 +239,13 @@ class _MainScreenState extends State<MainScreen> {
         Get.to(SettingsScreen(), transition: Transition.zoom);
       }
     },
-    {
-      "title": "Printer",
-      "image": "assets/images/logo.png",
-      "onTap": () {
-        Get.to(SettingsPrinter(), transition: Transition.zoom);
-      }
-    },
+    // {
+    //   "title": "Printer",
+    //   "image": "assets/images/logo.png",
+    //   "onTap": () {
+    //     Get.to(SettingsPrinter(), transition: Transition.zoom);
+    //   }
+    // },
   ];
 
   _buildItemCard(String image, String title, void Function() onTap) {

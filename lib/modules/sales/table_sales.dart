@@ -1,4 +1,6 @@
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'dart:io';
@@ -6,57 +8,61 @@ import 'package:horizontal_data_table/horizontal_data_table.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sandc_pos/core/components/default_buttons.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
+import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
+import 'package:sandc_pos/models/invoice_details.dart';
+import 'package:sandc_pos/models/order.dart';
 import 'package:sandc_pos/models/order_item.dart';
 import 'package:sandc_pos/models/product.dart';
+import 'package:sandc_pos/models/products.dart';
+import 'package:uuid/uuid.dart';
 
-class TableSales extends StatelessWidget {
+class ItemModel {
+  String title;
+  IconData icon;
+  void onPress;
+
+  ItemModel(this.title, this.icon, this.onPress);
+}
+
+class TableSales extends StatefulWidget {
   TableSales({Key? key}) : super(key: key);
 
-  // List<Product> products = [
-  //   Product(id: 1, name: "Samsung a21s", price: 5500),
-  //   Product(id: 2, name: "shoes", price: 500),
-  //   Product(id: 3, name: "pepsi", price: 5),
-  //   Product(id: 4, name: "mouse", price: 150),
-  // ];
-  List<OrderItem> items = [
-    OrderItem(
-        id: 1,
-        product: Product(id: 1, name: "Samsung a21s", price: 5500),
-        quantity: 1,
-        total: 5500),
-    OrderItem(
-        id: 2,
-        product: Product(id: 2, name: "shoes", price: 500),
-        quantity: 5,
-        total: 2500),
-    OrderItem(
-        id: 3,
-        product: Product(id: 3, name: "pepsi", price: 5),
-        quantity: 2,
-        total: 10),
-  ];
+  @override
+  State<TableSales> createState() => _TableSalesState();
+}
+
+class _TableSalesState extends State<TableSales> {
   @override
   Widget build(BuildContext context) {
-    return HorizontalDataTable(
-      leftHandSideColumnWidth: Get.width * .40,
-      rightHandSideColumnWidth: Get.width * .60,
-      isFixedHeader: true,
-      headerWidgets: _getTitleWidget(),
-      // refreshIndicator: RefreshProgressIndicator(),
-      // htdRefreshController: HDTRefreshController(),
-      // onRefresh: () {},
-      // enablePullToRefresh: true,
-      leftSideItemBuilder: _generateFirstColumnRow,
-      rightSideItemBuilder: _generateRightHandSideColumnRow,
-      itemCount: items.length,
-      rowSeparatorWidget: const Divider(
-        color: Colors.black54,
-        height: 1.0,
-        thickness: 0.0,
-      ),
-      leftHandSideColBackgroundColor: const Color(0xFFFFFFFF),
-      rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
+    return BlocConsumer<DataCubit, DataState>(
+      listener: ((context, state) {}),
+      builder: (context, state) {
+        return DataCubit.get(context).itemsCurrentOrder.isNotEmpty &&
+                (state is AddQuantityProdcutSuccess ||
+                    state is AddNewProductSuccess ||
+                    state is DeleteProductFromHomeSuccess)
+            ? HorizontalDataTable(
+                leftHandSideColumnWidth: Get.width * .40,
+                rightHandSideColumnWidth: Get.width * .60,
+                isFixedHeader: true,
+                headerWidgets: _getTitleWidget(),
+                leftSideItemBuilder: _generateFirstColumnRow,
+                rightSideItemBuilder: _generateRightHandSideColumnRow,
+                itemCount: DataCubit.get(context).itemsCurrentOrder.length,
+                rowSeparatorWidget: const Divider(
+                  color: Colors.black54,
+                  height: 1.0,
+                  thickness: 0.0,
+                ),
+                leftHandSideColBackgroundColor: const Color(0xFFFFFFFF),
+                rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
+              )
+            : const Scaffold(
+                body: Center(child: Text("No items")),
+              );
+      },
     );
   }
 
@@ -88,7 +94,13 @@ class TableSales extends StatelessWidget {
       height: 52.h,
       padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
       alignment: Alignment.centerLeft,
-      child: Text(items[index].product!.name!),
+      child: Text(DataCubit.get(context)
+          .productsCurrentOrder
+          .where((element) =>
+              element.prodId ==
+              DataCubit.get(context).itemsCurrentOrder[index].prodId)
+          .first
+          .name!),
     );
   }
 
@@ -100,21 +112,114 @@ class TableSales extends StatelessWidget {
           height: 52.h,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child: Text("${items[index].product!.price!}"),
+          child: Text(
+              "${DataCubit.get(context).productsCurrentOrder.where((element) => element.prodId == DataCubit.get(context).itemsCurrentOrder[index].prodId).first.priceOne!}"),
+        ),
+        GestureDetector(
+          onTapDown: (details) {
+            showMenu(
+              context: context,
+              position: RelativeRect.fromLTRB(
+                details.globalPosition.dx,
+                details.globalPosition.dy,
+                details.globalPosition.dx,
+                details.globalPosition.dy,
+              ),
+              items: [
+                const PopupMenuItem(child: Text('+'), value: '1'),
+                const PopupMenuItem(child: Text('-'), value: '2'),
+              ],
+              elevation: 8.0,
+            ).then(
+              (value) {
+                if (value == "1") {
+                  DataCubit.get(context).addQuantityProdcutFromHome(
+                      DataCubit.get(context)
+                          .productsCurrentOrder
+                          .where((element) =>
+                              element.prodId ==
+                              DataCubit.get(context)
+                                  .itemsCurrentOrder[index]
+                                  .prodId)
+                          .first,
+                      context);
+                } else {
+                  if (DataCubit.get(context)
+                          .itemsCurrentOrder[index]
+                          .quanitiy ==
+                      1) {
+                    Get.dialog(
+                        AlertDialog(
+                          actions: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: DefaultButton(
+                                      buttonHeight: 25.h,
+                                      onPress: () {
+                                        DataCubit.get(context)
+                                            .deleteProdcutFromCart(
+                                                DataCubit.get(context)
+                                                    .productsCurrentOrder
+                                                    .where((element) =>
+                                                        element.prodId ==
+                                                        DataCubit.get(context)
+                                                            .itemsCurrentOrder[
+                                                                index]
+                                                            .prodId)
+                                                    .first,
+                                                context);
+                                        Get.back();
+                                      },
+                                      buttonText: "Yes"),
+                                ),
+                                Expanded(
+                                  child: DefaultButton(
+                                      buttonHeight: 25.h,
+                                      onPress: () {
+                                        Get.back();
+                                      },
+                                      buttonText: "No"),
+                                ),
+                              ],
+                            )
+                          ],
+                          title: Text(
+                              "want to delete this product from cart ${DataCubit.get(context).productsCurrentOrder.where((element) => element.prodId == DataCubit.get(context).itemsCurrentOrder[index].prodId).first.name!}"),
+                        ),
+                        barrierDismissible: false);
+                  } else {
+                    DataCubit.get(context).mineseQuantityProdcutFromHome(
+                        DataCubit.get(context)
+                            .productsCurrentOrder
+                            .where((element) =>
+                                element.prodId ==
+                                DataCubit.get(context)
+                                    .itemsCurrentOrder[index]
+                                    .prodId)
+                            .first,
+                        context);
+                  }
+                }
+              },
+            );
+          },
+          child: Container(
+            width: Get.width * .20,
+            height: 52.h,
+            padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+            alignment: Alignment.centerLeft,
+            child: Text(
+                "${DataCubit.get(context).itemsCurrentOrder[index].quanitiy}"),
+          ),
         ),
         Container(
           width: Get.width * .20,
           height: 52.h,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child: Text("${items[index].quantity!}"),
-        ),
-        Container(
-          width: Get.width * .20,
-          height: 52.h,
-          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          child: Text("${items[index].total!}"),
+          child: Text(
+              "${DataCubit.get(context).itemsCurrentOrder[index].totalCost}"),
         ),
       ],
     );

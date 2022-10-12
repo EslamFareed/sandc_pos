@@ -3,17 +3,37 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/layouts/main_screen.dart';
+import 'package:sandc_pos/models/order.dart';
+import 'package:sandc_pos/modules/sales/categories_screen.dart';
 import 'package:sandc_pos/modules/sales/print_screen.dart';
 import 'package:sandc_pos/modules/sales/scan_code.dart';
 import 'package:sandc_pos/modules/sales/search_products.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../core/components/build_popup.dart';
 import '../../core/components/default_buttons.dart';
 import '../../core/style/text/app_text_style.dart';
+import '../../cubits/data_cubit/data_cubit.dart';
+import '../../models/products.dart';
 import 'table_sales.dart';
 
-class SalesScreen extends StatelessWidget {
-  const SalesScreen({Key? key}) : super(key: key);
+class SalesScreen extends StatefulWidget {
+  SalesScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SalesScreen> createState() => _SalesScreenState();
+}
+
+class _SalesScreenState extends State<SalesScreen> {
+  TextEditingController? controller = TextEditingController();
+
+  @override
+  void initState() {
+    DataCubit.get(context).itemsCurrentOrder = [];
+    DataCubit.get(context).productsCurrentOrder = [];
+    DataCubit.get(context).currentOrder = OrderModel(id: Uuid().v1());
+    super.initState();
+  }
 
   _buildAppBar() {
     return AppBar(
@@ -21,12 +41,12 @@ class SalesScreen extends StatelessWidget {
       centerTitle: true,
       actions: [
         //open printer page
-        IconButton(
-          onPressed: () {
-            Get.to(const PrintScreen(), transition: Transition.zoom);
-          },
-          icon: const Icon(Icons.print_rounded),
-        )
+        // IconButton(
+        //   onPressed: () {
+        //     Get.to(const PrintScreen(), transition: Transition.zoom);
+        //   },
+        //   icon: const Icon(Icons.print_rounded),
+        // )
       ],
     );
   }
@@ -66,23 +86,27 @@ class SalesScreen extends StatelessWidget {
       appBar: _buildAppBar(),
       body: WillPopScope(
           child: _buildBody(), onWillPop: () => _onWillPop(context)),
-      floatingActionButton: _buildFAB(),
+      floatingActionButton: _buildFAB(context),
     );
   }
 
-  _buildFAB() {
+  _buildFAB(BuildContext context) {
     return FloatingActionButton(
       child: const Icon(
         Icons.arrow_circle_up,
         size: 50,
       ),
       onPressed: () {
-        _buildBottom();
+        _buildBottom(context);
       },
     );
   }
 
-  _buildBottom() {
+  _buildBottom(BuildContext context) {
+    double total = 0;
+    DataCubit.get(context).itemsCurrentOrder.forEach((element) {
+      total += element.totalCost!;
+    });
     Get.dialog(
       Dialog(
         insetAnimationDuration: const Duration(milliseconds: 100),
@@ -94,37 +118,24 @@ class SalesScreen extends StatelessWidget {
           width: Get.width * .8,
           height: Get.height * .25,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    //close dialog
-                    FloatingActionButton(
-                      elevation: 0,
-                      onPressed: () {
-                        Get.back();
-                      },
-                      child: const Icon(
-                        Icons.arrow_downward,
-                        size: 30,
-                      ),
-                    ),
-                    //open categories
-                    FloatingActionButton(
-                      elevation: 0,
-                      onPressed: () {},
-                      child: const Icon(
-                        Icons.category_outlined,
-                        size: 30,
-                      ),
-                    ),
-                  ],
+              Container(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  icon: const Icon(
+                    Icons.exit_to_app,
+                    size: 30,
+                  ),
                 ),
               ),
-              Text("Total = 50000"),
+              Text(
+                "Total = $total",
+                style: AppTextStyle.headLine(),
+              ),
               Container(
                 width: Get.width * .7,
                 child: ElevatedButton(
@@ -143,7 +154,6 @@ class SalesScreen extends StatelessWidget {
   _buildSearchBar() {
     return Container(
       width: Get.width,
-      height: 50.h,
       margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.primaryColor,
@@ -156,7 +166,7 @@ class SalesScreen extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 Get.to(
-                  const SearchProductsScreen(),
+                  SearchProductsScreen(),
                   transition: Transition.fadeIn,
                 );
               },
@@ -208,7 +218,6 @@ class SalesScreen extends StatelessWidget {
               ),
             ),
           ),
-
           //open camera scanner
           IconButton(
             icon: const Icon(
@@ -219,7 +228,19 @@ class SalesScreen extends StatelessWidget {
             onPressed: () {
               Get.to(const ScanCodeScreen(), transition: Transition.zoom);
             },
-          )
+          ),
+          //open categories
+          IconButton(
+            icon: const Icon(
+              Icons.category_outlined,
+              color: Colors.white,
+              size: 30,
+            ),
+            onPressed: () {
+              Get.to(const CategoriesSearchProductsScreen(),
+                  transition: Transition.zoom);
+            },
+          ),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/modules/products/table_product.dart';
 
 import '../../core/style/color/app_colors.dart';
@@ -8,6 +9,7 @@ import '../sales/print_screen.dart';
 import '../sales/scan_code.dart';
 import '../sales/search_products.dart';
 import '../sales/table_sales.dart';
+import 'make_pdf_products.dart';
 
 class ShowProducts extends StatelessWidget {
   const ShowProducts({super.key});
@@ -20,7 +22,7 @@ class ShowProducts extends StatelessWidget {
         //open printer page
         IconButton(
           onPressed: () {
-            Get.to(const PrintScreen(), transition: Transition.zoom);
+            Get.to(MakePdfProducts(), transition: Transition.zoom);
           },
           icon: const Icon(Icons.print_rounded),
         )
@@ -51,10 +53,10 @@ class ShowProducts extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                Get.to(
-                  const SearchProductsScreen(),
-                  transition: Transition.fadeIn,
-                );
+                // Get.to(
+                //   SearchProductsScreen(),
+                //   transition: Transition.fadeIn,
+                // );
               },
               child: Container(
                 margin: const EdgeInsets.all(5),

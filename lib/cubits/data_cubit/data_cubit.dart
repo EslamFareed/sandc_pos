@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:uuid/uuid.dart';
 import '../../models/category.dart';
 import '../../models/client.dart';
 import '../../models/company.dart';
@@ -25,6 +27,106 @@ part 'data_state.dart';
 class DataCubit extends Cubit<DataState> {
   DataCubit() : super(DataInitial());
   static DataCubit get(context) => BlocProvider.of(context);
+
+  OrderModel? currentOrder;
+  List<ProductModel> productsCurrentOrder = [];
+  List<InvoiceDetailsModel> itemsCurrentOrder = [];
+
+  deleteProdcutFromCart(ProductModel product, BuildContext context) {
+    emit(DeleteProductFromHomeLoading());
+
+    productsCurrentOrder.remove(product);
+    itemsCurrentOrder
+        .removeWhere((element) => element.prodId == product.prodId);
+
+    // InvoiceDetailsModel currentItem = DataCubit.get(context).itemsCurrentOrder[
+    //     DataCubit.get(context)
+    //         .itemsCurrentOrder
+    //         .indexWhere((element) => element.prodId == product.prodId)];
+
+    // currentItem.quanitiy = currentItem.quanitiy! - 1;
+    // currentItem.totalCost = currentItem.quanitiy! * currentItem.unitPrice!;
+
+    // DataCubit.get(context).itemsCurrentOrder[DataCubit.get(context)
+    //         .itemsCurrentOrder
+    //         .indexWhere((element) => element.prodId == product.prodId)] =
+    //     currentItem;
+    emit(DeleteProductFromHomeSuccess());
+  }
+
+  mineseQuantityProdcutFromHome(ProductModel product, BuildContext context) {
+    emit(AddQuantityProdcutLoading());
+
+    InvoiceDetailsModel currentItem = itemsCurrentOrder[itemsCurrentOrder
+        .indexWhere((element) => element.prodId == product.prodId)];
+
+    currentItem.quanitiy = currentItem.quanitiy! - 1;
+    currentItem.totalCost = currentItem.quanitiy! * currentItem.unitPrice!;
+
+    itemsCurrentOrder[itemsCurrentOrder.indexWhere(
+        (element) => element.prodId == product.prodId)] = currentItem;
+    emit(AddQuantityProdcutSuccess());
+  }
+
+  addQuantityProdcutFromHome(ProductModel product, BuildContext context) {
+    emit(AddQuantityProdcutLoading());
+
+    InvoiceDetailsModel currentItem = itemsCurrentOrder[itemsCurrentOrder
+        .indexWhere((element) => element.prodId == product.prodId)];
+
+    currentItem.quanitiy = currentItem.quanitiy! + 1;
+    currentItem.totalCost = currentItem.quanitiy! * currentItem.unitPrice!;
+
+    itemsCurrentOrder[itemsCurrentOrder.indexWhere(
+        (element) => element.prodId == product.prodId)] = currentItem;
+    emit(AddQuantityProdcutSuccess());
+  }
+
+  addQuantityProdcut(ProductModel product, BuildContext context) {
+    emit(AddQuantityProdcutLoading());
+    Get.showSnackbar(const GetSnackBar(
+      message: "Product added quantity successfully",
+      duration: Duration(milliseconds: 1000),
+      animationDuration: Duration(milliseconds: 100),
+    ));
+
+    InvoiceDetailsModel currentItem = itemsCurrentOrder[itemsCurrentOrder
+        .indexWhere((element) => element.prodId == product.prodId)];
+
+    currentItem.quanitiy = currentItem.quanitiy! + 1;
+    currentItem.totalCost = currentItem.quanitiy! * currentItem.unitPrice!;
+
+    itemsCurrentOrder[itemsCurrentOrder.indexWhere(
+        (element) => element.prodId == product.prodId)] = currentItem;
+    emit(AddQuantityProdcutSuccess());
+  }
+
+  addNewProduct(ProductModel product, BuildContext context) {
+    emit(AddNewProductLoading());
+
+    Get.showSnackbar(const GetSnackBar(
+      message: "Product added successfully",
+      duration: Duration(milliseconds: 500),
+      animationDuration: Duration(milliseconds: 100),
+    ));
+
+    productsCurrentOrder.add(product);
+
+    itemsCurrentOrder.add(
+      InvoiceDetailsModel(
+        iD: Uuid().v1(),
+        isReturn: false,
+        orderID: currentOrder!.id,
+        prodId: product.prodId,
+        quanitiy: 1,
+        quantReturns: 0,
+        reasonForReturn: "",
+        totalCost: product.priceOne,
+        unitPrice: product.priceOne,
+      ),
+    );
+    emit(AddNewProductSuccess());
+  }
 
   static Database? _db;
 
@@ -1248,6 +1350,7 @@ class DataCubit extends Cubit<DataState> {
 
   List<CategoryModel> categoryModels = [];
   getAllCategoryTable() async {
+    emit(GetAllCategoryTableLoading());
     try {
       categoryModels = [];
       List<Map<String, dynamic>> data =
@@ -1256,10 +1359,12 @@ class DataCubit extends Cubit<DataState> {
       for (var element in data) {
         categoryModels.add(CategoryModel.fromJsonEdit(element));
       }
+      emit(GetAllCategoryTableSuccess());
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
+      emit(GetAllCategoryTableError());
     }
   }
 
@@ -1724,12 +1829,10 @@ class DataCubit extends Cubit<DataState> {
           '${item.name}',
           '${item.buyingPrice}',
           '${item.unitPackage}',
-          '${item.isActive! ? 1 : 0}',
-          '${item.isPetrolGas! ? 1 : 0}',
+          '${item.unitID}',
           '${item.createDate}',
           '${item.updateDate}',
           '${item.discount}',
-          '${item.unitID}',
           '${item.stockQuantity}',
           '${item.qrCode}',
           '${item.image}',
@@ -1740,7 +1843,9 @@ class DataCubit extends Cubit<DataState> {
           '${item.priceOne}',
           '${item.priceThree}',
           '${item.priceTwo}',
-          '${item.description}'
+          '${item.description}',
+          '${item.isActive! ? 1 : 0}',
+          '${item.isPetrolGas! ? 1 : 0}'
           ) 
           ''');
     } catch (e) {
@@ -1824,16 +1929,26 @@ class DataCubit extends Cubit<DataState> {
 
   List<ProductModel> productModels = [];
   getAllProductTable() async {
+    emit(GetAllProductTableLoading());
     try {
       productModels = [];
       List<Map<String, dynamic>> data =
           await readData("SELECT * FROM '${ProductModel.ProductModelName}' ");
 
       for (var element in data) {
+        // Database? mydb = await db;
+
+        // print(await mydb!.delete(ProductModel.ProductModelName,
+        //     where: '${ProductModel.columnId} = ?',
+        //     whereArgs: [element["Prod_Id"]]));
+
         productModels.add(ProductModel.fromJsonEdit(element));
       }
+
+      emit(GetAllProductTableSuccess());
     } catch (e) {
       print(e);
+      emit(GetAllProductTableError());
     }
   }
 

@@ -5,19 +5,20 @@ import 'package:get/get.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 
 import 'package:sandc_pos/core/style/color/app_colors.dart';
+import 'package:sandc_pos/models/category.dart';
 import 'package:sandc_pos/models/order_item.dart';
 import 'package:sandc_pos/models/product.dart';
 
 import '../../cubits/data_cubit/data_cubit.dart';
 
-class TableProduct extends StatefulWidget {
-  TableProduct({Key? key}) : super(key: key);
+class TableCategory extends StatefulWidget {
+  TableCategory({Key? key}) : super(key: key);
 
   @override
-  State<TableProduct> createState() => _TableProductState();
+  State<TableCategory> createState() => _TableCategoryState();
 }
 
-class _TableProductState extends State<TableProduct> {
+class _TableCategoryState extends State<TableCategory> {
   @override
   void initState() {
     _getData();
@@ -25,7 +26,7 @@ class _TableProductState extends State<TableProduct> {
   }
 
   _getData() async {
-    await DataCubit.get(context).getAllProductTable();
+    await DataCubit.get(context).getAllCategoryTable();
   }
 
   @override
@@ -35,11 +36,11 @@ class _TableProductState extends State<TableProduct> {
         builder: (context, state) {
           var cubit = DataCubit.get(context);
 
-          return cubit.productModels.isNotEmpty &&
-                  state is GetAllProductTableSuccess
+          return cubit.categoryModels.isNotEmpty &&
+                  state is GetAllCategoryTableSuccess
               ? HorizontalDataTable(
-                  leftHandSideColumnWidth: Get.width * .20,
-                  rightHandSideColumnWidth: Get.width * .80,
+                  leftHandSideColumnWidth: Get.width * .5,
+                  rightHandSideColumnWidth: Get.width * .5,
                   isFixedHeader: true,
                   headerWidgets: _getTitleWidget(),
                   // refreshIndicator: RefreshProgressIndicator(),
@@ -48,7 +49,7 @@ class _TableProductState extends State<TableProduct> {
                   // enablePullToRefresh: true,
                   leftSideItemBuilder: _generateFirstColumnRow,
                   rightSideItemBuilder: _generateRightHandSideColumnRow,
-                  itemCount: cubit.productModels.length,
+                  itemCount: cubit.categoryModels.length,
                   rowSeparatorWidget: const Divider(
                     color: Colors.black54,
                     height: 1.0,
@@ -67,10 +68,8 @@ class _TableProductState extends State<TableProduct> {
 
   List<Widget> _getTitleWidget() {
     return [
-      _getTitleItemWidget('image', Get.width * .20),
-      _getTitleItemWidget('Prodcut', Get.width * .40),
-      _getTitleItemWidget('Price', Get.width * .20),
-      _getTitleItemWidget('Quantity', Get.width * .20),
+      _getTitleItemWidget('Category', Get.width * .5),
+      _getTitleItemWidget('desc', Get.width * .5),
     ];
   }
 
@@ -89,14 +88,11 @@ class _TableProductState extends State<TableProduct> {
 
   Widget _generateFirstColumnRow(BuildContext context, int index) {
     return Container(
-      width: Get.width * .20,
+      width: Get.width * .5,
       height: 52.h,
       padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
       alignment: Alignment.centerLeft,
-      child: FadeInImage(
-        image: NetworkImage(DataCubit.get(context).productModels[index].image!),
-        placeholder: AssetImage("assets/images/logo.png"),
-      ),
+      child: Text(DataCubit.get(context).categoryModels[index].name!),
     );
   }
 
@@ -104,27 +100,12 @@ class _TableProductState extends State<TableProduct> {
     return Row(
       children: [
         Container(
-          width: Get.width * .40,
-          height: 52.h,
-          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          child: Text(DataCubit.get(context).productModels[index].name!),
-        ),
-        Container(
-          width: Get.width * .20,
+          width: Get.width * .5,
           height: 52.h,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
           child:
-              Text("${DataCubit.get(context).productModels[index].priceOne!}"),
-        ),
-        Container(
-          width: Get.width * .20,
-          height: 52.h,
-          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          child: Text(
-              "${DataCubit.get(context).productModels[index].stockQuantity!}"),
+              Text(DataCubit.get(context).categoryModels[index].description!),
         ),
       ],
     );

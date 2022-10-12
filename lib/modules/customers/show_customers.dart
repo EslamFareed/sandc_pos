@@ -13,6 +13,7 @@ import '../../core/components/build_popup.dart';
 import '../../core/components/default_buttons.dart';
 import '../../core/style/text/app_text_style.dart';
 import '../sales/table_sales.dart';
+import 'make_pdf_customer.dart';
 import 'search_customers.dart';
 
 class ShowCustomers extends StatelessWidget {
@@ -24,12 +25,12 @@ class ShowCustomers extends StatelessWidget {
       centerTitle: true,
       actions: [
         //open printer page
-        // IconButton(
-        //   onPressed: () {
-        //     Get.to(const PrintScreen(), transition: Transition.zoom);
-        //   },
-        //   icon: SvgPicture.asset("assets/icons/reports.svg", height: 25.h),
-        // )
+        IconButton(
+          onPressed: () {
+            Get.to(const MakePdfClients(), transition: Transition.zoom);
+          },
+          icon: SvgPicture.asset("assets/icons/reports.svg", height: 25.h),
+        )
       ],
     );
   }
