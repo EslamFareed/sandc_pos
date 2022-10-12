@@ -33,7 +33,8 @@ class _TableCustomerState extends State<TableCustomer> {
         listener: (context, state) {},
         builder: (context, state) {
           var cubit = DataCubit.get(context);
-          return cubit.clientModels.isNotEmpty
+          return cubit.clientModels.isNotEmpty &&
+                  state is GetAllClientTableSuccess
               ? HorizontalDataTable(
                   leftHandSideColumnWidth: Get.width * .5,
                   rightHandSideColumnWidth: Get.width * .5,

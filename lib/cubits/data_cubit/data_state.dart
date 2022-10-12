@@ -5,4 +5,9 @@ abstract class DataState {}
 
 class DataInitial extends DataState {}
 
-class GetAllClients extends DataState {}
+
+////////////////////////////////////////////////////
+
+class GetAllClientTableLoading extends DataState {}
+class GetAllClientTableSuccess extends DataState {}
+class GetAllClientTableError extends DataState {}

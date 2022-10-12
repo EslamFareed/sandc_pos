@@ -1974,8 +1974,8 @@ class DataCubit extends Cubit<DataState> {
 
   List<ClientModel> clientModels = [];
   getAllClientTable() async {
+    emit(GetAllClientTableLoading());
     try {
-      emit(GetAllClients());
       clientModels = [];
       List<Map<String, dynamic>> data =
           await readData("SELECT * FROM '${ClientModel.ClientModelName}' ");
@@ -1983,8 +1983,10 @@ class DataCubit extends Cubit<DataState> {
       for (var element in data) {
         clientModels.add(ClientModel.fromJsonEdit(element));
       }
+      emit(GetAllClientTableSuccess());
     } catch (e) {
       print(e);
+      emit(GetAllClientTableError());
     }
   }
 
