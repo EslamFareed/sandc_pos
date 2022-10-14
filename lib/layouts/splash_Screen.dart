@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:sandc_pos/core/local/cache/cache_helper.dart';
 import 'package:sandc_pos/core/local/cache/cache_keys.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/layouts/main_screen.dart';
@@ -49,6 +50,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
+    // if (CacheKeysManger.geIsFirstTimeFromCache()) {
+    //   CacheHelper.saveData(key: "isFirstTime", value: false);
+    //   _getData();
+    // }
+
     Future.delayed(const Duration(seconds: 4)).then((value) => Get.off(
         CacheKeysManger.getUserTokenFromCache() == "NO"
             ? LoginScreen()
@@ -58,6 +64,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     super.initState();
   }
+
+  // _getData() async{
+
+  // }
 
   // @override
   // void dispose() {

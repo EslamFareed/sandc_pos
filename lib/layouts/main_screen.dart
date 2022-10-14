@@ -21,6 +21,7 @@ import 'package:sandc_pos/modules/about/contact_us.dart';
 import 'package:sandc_pos/modules/auth/login.dart';
 import 'package:sandc_pos/modules/customers/customers_home.dart';
 import 'package:sandc_pos/modules/products/products_home.dart';
+import 'package:sandc_pos/modules/sales_returns/sales_return.dart';
 import 'package:uuid/uuid.dart';
 
 import '../core/components/build_popup.dart';
@@ -207,7 +208,7 @@ class _MainScreenState extends State<MainScreen> {
       }
     },
     {
-      "title": "Customers",
+      "title": "Clients",
       "image": "assets/images/logo.png",
       "onTap": () {
         Get.to(const CustomersHome(), transition: Transition.zoom);
@@ -230,7 +231,9 @@ class _MainScreenState extends State<MainScreen> {
     {
       "title": "Sales Returns",
       "image": "assets/images/logo.png",
-      "onTap": () {}
+      "onTap": () {
+        Get.to(const SalesReturnsScreen(), transition: Transition.zoom);
+      }
     },
     {
       "title": "Settings",
@@ -239,13 +242,33 @@ class _MainScreenState extends State<MainScreen> {
         Get.to(SettingsScreen(), transition: Transition.zoom);
       }
     },
-    // {
-    //   "title": "Printer",
-    //   "image": "assets/images/logo.png",
-    //   "onTap": () {
-    //     Get.to(SettingsPrinter(), transition: Transition.zoom);
-    //   }
-    // },
+    {
+      "title": "Printer",
+      "image": "assets/images/logo.png",
+      "onTap": () {
+        Get.to(SettingsPrinter(), transition: Transition.zoom);
+      }
+    },
+    {
+      "title": "Update To cloud",
+      "image": "assets/images/logo.png",
+      "onTap": () {
+        Get.showSnackbar(GetSnackBar(
+          message: "Updated To cloud successfully",
+          duration: Duration(seconds: 2),
+        ));
+      }
+    },
+    {
+      "title": "Update From cloud",
+      "image": "assets/images/logo.png",
+      "onTap": () {
+        Get.showSnackbar(GetSnackBar(
+          message: "Updated From cloud successfully",
+          duration: Duration(seconds: 2),
+        ));
+      }
+    },
   ];
 
   _buildItemCard(String image, String title, void Function() onTap) {

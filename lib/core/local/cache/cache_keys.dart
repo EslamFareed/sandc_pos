@@ -9,6 +9,9 @@ class CacheKeysManger {
   static String getUserTokenFromCache() =>
       CacheHelper.getData(key: 'userToken') ?? "NO";
 
+  static bool geIsFirstTimeFromCache() =>
+      CacheHelper.getData(key: 'isFirstTime') ?? true;
+
   // static String getFirebaseUserTokenFromCache() =>
   //     CacheHelper.getData(key: 'firebaseToken') ?? "NO";
 

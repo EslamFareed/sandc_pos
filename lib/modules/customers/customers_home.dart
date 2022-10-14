@@ -16,7 +16,7 @@ class CustomersHome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Customers"),
+        title: const Text("Clients"),
       ),
       body: Stack(
         children: [
@@ -54,7 +54,7 @@ class CustomersHome extends StatelessWidget {
                       Get.to(const ShowCustomers(),
                           transition: Transition.zoom);
                     },
-                    buttonText: "Show Customers",
+                    buttonText: "Show Clients",
                     buttonBorderCircular: 16.r,
                     buttonHeight: 35.h,
                   ),
@@ -62,7 +62,7 @@ class CustomersHome extends StatelessWidget {
                     onPress: () {
                       Get.to(AddCustomer(), transition: Transition.zoom);
                     },
-                    buttonText: "Add New Customer",
+                    buttonText: "Add New Client",
                     buttonBorderCircular: 16.r,
                     buttonHeight: 35.h,
                   ),

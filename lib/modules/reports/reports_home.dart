@@ -7,6 +7,7 @@ import 'package:sandc_pos/modules/products/show_products.dart';
 import '../../core/components/default_buttons.dart';
 import '../../core/style/color/app_colors.dart';
 import '../categories/show_categories.dart';
+import 'sales_reports.dart';
 
 class ReportsHome extends StatelessWidget {
   const ReportsHome({super.key});
@@ -47,7 +48,7 @@ class ReportsHome extends StatelessWidget {
                       child: SvgPicture.asset("assets/icons/reports.svg")),
                   DefaultButton(
                     onPress: () {
-                      // Get.to(const ShowProducts(), transition: Transition.zoom);
+                      Get.to(const SalesReport(), transition: Transition.zoom);
                     },
                     buttonText: "Sales Reports",
                     buttonBorderCircular: 16.r,
