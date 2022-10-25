@@ -26,6 +26,9 @@ class _TableProductState extends State<TableProduct> {
 
   _getData() async {
     await DataCubit.get(context).getAllProductTable();
+    DataCubit.get(context).productModels.forEach((element) {
+      print(element.prodId);
+    });
   }
 
   @override
