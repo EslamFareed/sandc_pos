@@ -181,7 +181,7 @@ class _MainScreenState extends State<MainScreen> {
       child: Scaffold(
         appBar: _buildAppBar(),
         drawer: _buildDrawer(),
-        body: _buildBody(),
+        body: SingleChildScrollView(child: _buildBody()),
       ),
       onWillPop: () => _onWillPop(),
     );
