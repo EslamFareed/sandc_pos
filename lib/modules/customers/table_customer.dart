@@ -24,7 +24,7 @@ class _TableCustomerState extends State<TableCustomer> {
   }
 
   _getData() async {
-    await DataCubit.get(context).getAllClientTable();
+    // await DataCubit.get(context).getAllClientTable();
   }
 
   @override
@@ -33,33 +33,35 @@ class _TableCustomerState extends State<TableCustomer> {
         listener: (context, state) {},
         builder: (context, state) {
           var cubit = DataCubit.get(context);
-          return cubit.clientModels.isNotEmpty &&
-                  state is GetAllClientTableSuccess
-              ? HorizontalDataTable(
-                  leftHandSideColumnWidth: Get.width * .5,
-                  rightHandSideColumnWidth: Get.width * .5,
-                  isFixedHeader: true,
-                  headerWidgets: _getTitleWidget(),
-                  // refreshIndicator: RefreshProgressIndicator(),
-                  // htdRefreshController: HDTRefreshController(),
-                  // onRefresh: () {},
-                  // enablePullToRefresh: true,
-                  leftSideItemBuilder: _generateFirstColumnRow,
-                  rightSideItemBuilder: _generateRightHandSideColumnRow,
-                  itemCount: cubit.clientModels.length,
-                  rowSeparatorWidget: const Divider(
-                    color: Colors.black54,
-                    height: 1.0,
-                    thickness: 0.0,
-                  ),
-                  leftHandSideColBackgroundColor: const Color(0xFFFFFFFF),
-                  rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
-                )
-              : const Scaffold(
-                  body: Center(
-                    child: Text("No items found.."),
-                  ),
-                );
+          return
+              // cubit.clientModels.isNotEmpty &&
+              //         state is GetAllClientTableSuccess
+              //     ? HorizontalDataTable(
+              //         leftHandSideColumnWidth: Get.width * .5,
+              //         rightHandSideColumnWidth: Get.width * .5,
+              //         isFixedHeader: true,
+              //         headerWidgets: _getTitleWidget(),
+              //         // refreshIndicator: RefreshProgressIndicator(),
+              //         // htdRefreshController: HDTRefreshController(),
+              //         // onRefresh: () {},
+              //         // enablePullToRefresh: true,
+              //         leftSideItemBuilder: _generateFirstColumnRow,
+              //         rightSideItemBuilder: _generateRightHandSideColumnRow,
+              //         itemCount: cubit.clientModels.length,
+              //         rowSeparatorWidget: const Divider(
+              //           color: Colors.black54,
+              //           height: 1.0,
+              //           thickness: 0.0,
+              //         ),
+              //         leftHandSideColBackgroundColor: const Color(0xFFFFFFFF),
+              //         rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
+              //       )
+              //     :
+              const Scaffold(
+            body: Center(
+              child: Text("No items found.."),
+            ),
+          );
         });
   }
 
@@ -105,14 +107,16 @@ class _TableCustomerState extends State<TableCustomer> {
                 children: [
                   Expanded(
                     child: Text(
-                      DataCubit.get(context).clientModels[index].name!,
+                      // DataCubit.get(context).clientModels[index].name!,
+                      "",
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
                   ),
                   Expanded(
                     child: Text(
-                      DataCubit.get(context).clientModels[index].phone!,
+                      // DataCubit.get(context).clientModels[index].phone!,
+                      "",
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
@@ -134,16 +138,16 @@ class _TableCustomerState extends State<TableCustomer> {
           height: 52.h,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child: Text(
-              "${DataCubit.get(context).clientModels[index].ammountTobePaid!}"),
+          // child: Text(
+          //     "${DataCubit.get(context).clientModels[index].ammountTobePaid!}"),
         ),
         Container(
           width: Get.width * .25,
           height: 52.h,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child: Text(
-              "${DataCubit.get(context).clientModels[index].maxDebitLimit!}"),
+          // child: Text(
+          //     "${DataCubit.get(context).clientModels[index].maxDebitLimit!}"),
         ),
       ],
     );

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:sandc_pos/core/local/cache/cache_helper.dart';
+import 'package:get/get.dart' as getx;
 import 'package:sandc_pos/core/local/cache/cache_keys.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
-import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/layouts/main_screen.dart';
 import 'package:sandc_pos/modules/auth/login.dart';
+
+import '../cubits/auth_cubit/auth_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,7 +19,24 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _buildBody());
+    return BlocConsumer<AuthCubit, AuthState>(
+      builder: (context, state) => Scaffold(body: _buildBody()),
+      listener: (context, state) {
+        if (state is LoginSuccessState) {
+          getx.Get.showSnackbar(const getx.GetSnackBar(
+            message: "update login data successfuly",
+            duration: Duration(seconds: 4),
+          ));
+        }
+
+        if (state is LoginErrorState) {
+          getx.Get.showSnackbar(const getx.GetSnackBar(
+            message: "Error please try again",
+            duration: Duration(seconds: 4),
+          ));
+        }
+      },
+    );
   }
 
   _buildBody() {
@@ -51,22 +68,30 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
-    // if (CacheKeysManger.geIsFirstTimeFromCache()) {
-    //   CacheHelper.saveData(key: "isFirstTime", value: false);
-    //   _getData();
-    // }
-
-    Future.delayed(const Duration(seconds: 4)).then((value) => Get.off(
-        CacheKeysManger.getUserTokenFromCache() == "NO"
-            ? LoginScreen()
-            : const MainScreen(),
-        transition: Transition.fade,
-        duration: const Duration(seconds: 1)));
+    if (CacheKeysManger.getUserTokenFromCache() == "NO") {
+      Future.delayed(const Duration(seconds: 4)).then((value) => getx.Get.off(
+          LoginScreen(),
+          transition: getx.Transition.fade,
+          duration: const Duration(seconds: 1)));
+    } else {
+      _getData();
+      Future.delayed(const Duration(seconds: 4)).then((value) => getx.Get.off(
+          const MainScreen(),
+          transition: getx.Transition.fade,
+          duration: const Duration(seconds: 1)));
+    }
 
     super.initState();
   }
 
-  // _getData() async{
+  _getData() async {
+    await AuthCubit.get(context).login(
+        email: CacheKeysManger.geEmailFromCache(),
+        password: CacheKeysManger.gePasswordFromCache());
+  }
+}
+
+//   // _getData() async{
 
   // }
 
@@ -76,4 +101,4 @@ class _SplashScreenState extends State<SplashScreen> {
   //       overlays: SystemUiOverlay.values);
   //   super.dispose();
   // }
-}
+

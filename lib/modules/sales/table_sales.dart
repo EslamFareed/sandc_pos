@@ -39,29 +39,31 @@ class _TableSalesState extends State<TableSales> {
     return BlocConsumer<DataCubit, DataState>(
       listener: ((context, state) {}),
       builder: (context, state) {
-        return DataCubit.get(context).itemsCurrentOrder.isNotEmpty &&
-                (state is AddQuantityProdcutSuccess ||
-                    state is AddNewProductSuccess ||
-                    state is DeleteProductFromHomeSuccess)
-            ? HorizontalDataTable(
-                leftHandSideColumnWidth: Get.width * .40,
-                rightHandSideColumnWidth: Get.width * .60,
-                isFixedHeader: true,
-                headerWidgets: _getTitleWidget(),
-                leftSideItemBuilder: _generateFirstColumnRow,
-                rightSideItemBuilder: _generateRightHandSideColumnRow,
-                itemCount: DataCubit.get(context).itemsCurrentOrder.length,
-                rowSeparatorWidget: const Divider(
-                  color: Colors.black54,
-                  height: 1.0,
-                  thickness: 0.0,
-                ),
-                leftHandSideColBackgroundColor: const Color(0xFFFFFFFF),
-                rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
-              )
-            : const Scaffold(
-                body: Center(child: Text("No items")),
-              );
+        return
+            // DataCubit.get(context).itemsCurrentOrder.isNotEmpty &&
+            //         (state is AddQuantityProdcutSuccess ||
+            //             state is AddNewProductSuccess ||
+            //             state is DeleteProductFromHomeSuccess)
+            //     ? HorizontalDataTable(
+            //         leftHandSideColumnWidth: Get.width * .40,
+            //         rightHandSideColumnWidth: Get.width * .60,
+            //         isFixedHeader: true,
+            //         headerWidgets: _getTitleWidget(),
+            //         leftSideItemBuilder: _generateFirstColumnRow,
+            //         rightSideItemBuilder: _generateRightHandSideColumnRow,
+            //         itemCount: DataCubit.get(context).itemsCurrentOrder.length,
+            //         rowSeparatorWidget: const Divider(
+            //           color: Colors.black54,
+            //           height: 1.0,
+            //           thickness: 0.0,
+            //         ),
+            //         leftHandSideColBackgroundColor: const Color(0xFFFFFFFF),
+            //         rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
+            //       )
+            //     :
+            const Scaffold(
+          body: Center(child: Text("No items")),
+        );
       },
     );
   }
@@ -88,140 +90,140 @@ class _TableSalesState extends State<TableSales> {
     );
   }
 
-  Widget _generateFirstColumnRow(BuildContext context, int index) {
-    return Container(
-      width: Get.width * .40,
-      height: 52.h,
-      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-      alignment: Alignment.centerLeft,
-      child: Text(DataCubit.get(context)
-          .productsCurrentOrder
-          .where((element) =>
-              element.prodId ==
-              DataCubit.get(context).itemsCurrentOrder[index].prodId)
-          .first
-          .name!),
-    );
-  }
+  // Widget _generateFirstColumnRow(BuildContext context, int index) {
+  //   return Container(
+  //     width: Get.width * .40,
+  //     height: 52.h,
+  //     padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+  //     alignment: Alignment.centerLeft,
+  //     child: Text(DataCubit.get(context)
+  //         .productsCurrentOrder
+  //         .where((element) =>
+  //             element.prodId ==
+  //             DataCubit.get(context).itemsCurrentOrder[index].prodId)
+  //         .first
+  //         .name!),
+  //   );
+  // }
 
-  Widget _generateRightHandSideColumnRow(BuildContext context, int index) {
-    return Row(
-      children: [
-        Container(
-          width: Get.width * .20,
-          height: 52.h,
-          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          child: Text(
-              "${DataCubit.get(context).productsCurrentOrder.where((element) => element.prodId == DataCubit.get(context).itemsCurrentOrder[index].prodId).first.priceOne!}"),
-        ),
-        GestureDetector(
-          onTapDown: (details) {
-            showMenu(
-              context: context,
-              position: RelativeRect.fromLTRB(
-                details.globalPosition.dx,
-                details.globalPosition.dy,
-                details.globalPosition.dx,
-                details.globalPosition.dy,
-              ),
-              items: [
-                const PopupMenuItem(child: Text('+'), value: '1'),
-                const PopupMenuItem(child: Text('-'), value: '2'),
-              ],
-              elevation: 8.0,
-            ).then(
-              (value) {
-                if (value == "1") {
-                  DataCubit.get(context).addQuantityProdcutFromHome(
-                      DataCubit.get(context)
-                          .productsCurrentOrder
-                          .where((element) =>
-                              element.prodId ==
-                              DataCubit.get(context)
-                                  .itemsCurrentOrder[index]
-                                  .prodId)
-                          .first,
-                      context);
-                } else {
-                  if (DataCubit.get(context)
-                          .itemsCurrentOrder[index]
-                          .quanitiy ==
-                      1) {
-                    Get.dialog(
-                        AlertDialog(
-                          actions: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: DefaultButton(
-                                      buttonHeight: 25.h,
-                                      onPress: () {
-                                        DataCubit.get(context)
-                                            .deleteProdcutFromCart(
-                                                DataCubit.get(context)
-                                                    .productsCurrentOrder
-                                                    .where((element) =>
-                                                        element.prodId ==
-                                                        DataCubit.get(context)
-                                                            .itemsCurrentOrder[
-                                                                index]
-                                                            .prodId)
-                                                    .first,
-                                                context);
-                                        Get.back();
-                                      },
-                                      buttonText: "Yes"),
-                                ),
-                                Expanded(
-                                  child: DefaultButton(
-                                      buttonHeight: 25.h,
-                                      onPress: () {
-                                        Get.back();
-                                      },
-                                      buttonText: "No"),
-                                ),
-                              ],
-                            )
-                          ],
-                          title: Text(
-                              "want to delete this product from cart ${DataCubit.get(context).productsCurrentOrder.where((element) => element.prodId == DataCubit.get(context).itemsCurrentOrder[index].prodId).first.name!}"),
-                        ),
-                        barrierDismissible: false);
-                  } else {
-                    DataCubit.get(context).mineseQuantityProdcutFromHome(
-                        DataCubit.get(context)
-                            .productsCurrentOrder
-                            .where((element) =>
-                                element.prodId ==
-                                DataCubit.get(context)
-                                    .itemsCurrentOrder[index]
-                                    .prodId)
-                            .first,
-                        context);
-                  }
-                }
-              },
-            );
-          },
-          child: Container(
-            width: Get.width * .20,
-            height: 52.h,
-            padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-            alignment: Alignment.centerLeft,
-            child: Text(
-                "${DataCubit.get(context).itemsCurrentOrder[index].quanitiy}"),
-          ),
-        ),
-        Container(
-          width: Get.width * .20,
-          height: 52.h,
-          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          child: Text(
-              "${DataCubit.get(context).itemsCurrentOrder[index].totalCost}"),
-        ),
-      ],
-    );
-  }
+  // Widget _generateRightHandSideColumnRow(BuildContext context, int index) {
+  //   return Row(
+  //     children: [
+  //       Container(
+  //         width: Get.width * .20,
+  //         height: 52.h,
+  //         padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+  //         alignment: Alignment.centerLeft,
+  //         child: Text(
+  //             "${DataCubit.get(context).productsCurrentOrder.where((element) => element.prodId == DataCubit.get(context).itemsCurrentOrder[index].prodId).first.priceOne!}"),
+  //       ),
+  //       GestureDetector(
+  //         onTapDown: (details) {
+  //           showMenu(
+  //             context: context,
+  //             position: RelativeRect.fromLTRB(
+  //               details.globalPosition.dx,
+  //               details.globalPosition.dy,
+  //               details.globalPosition.dx,
+  //               details.globalPosition.dy,
+  //             ),
+  //             items: [
+  //               const PopupMenuItem(child: Text('+'), value: '1'),
+  //               const PopupMenuItem(child: Text('-'), value: '2'),
+  //             ],
+  //             elevation: 8.0,
+  //           ).then(
+  //             (value) {
+  //               if (value == "1") {
+  //                 DataCubit.get(context).addQuantityProdcutFromHome(
+  //                     DataCubit.get(context)
+  //                         .productsCurrentOrder
+  //                         .where((element) =>
+  //                             element.prodId ==
+  //                             DataCubit.get(context)
+  //                                 .itemsCurrentOrder[index]
+  //                                 .prodId)
+  //                         .first,
+  //                     context);
+  //               } else {
+  //                 if (DataCubit.get(context)
+  //                         .itemsCurrentOrder[index]
+  //                         .quanitiy ==
+  //                     1) {
+  //                   Get.dialog(
+  //                       AlertDialog(
+  //                         actions: [
+  //                           Row(
+  //                             children: [
+  //                               Expanded(
+  //                                 child: DefaultButton(
+  //                                     buttonHeight: 25.h,
+  //                                     onPress: () {
+  //                                       DataCubit.get(context)
+  //                                           .deleteProdcutFromCart(
+  //                                               DataCubit.get(context)
+  //                                                   .productsCurrentOrder
+  //                                                   .where((element) =>
+  //                                                       element.prodId ==
+  //                                                       DataCubit.get(context)
+  //                                                           .itemsCurrentOrder[
+  //                                                               index]
+  //                                                           .prodId)
+  //                                                   .first,
+  //                                               context);
+  //                                       Get.back();
+  //                                     },
+  //                                     buttonText: "Yes"),
+  //                               ),
+  //                               Expanded(
+  //                                 child: DefaultButton(
+  //                                     buttonHeight: 25.h,
+  //                                     onPress: () {
+  //                                       Get.back();
+  //                                     },
+  //                                     buttonText: "No"),
+  //                               ),
+  //                             ],
+  //                           )
+  //                         ],
+  //                         title: Text(
+  //                             "want to delete this product from cart ${DataCubit.get(context).productsCurrentOrder.where((element) => element.prodId == DataCubit.get(context).itemsCurrentOrder[index].prodId).first.name!}"),
+  //                       ),
+  //                       barrierDismissible: false);
+  //                 } else {
+  //                   DataCubit.get(context).mineseQuantityProdcutFromHome(
+  //                       DataCubit.get(context)
+  //                           .productsCurrentOrder
+  //                           .where((element) =>
+  //                               element.prodId ==
+  //                               DataCubit.get(context)
+  //                                   .itemsCurrentOrder[index]
+  //                                   .prodId)
+  //                           .first,
+  //                       context);
+  //                 }
+  //               }
+  //             },
+  //           );
+  //         },
+  //         child: Container(
+  //           width: Get.width * .20,
+  //           height: 52.h,
+  //           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+  //           alignment: Alignment.centerLeft,
+  //           child: Text(
+  //               "${DataCubit.get(context).itemsCurrentOrder[index].quanitiy}"),
+  //         ),
+  //       ),
+  //       Container(
+  //         width: Get.width * .20,
+  //         height: 52.h,
+  //         padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+  //         alignment: Alignment.centerLeft,
+  //         child: Text(
+  //             "${DataCubit.get(context).itemsCurrentOrder[index].totalCost}"),
+  //       ),
+  //     ],
+  //   );
+  // }
 }

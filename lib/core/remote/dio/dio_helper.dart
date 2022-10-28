@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:sandc_pos/core/local/cache/cache_keys.dart';
 
 import 'end_points.dart';
 
@@ -27,6 +28,20 @@ class DioHelper {
     );
   }
 
+  static Future<Response> getDataWithToken({
+    required String url,
+    Map<String, dynamic>? query,
+  }) async {
+    dio.options.headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${CacheKeysManger.getUserTokenFromCache()}"
+    };
+    return await dio.get(
+      url,
+      queryParameters: query,
+    );
+  }
+
   static Future<Response> postData({
     required String url,
     required Map<String, dynamic> data,
@@ -42,6 +57,22 @@ class DioHelper {
     );
   }
 
+  static Future<Response> postDataWithToken({
+    required String url,
+    required Map<String, dynamic> data,
+    Map<String, dynamic>? query,
+  }) async {
+    dio.options.headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${CacheKeysManger.getUserTokenFromCache()}"
+    };
+    return await dio.post(
+      url,
+      queryParameters: query,
+      data: data,
+    );
+  }
+
   static Future<Response> postForm({
     required String url,
     required FormData data,
@@ -49,6 +80,22 @@ class DioHelper {
   }) async {
     dio.options.headers = {
       "Content-Type": "application/json",
+    };
+    return await dio.post(
+      url,
+      queryParameters: query,
+      data: data,
+    );
+  }
+
+  static Future<Response> postFormWithToken({
+    required String url,
+    required FormData data,
+    Map<String, dynamic>? query,
+  }) async {
+    dio.options.headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${CacheKeysManger.getUserTokenFromCache()}"
     };
     return await dio.post(
       url,

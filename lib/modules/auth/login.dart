@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' as tra;
 import 'package:sandc_pos/core/components/app_language.dart';
-import 'package:sandc_pos/core/local/cache/cache_helper.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/core/style/text/app_text_style.dart';
-import 'package:sandc_pos/layouts/main_screen.dart';
+import 'package:sandc_pos/cubits/auth_cubit/auth_cubit.dart';
 import 'package:sandc_pos/modules/about/contact_us.dart';
 
+import '../../layouts/main_screen.dart';
 import 'forget_password.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -19,15 +20,40 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _buildBody(context));
+    return BlocConsumer<AuthCubit, AuthState>(
+      builder: (context, state) => Scaffold(body: _buildBody(context)),
+      listener: (context, state) {
+        if (state is LoginLoadingState) {
+          tra.Get.dialog(const Dialog(
+            child: Center(child: CircularProgressIndicator()),
+          ));
+        }
+
+        if (state is LoginSuccessState) {
+          tra.Get.offAll(const MainScreen(), transition: tra.Transition.zoom);
+          tra.Get.showSnackbar(const tra.GetSnackBar(
+            message: "Login successfully",
+            duration: Duration(seconds: 4),
+          ));
+        }
+
+        if (state is LoginErrorState) {
+          tra.Get.back();
+          tra.Get.showSnackbar(const tra.GetSnackBar(
+            message: "Error please try again",
+            duration: Duration(seconds: 4),
+          ));
+        }
+      },
+    );
   }
 
   _buildBody(BuildContext context) {
     return Form(
       key: _keyForm,
       child: Container(
-          width: Get.width,
-          height: Get.height,
+          width: tra.Get.width,
+          height: tra.Get.height,
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/background_splash.jpg"),
@@ -37,19 +63,19 @@ class LoginScreen extends StatelessWidget {
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: SizedBox(
-              width: Get.width,
-              height: Get.height,
+              width: tra.Get.width,
+              height: tra.Get.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Image.asset(
                     "assets/images/logo.png",
-                    width: Get.width * 0.5,
-                    height: Get.height * 0.15,
+                    width: tra.Get.width * 0.5,
+                    height: tra.Get.height * 0.15,
                   ),
                   SizedBox(
-                    width: Get.width * 0.7,
-                    height: Get.height * 0.6,
+                    width: tra.Get.width * 0.7,
+                    height: tra.Get.height * 0.6,
                     child: Card(
                       color: AppColors.whitBackGroundColor,
                       shape: RoundedRectangleBorder(
@@ -113,8 +139,8 @@ class LoginScreen extends StatelessWidget {
                                   : Alignment.centerLeft,
                               child: GestureDetector(
                                 onTap: () {
-                                  Get.to(const ForgetPasswordScreen(),
-                                      transition: Transition.zoom,
+                                  tra.Get.to(const ForgetPasswordScreen(),
+                                      transition: tra.Transition.zoom,
                                       duration: Duration(milliseconds: 200));
                                 },
                                 child: const Text(
@@ -128,7 +154,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 25.h),
                             Container(
-                              width: Get.width.w,
+                              width: tra.Get.width.w,
                               decoration: BoxDecoration(
                                 color: AppColors.primaryColor,
                                 borderRadius: BorderRadius.circular(16),
@@ -136,23 +162,10 @@ class LoginScreen extends StatelessWidget {
                               child: MaterialButton(
                                 onPressed: () async {
                                   if (_keyForm.currentState!.validate()) {
-                                    if (emailController.text ==
-                                            "eslam@yahoo.com" &&
-                                        passwordController.text == "123456") {
-                                      await CacheHelper.saveData(
-                                          key: "userToken", value: "123456789");
-                                      Get.showSnackbar(const GetSnackBar(
-                                        message: "Login successfully",
-                                        duration: Duration(seconds: 4),
-                                      ));
-                                      Get.offAll(const MainScreen(),
-                                          transition: Transition.zoom);
-                                    } else {
-                                      Get.showSnackbar(const GetSnackBar(
-                                        message: "error login",
-                                        duration: Duration(seconds: 4),
-                                      ));
-                                    }
+                                    await AuthCubit.get(context).login(
+                                        email: emailController.text.toString(),
+                                        password:
+                                            passwordController.text.toString());
                                   }
                                 },
                                 child: Text(
@@ -174,9 +187,9 @@ class LoginScreen extends StatelessWidget {
                                 SizedBox(width: 5.w),
                                 GestureDetector(
                                   onTap: () {
-                                    Get.to(
+                                    tra.Get.to(
                                       ContactUsScreen(),
-                                      transition: Transition.zoom,
+                                      transition: tra.Transition.zoom,
                                     );
                                   },
                                   child: const Text(

@@ -21,7 +21,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
 
   @override
   void initState() {
-    products = DataCubit.get(context).productModels;
+    // products = DataCubit.get(context).productModels;
     super.initState();
   }
 
@@ -62,11 +62,11 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
     return Card(
       child: ListTile(
         onTap: () {
-          if (DataCubit.get(context).productsCurrentOrder.contains(product)) {
-            DataCubit.get(context).addQuantityProdcut(product, context);
-          } else {
-            DataCubit.get(context).addNewProduct(product, context);
-          }
+          // if (DataCubit.get(context).productsCurrentOrder.contains(product)) {
+          //   DataCubit.get(context).addQuantityProdcut(product, context);
+          // } else {
+          //   DataCubit.get(context).addNewProduct(product, context);
+          // }
         },
         leading: Image.network(
           product.image!,
@@ -88,15 +88,15 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
   }
 
   void searchProducts(String query, BuildContext context) {
-    final productsSearched =
-        DataCubit.get(context).productModels.where((element) {
-      final productName = element.name!.toLowerCase();
-      final input = query.toLowerCase();
+    // final productsSearched =
+    //     DataCubit.get(context).productModels.where((element) {
+    //   final productName = element.name!.toLowerCase();
+    //   final input = query.toLowerCase();
 
-      return productName.contains(input);
-    });
-    setState(() {
-      products = productsSearched.toList();
-    });
+    //   return productName.contains(input);
+    // });
+    // setState(() {
+    //   products = productsSearched.toList();
+    // });
   }
 }

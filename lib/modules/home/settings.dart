@@ -119,17 +119,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   _buildForm(BuildContext context, DataCubit cubit) {
-    if (cubit.companyModel != null) {
-      companyNameController.text = cubit.companyModel!.companyName!;
-      phoneController.text = cubit.companyModel!.phone!;
-      addressController.text = cubit.companyModel!.address!;
-      notesController.text = cubit.companyModel!.companyDescription!;
-      valueAddedTaxesController.text =
-          cubit.companyModel!.taxAmount!.toString();
-      taxesNumberController.text = cubit.companyModel!.taxNumber!;
-      cancelTaxes = !(cubit.companyModel!.isTaxes!);
-      mustChooseCustomerWhenPayCash = cubit.companyModel!.isMustChoosePayCash!;
-    }
+    // if (cubit.companyModel != null) {
+    //   companyNameController.text = cubit.companyModel!.companyName!;
+    //   phoneController.text = cubit.companyModel!.phone!;
+    //   addressController.text = cubit.companyModel!.address!;
+    //   notesController.text = cubit.companyModel!.companyDescription!;
+    //   valueAddedTaxesController.text =
+    //       cubit.companyModel!.taxAmount!.toString();
+    //   taxesNumberController.text = cubit.companyModel!.taxNumber!;
+    //   cancelTaxes = !(cubit.companyModel!.isTaxes!);
+    //   mustChooseCustomerWhenPayCash = cubit.companyModel!.isMustChoosePayCash!;
+    // }
     return Form(
       key: _keyForm,
       child: Column(

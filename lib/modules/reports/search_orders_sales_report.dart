@@ -24,7 +24,7 @@ class _SearchOrdersSalesReportScreenState
 
   @override
   void initState() {
-    orders = DataCubit.get(context).orderModels;
+    // orders = DataCubit.get(context).orderModels;
     super.initState();
   }
 
@@ -85,14 +85,14 @@ class _SearchOrdersSalesReportScreenState
   }
 
   void searchProducts(String query, BuildContext context) {
-    final ordersSearched = DataCubit.get(context).orderModels.where((element) {
-      final orderReciet = element.id!.toLowerCase();
-      final input = query.toLowerCase();
+    // final ordersSearched = DataCubit.get(context).orderModels.where((element) {
+    //   final orderReciet = element.id!.toLowerCase();
+    //   final input = query.toLowerCase();
 
-      return orderReciet.contains(input);
-    });
-    setState(() {
-      orders = ordersSearched.toList();
-    });
+    //   return orderReciet.contains(input);
+    // });
+    // setState(() {
+    //   orders = ordersSearched.toList();
+    // });
   }
 }

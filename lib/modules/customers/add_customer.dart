@@ -209,8 +209,8 @@ class AddCustomer extends StatelessWidget {
                       double.parse(maxDebitBillsController.text),
                   taxNumber: taxNumberController.text,
                   updateDate: "date");
-              await DataCubit.get(context).insertClientTable(item);
-              await DataCubit.get(context).getAllClientTable();
+              // await DataCubit.get(context).insertClientTable(item);
+              // await DataCubit.get(context).getAllClientTable();
               Get.showSnackbar(const GetSnackBar(
                 message: "Create successfully",
                 duration: Duration(seconds: 2),

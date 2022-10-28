@@ -5,8 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:sandc_pos/cubits/auth_cubit/auth_cubit.dart';
 import 'package:sandc_pos/cubits/chat_cubit/chat_cubit.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
+import 'package:sandc_pos/cubits/data_online_cubit/data_online_cubit.dart';
 
 import '../../core/style/dark/dark.dart';
 import '../core/style/light/light.dart';
@@ -23,25 +25,26 @@ class AppRoot extends StatelessWidget {
       providers: [
         BlocProvider(create: (BuildContext context) => MainCubit()),
         BlocProvider(create: (BuildContext context) => ChatCubit()),
-        BlocProvider(
-            create: (BuildContext context) => DataCubit()
-              ..db
-              ..getAllBillTable()
-              ..getAllBranchProductTable()
-              ..getAllBranchTable()
-              ..getAllCategoryTable()
-              ..getAllClientTable()
-              ..getAllCompanyTable()
-              ..getAllCurrencyTable()
-              ..getAllDebitPayingsTable()
-              ..getAllEmpTypesTable()
-              ..getAllEmployeeTable()
-              ..getAllInvoiceDetailsTable()
-              ..getAllOrderTable()
-              ..getAllPayTypeTable()
-              ..getAllProductTable()
-              ..getAllReceiptsTable()
-              ..getAllUnitTable()),
+        BlocProvider(create: (BuildContext context) => AuthCubit()),
+        BlocProvider(create: (BuildContext context) => DataOnlineCubit()),
+        BlocProvider(create: (BuildContext context) => DataCubit()..db
+            // ..getAllBillTable()
+            // ..getAllBranchProductTable()
+            // ..getAllBranchTable()
+            // ..getAllCategoryTable()
+            // ..getAllClientTable()
+            // ..getAllCompanyTable()
+            // ..getAllCurrencyTable()
+            // ..getAllDebitPayingsTable()
+            // ..getAllEmpTypesTable()
+            // ..getAllEmployeeTable()
+            // ..getAllInvoiceDetailsTable()
+            // ..getAllOrderTable()
+            // ..getAllPayTypeTable()
+            // ..getAllProductTable()
+            // ..getAllReceiptsTable()
+            // ..getAllUnitTable()
+            ),
       ],
       child: BlocConsumer<MainCubit, MainStates>(
         listener: (context, state) {},

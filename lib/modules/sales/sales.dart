@@ -29,9 +29,9 @@ class _SalesScreenState extends State<SalesScreen> {
 
   @override
   void initState() {
-    DataCubit.get(context).itemsCurrentOrder = [];
-    DataCubit.get(context).productsCurrentOrder = [];
-    DataCubit.get(context).currentOrder = OrderModel(id: Uuid().v1());
+    // DataCubit.get(context).itemsCurrentOrder = [];
+    // DataCubit.get(context).productsCurrentOrder = [];
+    // DataCubit.get(context).currentOrder = OrderModel(id: Uuid().v1());
     super.initState();
   }
 
@@ -104,9 +104,9 @@ class _SalesScreenState extends State<SalesScreen> {
 
   _buildBottom(BuildContext context) {
     double total = 0;
-    DataCubit.get(context).itemsCurrentOrder.forEach((element) {
-      total += element.totalCost!;
-    });
+    // DataCubit.get(context).itemsCurrentOrder.forEach((element) {
+    //   total += element.totalCost!;
+    // });
     Get.dialog(
       Dialog(
         insetAnimationDuration: const Duration(milliseconds: 100),

@@ -25,10 +25,10 @@ class _TableProductState extends State<TableProduct> {
   }
 
   _getData() async {
-    await DataCubit.get(context).getAllProductTable();
-    DataCubit.get(context).productModels.forEach((element) {
-      print(element.prodId);
-    });
+    // await DataCubit.get(context).getAllProductTable();
+    // DataCubit.get(context).productModels.forEach((element) {
+    //   print(element.prodId);
+    // });
   }
 
   @override
@@ -38,33 +38,35 @@ class _TableProductState extends State<TableProduct> {
         builder: (context, state) {
           var cubit = DataCubit.get(context);
 
-          return cubit.productModels.isNotEmpty &&
-                  state is GetAllProductTableSuccess
-              ? HorizontalDataTable(
-                  leftHandSideColumnWidth: Get.width * .20,
-                  rightHandSideColumnWidth: Get.width * .80,
-                  isFixedHeader: true,
-                  headerWidgets: _getTitleWidget(),
-                  // refreshIndicator: RefreshProgressIndicator(),
-                  // htdRefreshController: HDTRefreshController(),
-                  // onRefresh: () {},
-                  // enablePullToRefresh: true,
-                  leftSideItemBuilder: _generateFirstColumnRow,
-                  rightSideItemBuilder: _generateRightHandSideColumnRow,
-                  itemCount: cubit.productModels.length,
-                  rowSeparatorWidget: const Divider(
-                    color: Colors.black54,
-                    height: 1.0,
-                    thickness: 0.0,
-                  ),
-                  leftHandSideColBackgroundColor: const Color(0xFFFFFFFF),
-                  rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
-                )
-              : const Scaffold(
-                  body: Center(
-                    child: Text("No items found.."),
-                  ),
-                );
+          return
+              //  cubit.productModels.isNotEmpty &&
+              //         state is GetAllProductTableSuccess
+              //     ? HorizontalDataTable(
+              //         leftHandSideColumnWidth: Get.width * .20,
+              //         rightHandSideColumnWidth: Get.width * .80,
+              //         isFixedHeader: true,
+              //         headerWidgets: _getTitleWidget(),
+              //         // refreshIndicator: RefreshProgressIndicator(),
+              //         // htdRefreshController: HDTRefreshController(),
+              //         // onRefresh: () {},
+              //         // enablePullToRefresh: true,
+              //         leftSideItemBuilder: _generateFirstColumnRow,
+              //         rightSideItemBuilder: _generateRightHandSideColumnRow,
+              //         itemCount: cubit.productModels.length,
+              //         rowSeparatorWidget: const Divider(
+              //           color: Colors.black54,
+              //           height: 1.0,
+              //           thickness: 0.0,
+              //         ),
+              //         leftHandSideColBackgroundColor: const Color(0xFFFFFFFF),
+              //         rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
+              //       )
+              //     :
+              const Scaffold(
+            body: Center(
+              child: Text("No items found.."),
+            ),
+          );
         });
   }
 
@@ -96,10 +98,10 @@ class _TableProductState extends State<TableProduct> {
       height: 52.h,
       padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
       alignment: Alignment.centerLeft,
-      child: FadeInImage(
-        image: NetworkImage(DataCubit.get(context).productModels[index].image!),
-        placeholder: AssetImage("assets/images/logo.png"),
-      ),
+      // child: FadeInImage(
+      //   image: NetworkImage(DataCubit.get(context).productModels[index].image!),
+      //   placeholder: AssetImage("assets/images/logo.png"),
+      // ),
     );
   }
 
@@ -111,23 +113,23 @@ class _TableProductState extends State<TableProduct> {
           height: 52.h,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child: Text(DataCubit.get(context).productModels[index].name!),
+          // child: Text(DataCubit.get(context).productModels[index].name!),
         ),
         Container(
           width: Get.width * .20,
           height: 52.h,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child:
-              Text("${DataCubit.get(context).productModels[index].priceOne!}"),
+          // child:
+          //     Text("${DataCubit.get(context).productModels[index].priceOne!}"),
         ),
         Container(
           width: Get.width * .20,
           height: 52.h,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child: Text(
-              "${DataCubit.get(context).productModels[index].stockQuantity!}"),
+          // child: Text(
+          //     "${DataCubit.get(context).productModels[index].stockQuantity!}"),
         ),
       ],
     );

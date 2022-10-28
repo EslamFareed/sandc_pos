@@ -1,34 +1,24 @@
 import 'dart:io';
-import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:sandc_pos/core/local/cache/cache_helper.dart';
-import 'package:sandc_pos/core/style/color/app_colors.dart';
-import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
-import 'package:sandc_pos/models/branch.dart';
-import 'package:sandc_pos/models/category.dart';
-import 'package:sandc_pos/models/company.dart';
-import 'package:sandc_pos/models/currency.dart';
-import 'package:sandc_pos/models/emp_types.dart';
-import 'package:sandc_pos/models/employee.dart';
-import 'package:sandc_pos/models/products.dart';
-import 'package:sandc_pos/models/unit.dart';
-import 'package:sandc_pos/modules/about/about_us.dart';
-import 'package:sandc_pos/modules/about/contact_us.dart';
-import 'package:sandc_pos/modules/auth/login.dart';
-import 'package:sandc_pos/modules/customers/customers_home.dart';
-import 'package:sandc_pos/modules/products/products_home.dart';
-import 'package:sandc_pos/modules/sales_returns/sales_return.dart';
-import 'package:uuid/uuid.dart';
+import '../core/local/cache/cache_helper.dart';
+import '../core/local/cache/cache_keys.dart';
+import '../core/style/color/app_colors.dart';
 
+import '../modules/about/about_us.dart';
+import '../modules/about/contact_us.dart';
+import '../modules/auth/login.dart';
+import '../modules/customers/customers_home.dart';
+import '../modules/products/products_home.dart';
+import '../modules/sales_returns/sales_return.dart';
 import '../core/components/build_popup.dart';
 import '../core/components/default_buttons.dart';
 import '../core/style/text/app_text_style.dart';
 import '../core/utils/navigation_utility.dart';
-import '../modules/about/contact_with_admin_screen.dart';
 import '../modules/home/settings.dart';
 import '../modules/home/settings_printer.dart';
 import '../modules/reports/reports_home.dart';
@@ -50,7 +40,11 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   _getData() async {
-    await DataCubit.get(context).getCurrentCompany();
+    if (kDebugMode) {
+      print(CacheKeysManger.getUserTokenFromCache());
+    }
+
+    // await DataCubit.get(context).getCurrentCompany();
 
     // await DataCubit.get(context).deleteAllProductModel();
     // var id = Uuid().v1();
