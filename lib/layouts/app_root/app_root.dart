@@ -10,11 +10,11 @@ import 'package:sandc_pos/cubits/chat_cubit/chat_cubit.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/cubits/data_online_cubit/data_online_cubit.dart';
 
-import '../../core/style/dark/dark.dart';
-import '../core/style/light/light.dart';
-import '../cubits/main_cubit/main_cubit.dart';
-import '../cubits/main_cubit/main_states.dart';
-import 'splash_Screen.dart';
+import '../../../core/style/dark/dark.dart';
+import '../../core/style/light/light.dart';
+import '../../cubits/main_cubit/main_cubit.dart';
+import '../../cubits/main_cubit/main_states.dart';
+import '../splash_screen/splash_Screen.dart';
 
 class AppRoot extends StatelessWidget {
   const AppRoot({Key? key}) : super(key: key);

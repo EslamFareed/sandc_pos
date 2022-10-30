@@ -69,11 +69,11 @@ class ClientResponseModel {
     maxLimtDebitRecietCount = json['maxLimtDebitRecietCount'];
     companyId = json['company_Id'];
     empID = json['emp_ID'];
-    updateDataBase = json['updateDataBase'] == 1 ? true : false;
-    offlineDatabase = json['offlineDatabase'] == 1 ? true : false;
+    updateDataBase = json['updateDataBase'];
+    offlineDatabase = json['offlineDatabase'];
     createDate = json['createDate'];
     updateDate = json['updateDate'];
-    isActive = json['isActive'] == 1 ? true : false;
+    isActive = json['isActive'];
   }
 
   Map<String, dynamic> toJson() {

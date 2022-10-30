@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' as getx;
-import 'package:sandc_pos/core/local/cache/cache_keys.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
-import 'package:sandc_pos/layouts/main_screen.dart';
+import 'package:sandc_pos/layouts/main_screen/main_screen.dart';
 import 'package:sandc_pos/modules/auth/login.dart';
 
-import '../cubits/auth_cubit/auth_cubit.dart';
+import '../../cubits/auth_cubit/auth_cubit.dart';
+import '../../reposetories/shared_pref/cache_keys.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

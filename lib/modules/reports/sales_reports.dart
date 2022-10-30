@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
-import 'package:sandc_pos/layouts/main_screen.dart';
+import 'package:sandc_pos/layouts/main_screen/main_screen.dart';
 import 'package:sandc_pos/models/order.dart';
 import 'package:sandc_pos/modules/reports/make_pdf_report_sales.dart';
 import 'package:sandc_pos/modules/reports/table_sales_report.dart';

@@ -17,4 +17,7 @@ class CacheKeysManger {
 
   static String gePasswordFromCache() =>
       CacheHelper.getData(key: 'password') ?? "NO";
+
+  static bool geIsUpdateToOnlineFromCache() =>
+      CacheHelper.getData(key: 'isUpdateToOnline') ?? true;
 }

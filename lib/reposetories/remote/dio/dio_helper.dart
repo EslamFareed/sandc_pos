@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:sandc_pos/core/local/cache/cache_keys.dart';
 
+import '../../shared_pref/cache_keys.dart';
 import 'end_points.dart';
 
 class DioHelper {

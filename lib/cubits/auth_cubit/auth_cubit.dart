@@ -2,11 +2,11 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:sandc_pos/core/remote/dio/dio_helper.dart';
-import 'package:sandc_pos/core/remote/dio/end_points.dart';
 
-import '../../core/local/cache/cache_helper.dart';
-import '../../core/local/cache/cache_keys.dart';
+import '../../reposetories/remote/dio/dio_helper.dart';
+import '../../reposetories/remote/dio/end_points.dart';
+import '../../reposetories/shared_pref/cache_helper.dart';
+import '../../reposetories/shared_pref/cache_keys.dart';
 
 part 'auth_state.dart';
 

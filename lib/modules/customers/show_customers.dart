@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
-import 'package:sandc_pos/layouts/main_screen.dart';
+import 'package:sandc_pos/layouts/main_screen/main_screen.dart';
 import 'package:sandc_pos/modules/customers/table_customer.dart';
 import 'package:sandc_pos/modules/sales/print_screen.dart';
 import 'package:sandc_pos/modules/sales/scan_code.dart';

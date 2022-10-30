@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'core/local/cache/cache_helper.dart';
-import 'core/remote/dio/dio_helper.dart';
 import 'firebase_options.dart';
-import 'layouts/app_root.dart';
+import 'layouts/app_root/app_root.dart';
+import 'reposetories/remote/dio/dio_helper.dart';
+import 'reposetories/shared_pref/cache_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

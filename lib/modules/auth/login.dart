@@ -8,7 +8,7 @@ import 'package:sandc_pos/core/style/text/app_text_style.dart';
 import 'package:sandc_pos/cubits/auth_cubit/auth_cubit.dart';
 import 'package:sandc_pos/modules/about/contact_us.dart';
 
-import '../../layouts/main_screen.dart';
+import '../../layouts/main_screen/main_screen.dart';
 import 'forget_password.dart';
 
 class LoginScreen extends StatelessWidget {
