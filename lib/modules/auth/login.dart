@@ -24,9 +24,22 @@ class LoginScreen extends StatelessWidget {
       builder: (context, state) => Scaffold(body: _buildBody(context)),
       listener: (context, state) {
         if (state is LoginLoadingState) {
-          tra.Get.dialog(const Dialog(
-            child: Center(child: CircularProgressIndicator()),
-          ));
+          tra.Get.dialog(
+              Dialog(
+                child: SizedBox(
+                  height: 100.h,
+                  width: 100.w,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      CircularProgressIndicator(),
+                    ],
+                  ),
+                ),
+              ),
+              barrierDismissible: false,
+              transitionDuration: const Duration(milliseconds: 500));
         }
 
         if (state is LoginSuccessState) {

@@ -1,4 +1,8 @@
 class PayTypeResponseModel {
+  static const String PayTypeModelName = 'PayTypeTable';
+  static const String columnId = 'id';
+  static const String columnName = 'name';
+
   int? id;
   String? name;
 

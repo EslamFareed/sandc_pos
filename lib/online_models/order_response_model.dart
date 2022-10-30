@@ -1,4 +1,6 @@
 class OrderResponseModel {
+  static const String OrderModelName = 'OrderTable';
+
   String? id;
   String? clientID;
   int? payTypeID;
@@ -42,6 +44,25 @@ class OrderResponseModel {
       this.getInVoiceDetails,
       this.getDebitPayings});
 
+  static const String columnId = 'id';
+  static const String columnClientID = 'client_ID';
+  static const String columnPayTypeID = 'payType_ID';
+  static const String columnEmpID = 'emp_ID';
+  static const String columnCreateDate = 'createDate';
+  static const String columnUpdateDate = 'updateDate';
+  static const String columnIsPayCash = 'isPayCash';
+  static const String columnTotalCost = 'totalCost';
+  static const String columnDiscount = 'discount';
+  static const String columnTaxes = 'taxes';
+  static const String columnCostNet = 'cost_Net';
+  static const String columnDebitPay = 'debitPay';
+  static const String columnPayAmount = 'payAmount';
+  static const String columnQrcode = 'qrcode';
+  static const String columnIsReturn = 'isReturn';
+  static const String columnReturnDesc = 'returnDesc';
+  static const String columnUpdateDataBase = 'updateDataBase';
+  static const String columnOfflineDatabase = 'offlineDatabase';
+
   OrderResponseModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     clientID = json['client_ID'];
@@ -61,6 +82,39 @@ class OrderResponseModel {
     returnDesc = json['returnDesc'];
     updateDataBase = json['updateDataBase'];
     offlineDatabase = json['offlineDatabase'];
+    if (json['getInVoiceDetails'] != null) {
+      getInVoiceDetails = <GetInVoiceDetails>[];
+      json['getInVoiceDetails'].forEach((v) {
+        getInVoiceDetails!.add(new GetInVoiceDetails.fromJson(v));
+      });
+    }
+    if (json['getDebitPayings'] != null) {
+      getDebitPayings = <GetDebitPayings>[];
+      json['getDebitPayings'].forEach((v) {
+        getDebitPayings!.add(new GetDebitPayings.fromJson(v));
+      });
+    }
+  }
+
+  OrderResponseModel.fromJsonEdit(Map<String, dynamic> json) {
+    id = json['id'];
+    clientID = json['client_ID'];
+    payTypeID = json['payType_ID'];
+    empID = json['emp_ID'];
+    createDate = json['createDate'];
+    updateDate = json['updateDate'];
+    isPayCash = json['isPayCash'] == 1 ? true : false;
+    totalCost = json['totalCost'];
+    discount = json['discount'];
+    taxes = json['taxes'];
+    costNet = json['cost_Net'];
+    debitPay = json['debitPay'];
+    payAmount = json['payAmount'];
+    qrcode = json['qrcode'];
+    isReturn = json['isReturn'] == 1 ? true : false;
+    returnDesc = json['returnDesc'];
+    updateDataBase = json['updateDataBase'] == 1 ? true : false;
+    offlineDatabase = json['offlineDatabase'] == 1 ? true : false;
     if (json['getInVoiceDetails'] != null) {
       getInVoiceDetails = <GetInVoiceDetails>[];
       json['getInVoiceDetails'].forEach((v) {

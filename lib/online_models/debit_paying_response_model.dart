@@ -1,4 +1,6 @@
 class DebitPayingResponseModel {
+  static const String DebitPayingsModelName = 'DebitPayingsTable';
+
   String? id;
   String? orderID;
   String? qrcode;
@@ -32,6 +34,22 @@ class DebitPayingResponseModel {
       this.createDate,
       this.updateDate});
 
+  static const String columnId = 'id';
+  static const String columnOrderID = 'order_ID';
+  static const String columnCreateDate = 'createDate';
+  static const String columnUpdateDate = 'updateDate';
+  static const String columnQrcode = 'qrcode';
+  static const String columnPayAmount = 'payAmount';
+  static const String columnDebitAmount = 'debitAmount';
+  static const String columnClientID = 'client_ID';
+  static const String columnClientName = 'clientName';
+  static const String columnEmpID = 'emp_ID';
+  static const String columnCompId = 'comp_Id';
+  static const String columnCompName = 'compName';
+  static const String columnEmpName = 'empName';
+  static const String columnUpdateDataBase = 'updateDataBase';
+  static const String columnOfflineDatabase = 'offlineDatabase';
+
   DebitPayingResponseModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     orderID = json['order_ID'];
@@ -46,6 +64,24 @@ class DebitPayingResponseModel {
     compId = json['comp_Id'];
     updateDataBase = json['updateDataBase'];
     offlineDatabase = json['offlineDatabase'];
+    createDate = json['createDate'];
+    updateDate = json['updateDate'];
+  }
+
+  DebitPayingResponseModel.fromJsonEdit(Map<String, dynamic> json) {
+    id = json['id'];
+    orderID = json['order_ID'];
+    qrcode = json['qrcode'];
+    payAmount = json['payAmount'];
+    debitAmount = json['debitAmount'];
+    clientID = json['client_ID'];
+    empID = json['emp_ID'];
+    empName = json['empName'];
+    clientName = json['clientName'];
+    compName = json['compName'];
+    compId = json['comp_Id'];
+    updateDataBase = json['updateDataBase'] == 1 ? true : false;
+    offlineDatabase = json['offlineDatabase'] == 1 ? true : false;
     createDate = json['createDate'];
     updateDate = json['updateDate'];
   }

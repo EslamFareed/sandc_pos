@@ -1,4 +1,6 @@
 class CompanyInfoResponseModel {
+  static const String CompanyModelName = 'CompanyTable';
+
   String? companyName;
   String? companyDescription;
   String? compPhone;
@@ -44,6 +46,28 @@ class CompanyInfoResponseModel {
       this.compId,
       this.empId});
 
+  static const String columnId = 'comp_Id';
+  static const String columnCompanyName = 'companyName';
+  static const String columnCompanyDescription = 'companyDescription';
+  static const String columnPhone = 'compPhone';
+  static const String columnAddress = 'compAddress';
+  static const String columnCompLanguage = 'compLanguage';
+  static const String columnLanguage = 'language';
+  static const String columnCompTaxNumber = 'compTaxNumber';
+  static const String columnCompTaxAmount = 'compTaxAmount';
+  static const String columnTaxAmount = 'taxAmount';
+  static const String columnIsTaxes = 'isTaxes';
+  static const String columnIsMustChoosePayCash = 'isMustChoosePayCash';
+  static const String columnIsPriceIncludeTaxes = 'isPriceIncludeTaxes';
+  static const String columnCurrencyName = 'compCurrency_Name';
+  static const String columnLogo = 'logo';
+  static const String columnEmpName = 'empName';
+  static const String columnEmpPhone = 'empPhone';
+  static const String columnEmpEmail = 'empEmail';
+  static const String columnBranchId = 'branch_Id';
+  static const String columnBranchName = 'branchName';
+  static const String columnEmpId = 'emp_id';
+
   CompanyInfoResponseModel.fromJson(Map<String, dynamic> json) {
     companyName = json['companyName'];
     companyDescription = json['companyDescription'];
@@ -58,6 +82,30 @@ class CompanyInfoResponseModel {
     isMustChoosePayCash = json['isMustChoosePayCash'];
     language = json['language'];
     isPriceIncludeTaxes = json['isPriceIncludeTaxes'];
+    taxAmount = json['taxAmount'];
+    empName = json['empName'];
+    empPhone = json['empPhone'];
+    empEmail = json['empEmail'];
+    branchId = json['branch_Id'];
+    branchName = json['branchName'];
+    compId = json['comp_Id'];
+    empId = json['emp_id'];
+  }
+
+  CompanyInfoResponseModel.fromJsonEdit(Map<String, dynamic> json) {
+    companyName = json['companyName'];
+    companyDescription = json['companyDescription'];
+    compPhone = json['compPhone'];
+    compAddress = json['compAddress'];
+    compLanguage = json['compLanguage'];
+    compTaxNumber = json['compTaxNumber'];
+    logo = json['logo'];
+    compTaxAmount = json['compTaxAmount'];
+    compCurrencyName = json['compCurrency_Name'];
+    isTaxes = json['isTaxes'] == 1 ? true : false;
+    isMustChoosePayCash = json['isMustChoosePayCash'] == 1 ? true : false;
+    language = json['language'];
+    isPriceIncludeTaxes = json['isPriceIncludeTaxes'] == 1 ? true : false;
     taxAmount = json['taxAmount'];
     empName = json['empName'];
     empPhone = json['empPhone'];

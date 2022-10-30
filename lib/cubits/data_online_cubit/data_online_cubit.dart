@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
+import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/online_models/company_info_response_model.dart';
 import 'package:sandc_pos/online_models/product_response_model.dart';
 
@@ -36,6 +37,9 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
       await getAllOrders(context);
       await getAllDebitPayings(context);
       await getCompanyInfo(context);
+
+      await DataCubit.get(context).insertClients(onlineClients);
+      await DataCubit.get(context).insertProducts(onlineProducts);
     } catch (e) {
       if (kDebugMode) {
         print(e.toString());

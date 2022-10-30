@@ -41,7 +41,7 @@ class ClientResponseModel {
   static const String columnId = 'id';
   static const String columnName = 'name';
   static const String columnPhone = 'phone';
-  static const String columnLoacation = 'loacation';
+  static const String columnLocation = 'loacation';
   static const String columnAddress = 'address';
   static const String columnComment = 'comment';
   static const String columnTaxNumber = 'taxNumber';
@@ -74,6 +74,26 @@ class ClientResponseModel {
     createDate = json['createDate'];
     updateDate = json['updateDate'];
     isActive = json['isActive'];
+  }
+
+  ClientResponseModel.fromJsonEdit(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    phone = json['phone'];
+    loacation = json['loacation'];
+    address = json['address'];
+    comment = json['comment'];
+    taxNumber = json['taxNumber'];
+    ammountTobePaid = json['ammountTobePaid'];
+    maxDebitLimit = json['maxDebitLimit'];
+    maxLimtDebitRecietCount = json['maxLimtDebitRecietCount'];
+    companyId = json['company_Id'];
+    empID = json['emp_ID'];
+    updateDataBase = json['updateDataBase'] == 1 ? true : false;
+    offlineDatabase = json['offlineDatabase'] == 1 ? true : false;
+    createDate = json['createDate'];
+    updateDate = json['updateDate'];
+    isActive = json['isActive'] == 1 ? true : false;
   }
 
   Map<String, dynamic> toJson() {

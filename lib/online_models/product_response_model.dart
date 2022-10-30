@@ -1,4 +1,6 @@
 class ProductResponseModel {
+  static const String ProductModelName = 'ProductTable';
+
   String? prodId;
   String? name;
   String? qrCode;
@@ -50,6 +52,31 @@ class ProductResponseModel {
       this.categoryName,
       this.unitName});
 
+  static const String columnId = 'prod_Id';
+  static const String columnName = 'name';
+  static const String columnQrCode = 'qrCode';
+  static const String columnDescription = 'description';
+  static const String columnProductNumber = 'product_Number';
+  static const String columnPriceOne = 'priceOne';
+  static const String columnPriceTwo = 'priceTwo';
+  static const String columnPriceThree = 'priceThree';
+  static const String columnImage = 'image';
+  static const String columnBuyingPrice = 'buyingPrice';
+  static const String columnStockQuantity = 'stockQuantity';
+  static const String columnDiscount = 'discount';
+  static const String columnIsPetrolGas = 'isPertrolGas';
+  static const String columnUnitID = 'unit_ID';
+  static const String columnUnitPackage = 'unit_Package';
+  static const String columnTopPackaging = 'top_Packaging';
+  static const String columnCompID = 'comp_ID';
+  static const String columnCatID = 'cat_ID';
+  static const String columnExpirationDate = 'expiration_Date';
+  static const String columnCreateDate = 'createDate';
+  static const String columnUpdateDate = 'updateDate';
+  static const String columnIsActive = 'isActive';
+  static const String columnCategoryName = 'categoryName';
+  static const String columnUnitName = 'unitName';
+
   ProductResponseModel.fromJson(Map<String, dynamic> json) {
     prodId = json['prod_Id'];
     name = json['name'];
@@ -73,6 +100,33 @@ class ProductResponseModel {
     createDate = json['createDate'];
     updateDate = json['updateDate'];
     isActive = json['isActive'];
+    categoryName = json['categoryName'];
+    unitName = json['unitName'];
+  }
+
+  ProductResponseModel.fromJsonEdit(Map<String, dynamic> json) {
+    prodId = json['prod_Id'];
+    name = json['name'];
+    qrCode = json['qrCode'];
+    description = json['description'];
+    productNumber = json['product_Number'];
+    priceOne = json['priceOne'];
+    priceTwo = json['priceTwo'];
+    priceThree = json['priceThree'];
+    image = json['image'];
+    buyingPrice = json['buyingPrice'];
+    stockQuantity = json['stockQuantity'];
+    discount = json['discount'];
+    isPertrolGas = json['isPertrolGas'] == 1 ? true : false;
+    unitID = json['unit_ID'];
+    unitPackage = json['unit_Package'];
+    topPackaging = json['top_Packaging'];
+    compID = json['comp_ID'];
+    catID = json['cat_ID'];
+    expirationDate = json['expiration_Date'];
+    createDate = json['createDate'];
+    updateDate = json['updateDate'];
+    isActive = json['isActive'] == 1 ? true : false;
     categoryName = json['categoryName'];
     unitName = json['unitName'];
   }
