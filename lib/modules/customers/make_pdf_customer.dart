@@ -14,9 +14,9 @@ class MakePdfClients extends StatelessWidget {
       appBar: AppBar(
         title: Text('PDF Preview'),
       ),
-      // body: PdfPreview(
-      //   build: (ctx) => makePdf(DataCubit.get(context).clientModels),
-      // ),
+      body: PdfPreview(
+        build: (ctx) => makePdf(DataCubit.get(context).clientModels),
+      ),
     );
   }
 }

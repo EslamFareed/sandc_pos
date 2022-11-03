@@ -5,13 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:sandc_pos/core/components/app_currency.dart';
 import 'package:sandc_pos/core/style/text/app_text_style.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 
-import '../../core/components/app_language.dart';
-import '../../core/components/default_buttons.dart';
-import '../../core/components/text_form_field.dart';
 import '../../core/style/color/app_colors.dart';
 import 'widgets/item_setting_data.dart';
 
@@ -70,27 +66,21 @@ class SettingsScreen extends StatelessWidget {
         ItemSettingData(
             title: "Company Name That shown in sales bill",
             data: DataCubit.get(context).companyModels[0].companyName),
-        SizedBox(height: 10.h),
         ItemSettingData(
             title: "Phone",
             data: DataCubit.get(context).companyModels[0].compPhone),
-        SizedBox(height: 10.h),
         ItemSettingData(
             title: "Address",
             data: DataCubit.get(context).companyModels[0].compAddress),
-        SizedBox(height: 10.h),
         ItemSettingData(
             title: "Notes Writen in the last of bill",
             data: DataCubit.get(context).companyModels[0].companyDescription),
-        SizedBox(height: 10.h),
         ItemSettingData(
             title: "Language",
             data: DataCubit.get(context).companyModels[0].compLanguage),
-        SizedBox(height: 10.h),
         ItemSettingData(
             title: "Currency",
             data: DataCubit.get(context).companyModels[0].compCurrencyName),
-        SizedBox(height: 10.h),
         CheckboxListTile(
           enabled: false,
           value: false,

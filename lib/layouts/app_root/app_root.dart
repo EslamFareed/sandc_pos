@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:sandc_pos/cubits/auth_cubit/auth_cubit.dart';
 import 'package:sandc_pos/cubits/chat_cubit/chat_cubit.dart';
+import 'package:sandc_pos/cubits/client_cubit/client_cubit.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/cubits/data_online_cubit/data_online_cubit.dart';
 
@@ -27,6 +28,7 @@ class AppRoot extends StatelessWidget {
         BlocProvider(create: (BuildContext context) => ChatCubit()),
         BlocProvider(create: (BuildContext context) => AuthCubit()),
         BlocProvider(create: (BuildContext context) => DataOnlineCubit()),
+        BlocProvider(create: (BuildContext context) => ClientCubit()),
         BlocProvider(create: (BuildContext context) => DataCubit()..db),
       ],
       child: BlocConsumer<MainCubit, MainStates>(

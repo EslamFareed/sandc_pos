@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../core/style/text/app_text_style.dart';
@@ -20,7 +21,8 @@ class ItemSettingData extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 color: const Color.fromARGB(255, 221, 221, 221)),
-            child: Text(data!, style: AppTextStyle.bodyText()))
+            child: Text(data!, style: AppTextStyle.bodyText())),
+        SizedBox(height: 10.h),
       ],
     );
   }

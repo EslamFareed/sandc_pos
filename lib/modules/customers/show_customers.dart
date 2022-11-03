@@ -2,17 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:sandc_pos/core/style/color/app_colors.dart';
-import 'package:sandc_pos/layouts/main_screen/main_screen.dart';
-import 'package:sandc_pos/modules/customers/table_customer.dart';
-import 'package:sandc_pos/modules/sales/print_screen.dart';
-import 'package:sandc_pos/modules/sales/scan_code.dart';
-import 'package:sandc_pos/modules/sales/search_products.dart';
 
-import '../../core/components/build_popup.dart';
-import '../../core/components/default_buttons.dart';
-import '../../core/style/text/app_text_style.dart';
-import '../sales/table_sales.dart';
+import 'package:sandc_pos/modules/customers/table_customer.dart';
+
 import 'make_pdf_customer.dart';
 import 'search_customers.dart';
 
@@ -51,14 +43,14 @@ class ShowCustomers extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             Get.to(
-              const SearchCustomersScreen(),
+              SearchCustomersScreen(),
               transition: Transition.fadeIn,
             );
           },
           child: Container(
             margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Color.fromARGB(255, 224, 224, 224),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Container(
@@ -87,8 +79,7 @@ class ShowCustomers extends StatelessWidget {
   _buildBody() {
     return Column(
       children: [
-        // _buildSearchBar(),
-        SizedBox(height: 25.h),
+        _buildSearchBar(),
         Expanded(child: TableCustomer()),
       ],
     );

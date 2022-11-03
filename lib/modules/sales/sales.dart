@@ -60,7 +60,8 @@ class _SalesScreenState extends State<SalesScreen> {
       actions: [
         DefaultButton(
           onPress: () {
-            Get.offAll(const MainScreen(), transition: Transition.zoom);
+            Get.back(closeOverlays: true);
+            Get.back();
           },
           buttonText: "yes",
           buttonWidth: 70.w,
