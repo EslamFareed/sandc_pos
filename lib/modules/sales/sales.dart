@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/layouts/main_screen/main_screen.dart';
-import 'package:sandc_pos/models/order.dart';
 import 'package:sandc_pos/modules/sales/categories_screen.dart';
 import 'package:sandc_pos/modules/sales/print_screen.dart';
 import 'package:sandc_pos/modules/sales/scan_code.dart';
@@ -14,7 +13,6 @@ import '../../core/components/build_popup.dart';
 import '../../core/components/default_buttons.dart';
 import '../../core/style/text/app_text_style.dart';
 import '../../cubits/data_cubit/data_cubit.dart';
-import '../../models/products.dart';
 import 'table_sales.dart';
 
 class SalesScreen extends StatefulWidget {

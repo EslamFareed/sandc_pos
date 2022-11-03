@@ -11,11 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:sandc_pos/core/components/default_buttons.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
-import 'package:sandc_pos/models/invoice_details.dart';
-import 'package:sandc_pos/models/order.dart';
-import 'package:sandc_pos/models/order_item.dart';
-import 'package:sandc_pos/models/product.dart';
-import 'package:sandc_pos/models/products.dart';
+
 import 'package:uuid/uuid.dart';
 
 class ItemModel {

@@ -115,18 +115,6 @@ class OrderResponseModel {
     returnDesc = json['returnDesc'];
     updateDataBase = json['updateDataBase'] == 1 ? true : false;
     offlineDatabase = json['offlineDatabase'] == 1 ? true : false;
-    if (json['getInVoiceDetails'] != null) {
-      getInVoiceDetails = <GetInVoiceDetails>[];
-      json['getInVoiceDetails'].forEach((v) {
-        getInVoiceDetails!.add(new GetInVoiceDetails.fromJson(v));
-      });
-    }
-    if (json['getDebitPayings'] != null) {
-      getDebitPayings = <GetDebitPayings>[];
-      json['getDebitPayings'].forEach((v) {
-        getDebitPayings!.add(new GetDebitPayings.fromJson(v));
-      });
-    }
   }
 
   Map<String, dynamic> toJson() {
@@ -162,6 +150,8 @@ class OrderResponseModel {
 }
 
 class GetInVoiceDetails {
+  static const String InvoiceDetailsModelName = 'InvoiceDetailsTable';
+
   String? id;
   String? orderID;
   String? prodId;
@@ -189,6 +179,19 @@ class GetInVoiceDetails {
       this.updateDataBase,
       this.offlineDatabase});
 
+  static const String columnId = 'id';
+  static const String columnOrderID = 'order_ID';
+  static const String columnProdId = 'prod_Id';
+  static const String columnQuanitiy = 'quantity';
+  static const String columnUnitPrice = 'unitPrice';
+  static const String columnTotalCost = 'totalCost';
+  static const String columnIsReturn = 'isReturn';
+  static const String columnReasonForReturn = 'reasonForReturn';
+  static const String columnQuantReturns = 'quantReturns';
+  static const String columnUpdateDate = 'updateDate';
+  static const String columnUpdateDatabase = 'updateDataBase';
+  static const String columnOfflineDatabase = 'offlineDatabase';
+
   GetInVoiceDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     orderID = json['order_ID'];
@@ -202,6 +205,21 @@ class GetInVoiceDetails {
     updateDate = json['updateDate'];
     updateDataBase = json['updateDataBase'];
     offlineDatabase = json['offlineDatabase'];
+  }
+
+  GetInVoiceDetails.fromJsonEdit(Map<String, dynamic> json) {
+    id = json['id'];
+    orderID = json['order_ID'];
+    prodId = json['prod_Id'];
+    quantity = json['quantity'];
+    unitPrice = json['unitPrice'];
+    totalCost = json['totalCost'];
+    isReturn = json['isReturn'] == 1 ? true : false;
+    reasonForReturn = json['reasonForReturn'];
+    quantReturns = json['quantReturns'];
+    updateDate = json['updateDate'];
+    updateDataBase = json['updateDataBase'] == 1 ? true : false;
+    offlineDatabase = json['offlineDatabase'] == 1 ? true : false;
   }
 
   Map<String, dynamic> toJson() {
@@ -223,6 +241,8 @@ class GetInVoiceDetails {
 }
 
 class GetDebitPayings {
+  static const String GetDebitPayingsModelName = 'GetDebitPayingsTable';
+
   String? id;
   String? orderID;
   String? createDate;
@@ -248,6 +268,18 @@ class GetDebitPayings {
       this.updateDataBase,
       this.offlineDatabase});
 
+  static const String columnId = 'id';
+  static const String columnOrderID = 'order_ID';
+  static const String columnCreateDate = 'createDate';
+  static const String columnUpdateDate = 'updateDate';
+  static const String columnQrcode = 'qrcode';
+  static const String columnPayAmount = 'payAmount';
+  static const String columnDebitAmount = 'debitAmount';
+  static const String columnClientID = 'client_ID';
+  static const String columnEmpID = 'emp_ID';
+  static const String columnUpdateDataBase = 'updateDataBase';
+  static const String columnOfflineDatabase = 'offlineDatabase';
+
   GetDebitPayings.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     orderID = json['order_ID'];
@@ -260,6 +292,19 @@ class GetDebitPayings {
     empID = json['emp_ID'];
     updateDataBase = json['updateDataBase'];
     offlineDatabase = json['offlineDatabase'];
+  }
+
+  GetDebitPayings.fromJsonEdit(Map<String, dynamic> json) {
+    id = json['id'];
+    orderID = json['order_ID'];
+    createDate = json['createDate'];
+    updateDate = json['updateDate'];
+    qrcode = json['qrcode'];
+    payAmount = json['payAmount'];
+    debitAmount = json['debitAmount'];
+    clientID = json['client_ID'];
+    empID = json['emp_ID'];
+    updateDataBase = json['updateDataBase'] == 1 ? true : false;
   }
 
   Map<String, dynamic> toJson() {

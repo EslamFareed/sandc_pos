@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
-import 'package:sandc_pos/models/products.dart';
+import 'package:sandc_pos/online_models/product_response_model.dart';
 import 'package:uuid/uuid.dart';
-
-import '../../models/invoice_details.dart';
 
 class SearchProductsScreen extends StatefulWidget {
   SearchProductsScreen({Key? key}) : super(key: key);
@@ -17,7 +15,7 @@ class SearchProductsScreen extends StatefulWidget {
 class _SearchProductsScreenState extends State<SearchProductsScreen> {
   TextEditingController? controller = TextEditingController();
 
-  List<ProductModel> products = [];
+  List<ProductResponseModel> products = [];
 
   @override
   void initState() {
@@ -58,7 +56,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
     );
   }
 
-  _buildItemSearch(ProductModel product) {
+  _buildItemSearch(ProductResponseModel product) {
     return Card(
       child: ListTile(
         onTap: () {

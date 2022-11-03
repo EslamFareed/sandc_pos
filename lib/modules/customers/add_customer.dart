@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
-import 'package:sandc_pos/models/client.dart';
+import 'package:sandc_pos/online_models/client_response_model.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/components/default_buttons.dart';
@@ -192,7 +190,7 @@ class AddCustomer extends StatelessWidget {
         DefaultButton(
           onPress: () async {
             if (_keyForm.currentState!.validate()) {
-              ClientModel item = ClientModel(
+              ClientResponseModel item = ClientResponseModel(
                   id: Uuid().v1(),
                   name: fullnameController.text,
                   phone: phoneController.text,
@@ -201,12 +199,12 @@ class AddCustomer extends StatelessWidget {
                   comment: notesController.text,
                   companyId: 1,
                   createDate: "date",
-                  empID: 1,
+                  empID: "1",
                   isActive: true,
                   loacation: "location",
                   maxDebitLimit: double.parse(maxDebitController.text),
                   maxLimtDebitRecietCount:
-                      double.parse(maxDebitBillsController.text),
+                      int.parse(maxDebitBillsController.text),
                   taxNumber: taxNumberController.text,
                   updateDate: "date");
               // await DataCubit.get(context).insertClientTable(item);

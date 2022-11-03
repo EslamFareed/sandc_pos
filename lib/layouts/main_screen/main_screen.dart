@@ -115,7 +115,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       listener: (context, state) {
         if (state is GetDataOnlineSuccessState) {
-          getx.Get.back();
+          getx.Get.back(closeOverlays: true);
           getx.Get.showSnackbar(const getx.GetSnackBar(
             message: "Data updated successfuly",
             duration: Duration(seconds: 4),
@@ -259,12 +259,7 @@ class _MainScreenState extends State<MainScreen> {
               color: AppColors.primaryColor,
               height: getx.Get.height * .25,
               width: getx.Get.width,
-              child: Center(
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  height: 100.h,
-                ),
-              )),
+              child: Column()),
           SizedBox(
             height: getx.Get.height * .75,
             child: Column(

@@ -4,13 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:sandc_pos/core/components/app_currency.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
-import 'package:sandc_pos/models/company.dart';
 
 import '../../core/components/app_language.dart';
 import '../../core/components/default_buttons.dart';
 import '../../core/components/text_form_field.dart';
 import '../../core/style/color/app_colors.dart';
-import '../../models/currency.dart';
 
 class SettingsScreen extends StatefulWidget {
   SettingsScreen({super.key});

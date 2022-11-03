@@ -2,11 +2,9 @@ import 'dart:typed_data';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:sandc_pos/models/client.dart';
+import 'package:sandc_pos/online_models/client_response_model.dart';
 
-import '../../models/products.dart';
-
-Future<Uint8List> makePdf(List<ClientModel> clients) async {
+Future<Uint8List> makePdf(List<ClientResponseModel> clients) async {
   final pdf = Document();
 
   pdf.addPage(

@@ -8,6 +8,7 @@ import 'package:meta/meta.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/online_models/company_info_response_model.dart';
 import 'package:sandc_pos/online_models/product_response_model.dart';
+import 'package:sandc_pos/reposetories/shared_pref/cache_helper.dart';
 
 import '../../online_models/category_response_model.dart';
 import '../../online_models/client_response_model.dart';
@@ -30,6 +31,7 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
   getAllDataForFirstTime(BuildContext context) async {
     emit(GetDataOnlineLoadingState());
     try {
+      //? Get Online Data From Apis
       await getAllClients(context);
       await getAllProducts(context);
       await getAllPayTypes(context);
@@ -38,8 +40,38 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
       await getAllDebitPayings(context);
       await getCompanyInfo(context);
 
-      await DataCubit.get(context).insertClients(onlineClients);
-      await DataCubit.get(context).insertProducts(onlineProducts);
+      //? Get Offline Data From Sql
+      //! Get Offline Clients
+      await DataCubit.get(context).insertClientsByList(onlineClients);
+      await DataCubit.get(context).getAllClientTable();
+
+      //! Get Offline Products
+      await DataCubit.get(context).insertProductsByList(onlineProducts);
+      await DataCubit.get(context).getAllProductTable();
+
+      //! Get Offline Pay Types
+      await DataCubit.get(context).insertPayTypesByList(onlinePayTypes);
+      await DataCubit.get(context).getAllPayTypeTable();
+
+      //! Get Offline Categories
+      await DataCubit.get(context).insertCategoriesByList(onlineCategories);
+      await DataCubit.get(context).getAllCategoryTable();
+
+      //! Get Offline Products
+      await DataCubit.get(context).insertOrdersByList(onlineOrders);
+      await DataCubit.get(context).getAllOrderTable();
+      await DataCubit.get(context).getAllInvoiceDetailsTable();
+
+      //! Get Offline Products
+      await DataCubit.get(context).insertDebitPayingsByList(onlineDebitPayings);
+      await DataCubit.get(context).getAllDebitPayingsTable();
+
+      //! Get Comapny Info
+      await DataCubit.get(context).insertCompanyTable(onlineCompanyInfo!);
+      await DataCubit.get(context).getAllCompanyTable();
+
+      await CacheHelper.saveData(key: "isFirstTime", value: false);
+      emit(GetDataOnlineSuccessState());
     } catch (e) {
       if (kDebugMode) {
         print(e.toString());

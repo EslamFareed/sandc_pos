@@ -5,12 +5,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/layouts/main_screen/main_screen.dart';
-import 'package:sandc_pos/models/order.dart';
 import 'package:sandc_pos/modules/reports/make_pdf_report_sales.dart';
 import 'package:sandc_pos/modules/reports/table_sales_report.dart';
 import 'package:sandc_pos/modules/sales/categories_screen.dart';
 import 'package:sandc_pos/modules/sales/scan_code.dart';
 import 'package:sandc_pos/modules/sales/search_products.dart';
+import 'package:sandc_pos/online_models/order_response_model.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/components/build_popup.dart';
@@ -51,21 +51,21 @@ class _SalesReportState extends State<SalesReport> {
     super.initState();
   }
 
-  List<OrderModel> orders = [
-    OrderModel(
-      clientID: 1,
+  List<OrderResponseModel> orders = [
+    OrderResponseModel(
+      clientID: "1",
       totalCost: 1500,
       createDate: "2022-2-10",
       id: Uuid().v1(),
     ),
-    OrderModel(
-      clientID: 1,
+    OrderResponseModel(
+      clientID: "1",
       totalCost: 1500,
       createDate: "2022-2-10",
       id: Uuid().v1(),
     ),
-    OrderModel(
-      clientID: 1,
+    OrderResponseModel(
+      clientID: "1",
       totalCost: 1500,
       createDate: "2022-2-10",
       id: Uuid().v1(),

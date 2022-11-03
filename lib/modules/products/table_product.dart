@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 
 import 'package:sandc_pos/core/style/color/app_colors.dart';
-import 'package:sandc_pos/models/order_item.dart';
-import 'package:sandc_pos/models/product.dart';
 
 import '../../cubits/data_cubit/data_cubit.dart';
 

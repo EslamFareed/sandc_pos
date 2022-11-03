@@ -2,26 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:sandc_pos/online_models/category_response_model.dart';
+import 'package:sandc_pos/online_models/company_info_response_model.dart';
+import 'package:sandc_pos/online_models/debit_paying_response_model.dart';
+import 'package:sandc_pos/online_models/order_response_model.dart';
+import 'package:sandc_pos/online_models/pay_type_response_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
-import '../../models/category.dart';
-import '../../models/client.dart';
-import '../../models/company.dart';
-import '../../models/currency.dart';
-import '../../models/debit_payings.dart';
-import '../../models/emp_types.dart';
-import '../../models/employee.dart';
-import '../../models/invoice_details.dart';
-import '../../models/order.dart';
-import '../../models/pay_type.dart';
-import '../../models/products.dart';
-import '../../models/reciepts.dart';
-import '../../models/unit.dart';
 
-import '../../models/bill.dart';
-import '../../models/branch.dart';
-import '../../models/branch_product.dart';
 import '../../online_models/client_response_model.dart';
 import '../../online_models/product_response_model.dart';
 part 'data_state.dart';
@@ -56,6 +45,12 @@ class DataCubit extends Cubit<DataState> {
   _onCreate(Database db, int version) async {
     await createClientTable(db);
     await createProductTable(db);
+    await createPayTypeTable(db);
+    await createCategoryTable(db);
+    await createOrderTable(db);
+    await createInvoiceDetailsTable(db);
+    await createDebitPayingsTable(db);
+    await createCompanyTable(db);
 
     print("on Create ===================");
   }
@@ -109,7 +104,7 @@ class DataCubit extends Cubit<DataState> {
     ''');
   }
 
-  insertClients(List<ClientResponseModel> items) async {
+  insertClientsByList(List<ClientResponseModel> items) async {
     try {
       for (var element in items) {
         await insertClientTable(element);
@@ -170,6 +165,27 @@ class DataCubit extends Cubit<DataState> {
     }
   }
 
+  List<ClientResponseModel> clientModels = [];
+  getAllClientTable() async {
+    try {
+      clientModels = [];
+      List<Map<String, dynamic>> data = await readData(
+          "SELECT * FROM '${ClientResponseModel.ClientModelName}' ");
+
+      for (var element in data) {
+        clientModels.add(ClientResponseModel.fromJsonEdit(element));
+      }
+      if (kDebugMode) {
+        print("clients offline : ${clientModels.length}");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////
   //! Products Offline
   createProductTable(Database db) async {
     await db.execute('''
@@ -202,7 +218,7 @@ class DataCubit extends Cubit<DataState> {
     ''');
   }
 
-  insertProducts(List<ProductResponseModel> items) async {
+  insertProductsByList(List<ProductResponseModel> items) async {
     try {
       for (var element in items) {
         await insertProductTable(element);
@@ -272,6 +288,552 @@ class DataCubit extends Cubit<DataState> {
           ''');
     } catch (e) {
       print(e);
+    }
+  }
+
+  List<ProductResponseModel> productModels = [];
+  getAllProductTable() async {
+    try {
+      productModels = [];
+      List<Map<String, dynamic>> data = await readData(
+          "SELECT * FROM '${ProductResponseModel.ProductModelName}' ");
+
+      for (var element in data) {
+        productModels.add(ProductResponseModel.fromJsonEdit(element));
+      }
+      if (kDebugMode) {
+        print("productModels offline : ${productModels.length}");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////
+  //! Pay Types Offline
+  createPayTypeTable(Database db) async {
+    await db.execute('''
+    CREATE TABLE "${PayTypeResponseModel.PayTypeModelName}" (
+      "${PayTypeResponseModel.columnId}" INTEGER NOT NULL PRIMARY KEY ,
+      "${PayTypeResponseModel.columnName}" TEXT
+    )
+    ''');
+  }
+
+  insertPayTypesByList(List<PayTypeResponseModel> items) async {
+    try {
+      for (var element in items) {
+        await insertPayTypeTable(element);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  insertPayTypeTable(PayTypeResponseModel item) async {
+    try {
+      await insertData(
+          "INSERT INTO '${PayTypeResponseModel.PayTypeModelName}' ('${PayTypeResponseModel.columnId}','${PayTypeResponseModel.columnName}') VALUES ('${item.id}','${item.name}') ");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  List<PayTypeResponseModel> payTypeModels = [];
+  getAllPayTypeTable() async {
+    try {
+      payTypeModels = [];
+      List<Map<String, dynamic>> data = await readData(
+          "SELECT * FROM '${PayTypeResponseModel.PayTypeModelName}' ");
+
+      for (var element in data) {
+        payTypeModels.add(PayTypeResponseModel.fromJson(element));
+      }
+      if (kDebugMode) {
+        print("payTypeModels offline : ${payTypeModels.length}");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////
+  //! Categories Offline
+  createCategoryTable(Database db) async {
+    await db.execute('''
+    CREATE TABLE "${CategoryResponseModel.CategoryModelName}" (
+      "${CategoryResponseModel.columnId}" TEXT NOT NULL PRIMARY KEY ,
+      "${CategoryResponseModel.columnCompanyId}" INTEGER ,
+      "${CategoryResponseModel.columnIsActive}" INTEGER ,
+      "${CategoryResponseModel.columnName}" TEXT ,
+      "${CategoryResponseModel.columnDescription}" TEXT
+    )
+    ''');
+  }
+
+  insertCategoriesByList(List<CategoryResponseModel> items) async {
+    try {
+      for (var element in items) {
+        await insertCategoryTable(element);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  insertCategoryTable(CategoryResponseModel item) async {
+    try {
+      await insertData('''
+          INSERT INTO
+          '${CategoryResponseModel.CategoryModelName}'
+          ('${CategoryResponseModel.columnId}',
+          '${CategoryResponseModel.columnCompanyId}',
+          '${CategoryResponseModel.columnIsActive}',
+          '${CategoryResponseModel.columnDescription}',
+          '${CategoryResponseModel.columnName}')
+          VALUES (
+            '${item.id}',
+          '${item.companyId}',
+          '${item.isActive! ? 1 : 0}',
+          '${item.description}',
+          '${item.name}'
+          )
+          ''');
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  List<CategoryResponseModel> categoryModels = [];
+  getAllCategoryTable() async {
+    try {
+      categoryModels = [];
+      List<Map<String, dynamic>> data = await readData(
+          "SELECT * FROM '${CategoryResponseModel.CategoryModelName}' ");
+
+      for (var element in data) {
+        categoryModels.add(CategoryResponseModel.fromJsonEdit(element));
+      }
+      if (kDebugMode) {
+        print("categoryModels offline : ${categoryModels.length}");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////
+  //! Orders Offline
+  createOrderTable(Database db) async {
+    await db.execute('''
+    CREATE TABLE "${OrderResponseModel.OrderModelName}" (
+      "${OrderResponseModel.columnId}" TEXT NOT NULL PRIMARY KEY ,
+      "${OrderResponseModel.columnClientID}" TEXT ,
+      "${OrderResponseModel.columnPayTypeID}" INTEGER ,
+      "${OrderResponseModel.columnEmpID}" TEXT ,
+      "${OrderResponseModel.columnIsPayCash}" INTEGER ,
+      "${OrderResponseModel.columnCreateDate}" TEXT ,
+      "${OrderResponseModel.columnUpdateDate}" TEXT ,
+      "${OrderResponseModel.columnDiscount}" REAL ,
+      "${OrderResponseModel.columnTotalCost}" REAL ,
+      "${OrderResponseModel.columnTaxes}" REAL ,
+      "${OrderResponseModel.columnCostNet}" REAL ,
+      "${OrderResponseModel.columnDebitPay}" REAL ,
+      "${OrderResponseModel.columnPayAmount}" REAL ,
+      "${OrderResponseModel.columnQrcode}" TEXT ,
+      "${OrderResponseModel.columnIsReturn}" INTEGER ,
+      "${OrderResponseModel.columnUpdateDataBase}" INTEGER ,
+      "${OrderResponseModel.columnOfflineDatabase}" INTEGER ,
+      "${OrderResponseModel.columnReturnDesc}" TEXT
+    )
+    ''');
+  }
+
+  insertOrdersByList(List<OrderResponseModel> items) async {
+    try {
+      for (var element in items) {
+        await insertOrderTable(element);
+        await insertInvoiceDetailsByList(element.getInVoiceDetails!);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  insertOrderTable(OrderResponseModel item) async {
+    try {
+      await insertData('''
+          INSERT INTO
+          '${OrderResponseModel.OrderModelName}'
+          ('${OrderResponseModel.columnId}',
+          '${OrderResponseModel.columnClientID}',
+          '${OrderResponseModel.columnPayTypeID}',
+          '${OrderResponseModel.columnEmpID}',
+          '${OrderResponseModel.columnIsPayCash}',
+          '${OrderResponseModel.columnCreateDate}',
+          '${OrderResponseModel.columnUpdateDate}',
+          '${OrderResponseModel.columnDiscount}',
+          '${OrderResponseModel.columnTotalCost}',
+          '${OrderResponseModel.columnTaxes}',
+          '${OrderResponseModel.columnCostNet}',
+          '${OrderResponseModel.columnDebitPay}',
+          '${OrderResponseModel.columnPayAmount}',
+          '${OrderResponseModel.columnQrcode}',
+          '${OrderResponseModel.columnIsReturn}',
+          '${OrderResponseModel.columnUpdateDataBase}',
+          '${OrderResponseModel.columnOfflineDatabase}',
+          '${OrderResponseModel.columnReturnDesc}')
+          VALUES (
+            '${item.id}',
+          '${item.clientID}',
+          '${item.payTypeID}',
+          '${item.empID}',
+          '${item.isPayCash! ? 1 : 0}',
+          '${item.createDate}',
+          '${item.updateDate}',
+          '${item.discount}',
+          '${item.totalCost}',
+          '${item.taxes}',
+          '${item.costNet}',
+          '${item.debitPay}',
+          '${item.payAmount}',
+          '${item.qrcode}',
+          '${item.isReturn! ? 1 : 0}',
+          '${item.updateDataBase! ? 1 : 0}',
+          '${item.offlineDatabase! ? 1 : 0}',
+          '${item.returnDesc}'
+          )
+          ''');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  List<OrderResponseModel> orderModels = [];
+  getAllOrderTable() async {
+    try {
+      orderModels = [];
+      List<Map<String, dynamic>> data = await readData(
+          "SELECT * FROM '${OrderResponseModel.OrderModelName}' ");
+
+      for (var element in data) {
+        orderModels.add(OrderResponseModel.fromJsonEdit(element));
+      }
+      if (kDebugMode) {
+        print("orderModels offline : ${orderModels.length}");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////
+  //! Invoice Details Offline
+  createInvoiceDetailsTable(Database db) async {
+    await db.execute('''
+    CREATE TABLE "${GetInVoiceDetails.InvoiceDetailsModelName}" (
+      "${GetInVoiceDetails.columnId}" TEXT NOT NULL PRIMARY KEY ,
+      "${GetInVoiceDetails.columnProdId}" TEXT ,
+      "${GetInVoiceDetails.columnQuanitiy}" INTEGER ,
+      "${GetInVoiceDetails.columnUnitPrice}" REAL ,
+      "${GetInVoiceDetails.columnTotalCost}" REAL ,
+      "${GetInVoiceDetails.columnIsReturn}" INTEGER ,
+      "${GetInVoiceDetails.columnReasonForReturn}" TEXT ,
+      "${GetInVoiceDetails.columnUpdateDate}" TEXT ,
+      "${GetInVoiceDetails.columnQuantReturns}" INTEGER ,
+      "${GetInVoiceDetails.columnUpdateDatabase}" INTEGER ,
+      "${GetInVoiceDetails.columnOfflineDatabase}" INTEGER ,
+      "${GetInVoiceDetails.columnOrderID}" TEXT
+    )
+    ''');
+  }
+
+  insertInvoiceDetailsByList(List<GetInVoiceDetails> items) async {
+    try {
+      for (var element in items) {
+        await insertInvoiceDetailsTable(element);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  insertInvoiceDetailsTable(GetInVoiceDetails item) async {
+    try {
+      await insertData('''
+          INSERT INTO
+          '${GetInVoiceDetails.InvoiceDetailsModelName}'
+          ('${GetInVoiceDetails.columnId}',
+          '${GetInVoiceDetails.columnIsReturn}',
+          '${GetInVoiceDetails.columnUpdateDatabase}',
+          '${GetInVoiceDetails.columnOfflineDatabase}',
+          '${GetInVoiceDetails.columnOrderID}',
+          '${GetInVoiceDetails.columnProdId}',
+          '${GetInVoiceDetails.columnQuanitiy}',
+          '${GetInVoiceDetails.columnQuantReturns}',
+          '${GetInVoiceDetails.columnReasonForReturn}',
+          '${GetInVoiceDetails.columnTotalCost}',
+          '${GetInVoiceDetails.columnUpdateDate}',
+          '${GetInVoiceDetails.columnUnitPrice}')
+          VALUES (
+            '${item.id}',
+          '${item.isReturn! ? 1 : 0}}',
+          '${item.updateDataBase! ? 1 : 0}}',
+          '${item.offlineDatabase! ? 1 : 0}}',
+          '${item.orderID}',
+          '${item.prodId}',
+          '${item.quantity}',
+          '${item.quantReturns}',
+          '${item.reasonForReturn}',
+          '${item.totalCost}',
+          '${item.updateDate}',
+          '${item.unitPrice}'
+          )
+          ''');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  List<GetInVoiceDetails> invoiceDetailsModels = [];
+  getAllInvoiceDetailsTable() async {
+    try {
+      invoiceDetailsModels = [];
+      List<Map<String, dynamic>> data = await readData(
+          "SELECT * FROM '${GetInVoiceDetails.InvoiceDetailsModelName}' ");
+
+      for (var element in data) {
+        invoiceDetailsModels.add(GetInVoiceDetails.fromJsonEdit(element));
+      }
+      if (kDebugMode) {
+        print("invoiceDetailsModels offline : ${invoiceDetailsModels.length}");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////
+  //! Debit Payings Offline
+  createDebitPayingsTable(Database db) async {
+    await db.execute('''
+    CREATE TABLE "${DebitPayingResponseModel.DebitPayingsModelName}" (
+      "${DebitPayingResponseModel.columnId}" TEXT NOT NULL PRIMARY KEY ,
+      "${DebitPayingResponseModel.columnClientID}" TEXT ,
+      "${DebitPayingResponseModel.columnCreateDate}" TEXT ,
+      "${DebitPayingResponseModel.columnDebitAmount}" REAL ,
+      "${DebitPayingResponseModel.columnEmpID}" TEXT ,
+      "${DebitPayingResponseModel.columnEmpName}" TEXT ,
+      "${DebitPayingResponseModel.columnClientName}" TEXT ,
+      "${DebitPayingResponseModel.columnCompName}" TEXT ,
+      "${DebitPayingResponseModel.columnCompId}" INTEGER ,
+      "${DebitPayingResponseModel.columnUpdateDataBase}" INTEGER ,
+      "${DebitPayingResponseModel.columnOfflineDatabase}" INTEGER ,
+      "${DebitPayingResponseModel.columnUpdateDate}" TEXT ,
+      "${DebitPayingResponseModel.columnQrcode}" TEXT ,
+      "${DebitPayingResponseModel.columnPayAmount}" REAL ,
+      "${DebitPayingResponseModel.columnOrderID}" TEXT
+    )
+    ''');
+  }
+
+  insertDebitPayingsByList(List<DebitPayingResponseModel> items) async {
+    try {
+      for (var element in items) {
+        await insertDebitPayingsTable(element);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  insertDebitPayingsTable(DebitPayingResponseModel item) async {
+    try {
+      await insertData('''
+          INSERT INTO
+          '${DebitPayingResponseModel.DebitPayingsModelName}'
+          ('${DebitPayingResponseModel.columnId}',
+          '${DebitPayingResponseModel.columnClientID}',
+          '${DebitPayingResponseModel.columnCompId}',
+          '${DebitPayingResponseModel.columnCompName}',
+          '${DebitPayingResponseModel.columnClientName}',
+          '${DebitPayingResponseModel.columnEmpName}',
+          '${DebitPayingResponseModel.columnUpdateDataBase}',
+          '${DebitPayingResponseModel.columnOfflineDatabase}',
+          '${DebitPayingResponseModel.columnOrderID}',
+          '${DebitPayingResponseModel.columnCreateDate}',
+          '${DebitPayingResponseModel.columnDebitAmount}',
+          '${DebitPayingResponseModel.columnEmpID}',
+          '${DebitPayingResponseModel.columnPayAmount}',
+          '${DebitPayingResponseModel.columnQrcode}',
+          '${DebitPayingResponseModel.columnUpdateDate}')
+          VALUES (
+            '${item.id}',
+          '${item.clientID}',
+          '${item.compId}',
+          '${item.compName}',
+          '${item.clientName}',
+          '${item.empName}',
+          '${item.updateDataBase! ? 1 : 0}',
+          '${item.offlineDatabase! ? 1 : 0}',
+          '${item.orderID}',
+          '${item.createDate}',
+          '${item.debitAmount}',
+          '${item.empID}}',
+          '${item.payAmount}',
+          '${item.qrcode}',
+          '${item.updateDate}'
+          )
+          ''');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  List<DebitPayingResponseModel> debitPayingsModels = [];
+  getAllDebitPayingsTable() async {
+    try {
+      debitPayingsModels = [];
+      List<Map<String, dynamic>> data = await readData(
+          "SELECT * FROM '${DebitPayingResponseModel.DebitPayingsModelName}' ");
+
+      for (var element in data) {
+        debitPayingsModels.add(DebitPayingResponseModel.fromJson(element));
+      }
+      if (kDebugMode) {
+        print("debitPayingsModels offline : ${debitPayingsModels.length}");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////
+  //! Company Offline
+  createCompanyTable(Database db) async {
+    await db.execute('''
+    CREATE TABLE "${CompanyInfoResponseModel.CompanyModelName}" (
+      "${CompanyInfoResponseModel.columnId}" INTEGER NOT NULL PRIMARY KEY ,
+      "${CompanyInfoResponseModel.columnIsMustChoosePayCash}" INTEGER ,
+      "${CompanyInfoResponseModel.columnIsPriceIncludeTaxes}" INTEGER ,
+      "${CompanyInfoResponseModel.columnIsTaxes}" INTEGER ,
+      "${CompanyInfoResponseModel.columnBranchId}" INTEGER ,
+      "${CompanyInfoResponseModel.columnBranchName}" TEXT ,
+      "${CompanyInfoResponseModel.columnCompanyName}" TEXT ,
+      "${CompanyInfoResponseModel.columnEmpName}" TEXT ,
+      "${CompanyInfoResponseModel.columnEmpId}" TEXT ,
+      "${CompanyInfoResponseModel.columnEmpPhone}" TEXT ,
+      "${CompanyInfoResponseModel.columnEmpEmail}" TEXT ,
+      "${CompanyInfoResponseModel.columnCompanyDescription}" TEXT ,
+      "${CompanyInfoResponseModel.columnAddress}" TEXT ,
+      "${CompanyInfoResponseModel.columnPhone}" TEXT ,
+      "${CompanyInfoResponseModel.columnLogo}" TEXT ,
+      "${CompanyInfoResponseModel.columnLanguage}" TEXT ,
+      "${CompanyInfoResponseModel.columnCompLanguage}" TEXT ,
+      "${CompanyInfoResponseModel.columnCompTaxNumber}" TEXT ,
+      "${CompanyInfoResponseModel.columnCompTaxAmount}" TEXT ,
+      "${CompanyInfoResponseModel.columnCurrencyName}" TEXT ,
+      "${CompanyInfoResponseModel.columnTaxAmount}" TEXT
+    )
+    ''');
+  }
+
+  insertCompanyTable(CompanyInfoResponseModel item) async {
+    try {
+      await insertData('''
+          INSERT INTO
+          '${CompanyInfoResponseModel.CompanyModelName}'
+          ("${CompanyInfoResponseModel.columnId}",
+      "${CompanyInfoResponseModel.columnIsMustChoosePayCash}",
+      "${CompanyInfoResponseModel.columnIsPriceIncludeTaxes}",
+      "${CompanyInfoResponseModel.columnIsTaxes}",
+      "${CompanyInfoResponseModel.columnBranchId}",
+      "${CompanyInfoResponseModel.columnBranchName}",
+      "${CompanyInfoResponseModel.columnCompanyName}",
+      "${CompanyInfoResponseModel.columnEmpName}",
+      "${CompanyInfoResponseModel.columnEmpId}",
+      "${CompanyInfoResponseModel.columnEmpPhone}",
+      "${CompanyInfoResponseModel.columnEmpEmail}",
+      "${CompanyInfoResponseModel.columnCompanyDescription}",
+      "${CompanyInfoResponseModel.columnAddress}",
+      "${CompanyInfoResponseModel.columnPhone}",
+      "${CompanyInfoResponseModel.columnLogo}",
+      "${CompanyInfoResponseModel.columnLanguage}",
+      "${CompanyInfoResponseModel.columnCompLanguage}",
+      "${CompanyInfoResponseModel.columnCompTaxNumber}",
+      "${CompanyInfoResponseModel.columnCompTaxAmount}",
+      "${CompanyInfoResponseModel.columnCurrencyName}",
+      "${CompanyInfoResponseModel.columnTaxAmount}")
+          VALUES (
+            '${item.compId}',
+          '${item.isMustChoosePayCash! ? 1 : 0}',
+          '${item.isPriceIncludeTaxes! ? 1 : 0}',
+          '${item.isTaxes! ? 1 : 0}',
+          '${item.branchId}',
+          '${item.branchName}',
+          '${item.companyName}',
+          '${item.empName}',
+          '${item.empId}',
+          '${item.empPhone}',
+          '${item.empEmail}',
+          '${item.companyDescription}',
+          '${item.compAddress}',
+          '${item.compPhone}',
+          '${item.logo}',
+          '${item.language}',
+          '${item.compLanguage}',
+          '${item.compTaxNumber}',
+          '${item.compTaxAmount}',
+          '${item.compCurrencyName}',
+          '${item.taxAmount}'
+          )
+          ''');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  List<CompanyInfoResponseModel> companyModels = [];
+  getAllCompanyTable() async {
+    try {
+      companyModels = [];
+      List<Map<String, dynamic>> data = await readData(
+          "SELECT * FROM '${CompanyInfoResponseModel.CompanyModelName}' ");
+
+      for (var element in data) {
+        companyModels.add(CompanyInfoResponseModel.fromJsonEdit(element));
+      }
+      if (kDebugMode) {
+        print("companyModels offline : ${companyModels.length}");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 }
@@ -565,23 +1127,7 @@ class DataCubit extends Cubit<DataState> {
 
 //   //------------------------------------------------------------------
 //   // Todo PayType Table
-//   createPayTypeTable(Database db) async {
-//     await db.execute('''
-//     CREATE TABLE "${PayTypeModel.PayTypeModelName}" (
-//       "${ReceiptsModel.columnId}" INTEGER NOT NULL PRIMARY KEY ,
-//       "${ReceiptsModel.columnName}" TEXT
-//     )
-//     ''');
-//   }
 
-//   insertPayTypeTable(PayTypeModel item) async {
-//     try {
-//       await insertData(
-//           "INSERT INTO '${PayTypeModel.PayTypeModelName}' ('${PayTypeModel.columnId}','${PayTypeModel.columnName}') VALUES ('${item.id}','${item.name}') ");
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
 
 //   getPayTypeModelById(var id) async {
 //     try {
@@ -638,108 +1184,24 @@ class DataCubit extends Cubit<DataState> {
 //     }
 //   }
 
-//   List<PayTypeModel> payTypeModels = [];
-//   getAllPayTypeTable() async {
-//     try {
-//       payTypeModels = [];
-//       List<Map<String, dynamic>> data =
-//           await readData("SELECT * FROM '${PayTypeModel.PayTypeModelName}' ");
+  // List<PayTypeModel> payTypeModels = [];
+  // getAllPayTypeTable() async {
+  //   try {
+  //     payTypeModels = [];
+  //     List<Map<String, dynamic>> data =
+  //         await readData("SELECT * FROM '${PayTypeModel.PayTypeModelName}' ");
 
-//       for (var element in data) {
-//         payTypeModels.add(PayTypeModel.fromJson(element));
-//       }
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
+  //     for (var element in data) {
+  //       payTypeModels.add(PayTypeModel.fromJson(element));
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
 //   //------------------------------------------------------------------
 //   // Todo Company Table
-//   createCompanyTable(Database db) async {
-//     await db.execute('''
-//     CREATE TABLE "${CompanyModel.CompanyModelName}" (
-//       "${CompanyModel.columnId}" INTEGER NOT NULL PRIMARY KEY ,
-//       "${CompanyModel.columnIsAdmin}" INTEGER ,
-//       "${CompanyModel.columnIsConfirmed}" INTEGER ,
-//       "${CompanyModel.columnIsMustChoosePayCash}" INTEGER ,
-//       "${CompanyModel.columnIsTaxes}" INTEGER ,
-//       "${CompanyModel.columnCurrencyId}" INTEGER ,
-//       "${CompanyModel.columnCompanyName}" TEXT ,
-//       "${CompanyModel.columnCompanyDescription}" TEXT ,
-//       "${CompanyModel.columnAddress}" TEXT ,
-//       "${CompanyModel.columnVerificationToken}" TEXT ,
-//       "${CompanyModel.columnVerifiedAt}" TEXT ,
-//       "${CompanyModel.columnPhone}" TEXT ,
-//       "${CompanyModel.columnEmail}" TEXT ,
-//       "${CompanyModel.columnPassword}" TEXT ,
-//       "${CompanyModel.columnPasswordSalt}" TEXT ,
-//       "${CompanyModel.columnRestTokenExpires}" TEXT ,
-//       "${CompanyModel.columnCreateDate}" TEXT ,
-//       "${CompanyModel.columnLogo}" TEXT ,
-//       "${CompanyModel.columnLanguage}" TEXT ,
-//       "${CompanyModel.columnTaxNumber}" TEXT ,
-//       "${CompanyModel.columnTaxAmount}" REAL ,
-//       "${CompanyModel.columnPasswordResetToken}" TEXT
-//     )
-//     ''');
-//   }
 
-//   insertCompanyTable(CompanyModel item) async {
-//     try {
-//       await insertData('''
-//           INSERT INTO
-//           '${CompanyModel.CompanyModelName}'
-//           ('${CompanyModel.columnId}',
-//           '${CompanyModel.columnAddress}',
-//           '${CompanyModel.columnCompanyDescription}',
-//           '${CompanyModel.columnCompanyName}',
-//           '${CompanyModel.columnCreateDate}',
-//           '${CompanyModel.columnCurrencyId}',
-//           '${CompanyModel.columnEmail}',
-//           '${CompanyModel.columnIsAdmin}',
-//           '${CompanyModel.columnIsConfirmed}',
-//           '${CompanyModel.columnIsMustChoosePayCash}',
-//           '${CompanyModel.columnIsTaxes}',
-//           '${CompanyModel.columnLanguage}',
-//           '${CompanyModel.columnLogo}',
-//           '${CompanyModel.columnPassword}',
-//           '${CompanyModel.columnPasswordResetToken}',
-//           '${CompanyModel.columnPasswordSalt}',
-//           '${CompanyModel.columnPhone}',
-//           '${CompanyModel.columnRestTokenExpires}',
-//           '${CompanyModel.columnTaxAmount}',
-//           '${CompanyModel.columnTaxNumber}',
-//           '${CompanyModel.columnVerificationToken}',
-//           '${CompanyModel.columnVerifiedAt}')
-//           VALUES (
-//             '${item.id}',
-//           '${item.address}',
-//           '${item.companyDescription}',
-//           '${item.companyName}',
-//           '${item.createDate}',
-//           '${item.currencyId}',
-//           '${item.email}',
-//           '${item.isAdmin! ? 1 : 0}',
-//           '${item.isConfirmed! ? 1 : 0}',
-//           '${item.isMustChoosePayCash! ? 1 : 0}',
-//           '${item.isTaxes! ? 1 : 0}',
-//           '${item.language}',
-//           '${item.logo}',
-//           '${item.password}',
-//           '${item.passwordResetToken}',
-//           '${item.passwordSalt}',
-//           '${item.phone}',
-//           '${item.restTokenExpires}',
-//           '${item.taxAmount}',
-//           '${item.taxNumber}',
-//           '${item.verificationToken}',
-//           '${item.verifiedAt}'
-//           )
-//           ''');
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
 
 //   getCompanyModelById(var id) async {
 //     try {
@@ -816,20 +1278,20 @@ class DataCubit extends Cubit<DataState> {
 //     }
 //   }
 
-//   List<CompanyModel> companyModels = [];
-//   getAllCompanyTable() async {
-//     try {
-//       companyModels = [];
-//       List<Map<String, dynamic>> data =
-//           await readData("SELECT * FROM '${CompanyModel.CompanyModelName}' ");
+  // List<CompanyModel> companyModels = [];
+  // getAllCompanyTable() async {
+  //   try {
+  //     companyModels = [];
+  //     List<Map<String, dynamic>> data =
+  //         await readData("SELECT * FROM '${CompanyModel.CompanyModelName}' ");
 
-//       for (var element in data) {
-//         companyModels.add(CompanyModel.fromJsonEdit(element));
-//       }
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
+  //     for (var element in data) {
+  //       companyModels.add(CompanyModel.fromJsonEdit(element));
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
 // //------------------------------------------------------------------
 //   // Todo Employee Table
@@ -971,52 +1433,7 @@ class DataCubit extends Cubit<DataState> {
 
 //   //------------------------------------------------------------------
 //   // Todo InvoiceDetails Table
-//   createInvoiceDetailsTable(Database db) async {
-//     await db.execute('''
-//     CREATE TABLE "${InvoiceDetailsModel.InvoiceDetailsModelName}" (
-//       "${InvoiceDetailsModel.columnId}" TEXT NOT NULL PRIMARY KEY ,
-//       "${InvoiceDetailsModel.columnProdId}" TEXT ,
-//       "${InvoiceDetailsModel.columnQuanitiy}" INTEGER ,
-//       "${InvoiceDetailsModel.columnUnitPrice}" REAL ,
-//       "${InvoiceDetailsModel.columnTotalCost}" REAL ,
-//       "${InvoiceDetailsModel.columnIsReturn}" INTEGER ,
-//       "${InvoiceDetailsModel.columnReasonForReturn}" TEXT ,
-//       "${InvoiceDetailsModel.columnQuantReturns}" INTEGER ,
-//       "${InvoiceDetailsModel.columnOrderID}" TEXT
-//     )
-//     ''');
-//   }
 
-//   insertInvoiceDetailsTable(InvoiceDetailsModel item) async {
-//     try {
-//       await insertData('''
-//           INSERT INTO
-//           '${InvoiceDetailsModel.InvoiceDetailsModelName}'
-//           ('${InvoiceDetailsModel.columnId}',
-//           '${InvoiceDetailsModel.columnIsReturn}',
-//           '${InvoiceDetailsModel.columnOrderID}',
-//           '${InvoiceDetailsModel.columnProdId}',
-//           '${InvoiceDetailsModel.columnQuanitiy}',
-//           '${InvoiceDetailsModel.columnQuantReturns}',
-//           '${InvoiceDetailsModel.columnReasonForReturn}',
-//           '${InvoiceDetailsModel.columnTotalCost}',
-//           '${InvoiceDetailsModel.columnUnitPrice}')
-//           VALUES (
-//             '${item.iD}',
-//           '${item.orderID}',
-//           '${item.prodId}',
-//           '${item.quanitiy}',
-//           '${item.quantReturns}',
-//           '${item.isReturn! ? 1 : 0}}',
-//           '${item.reasonForReturn}',
-//           '${item.totalCost}',
-//           '${item.unitPrice}'
-//           )
-//           ''');
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
 
 //   getInvoiceDetailsModelById(var id) async {
 //     try {
@@ -1082,69 +1499,24 @@ class DataCubit extends Cubit<DataState> {
 //     }
 //   }
 
-//   List<InvoiceDetailsModel> invoiceDetailsModels = [];
-//   getAllInvoiceDetailsTable() async {
-//     try {
-//       invoiceDetailsModels = [];
-//       List<Map<String, dynamic>> data = await readData(
-//           "SELECT * FROM '${InvoiceDetailsModel.InvoiceDetailsModelName}' ");
+  // List<InvoiceDetailsModel> invoiceDetailsModels = [];
+  // getAllInvoiceDetailsTable() async {
+  //   try {
+  //     invoiceDetailsModels = [];
+  //     List<Map<String, dynamic>> data = await readData(
+  //         "SELECT * FROM '${InvoiceDetailsModel.InvoiceDetailsModelName}' ");
 
-//       for (var element in data) {
-//         invoiceDetailsModels.add(InvoiceDetailsModel.fromJsonEdit(element));
-//       }
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
+  //     for (var element in data) {
+  //       invoiceDetailsModels.add(InvoiceDetailsModel.fromJsonEdit(element));
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
 //   //------------------------------------------------------------------
 //   // Todo DebitPayings Table
-//   createDebitPayingsTable(Database db) async {
-//     await db.execute('''
-//     CREATE TABLE "${DebitPayingsModel.DebitPayingsModelName}" (
-//       "${DebitPayingsModel.columnId}" INTEGER NOT NULL PRIMARY KEY ,
-//       "${DebitPayingsModel.columnClientID}" INTEGER ,
-//       "${DebitPayingsModel.columnCreateDate}" TEXT ,
-//       "${DebitPayingsModel.columnDebitAmount}" REAL ,
-//       "${DebitPayingsModel.columnEmpID}" INTEGER ,
-//       "${DebitPayingsModel.columnUpdateDate}" TEXT ,
-//       "${DebitPayingsModel.columnQrcode}" TEXT ,
-//       "${DebitPayingsModel.columnPayAmount}" REAL ,
-//       "${DebitPayingsModel.columnOrderID}" TEXT
-//     )
-//     ''');
-//   }
 
-//   insertDebitPayingsTable(DebitPayingsModel item) async {
-//     try {
-//       await insertData('''
-//           INSERT INTO
-//           '${DebitPayingsModel.DebitPayingsModelName}'
-//           ('${DebitPayingsModel.columnId}',
-//           '${DebitPayingsModel.columnClientID}',
-//           '${DebitPayingsModel.columnOrderID}',
-//           '${DebitPayingsModel.columnCreateDate}',
-//           '${DebitPayingsModel.columnDebitAmount}',
-//           '${DebitPayingsModel.columnEmpID}',
-//           '${DebitPayingsModel.columnPayAmount}',
-//           '${DebitPayingsModel.columnQrcode}',
-//           '${DebitPayingsModel.columnUpdateDate}')
-//           VALUES (
-//             '${item.id}',
-//           '${item.clientID}',
-//           '${item.orderID}',
-//           '${item.createDate}',
-//           '${item.debitAmount}',
-//           '${item.empID}}',
-//           '${item.payAmount}',
-//           '${item.qrcode}',
-//           '${item.updateDate}'
-//           )
-//           ''');
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
 
 //   getDebitPayingsModelById(var id) async {
 //     try {
@@ -1210,22 +1582,22 @@ class DataCubit extends Cubit<DataState> {
 //     }
 //   }
 
-//   List<DebitPayingsModel> debitPayingsModels = [];
-//   getAllDebitPayingsTable() async {
-//     try {
-//       debitPayingsModels = [];
-//       List<Map<String, dynamic>> data = await readData(
-//           "SELECT * FROM '${DebitPayingsModel.DebitPayingsModelName}' ");
+  // List<DebitPayingsModel> debitPayingsModels = [];
+  // getAllDebitPayingsTable() async {
+  //   try {
+  //     debitPayingsModels = [];
+  //     List<Map<String, dynamic>> data = await readData(
+  //         "SELECT * FROM '${DebitPayingsModel.DebitPayingsModelName}' ");
 
-//       for (var element in data) {
-//         debitPayingsModels.add(DebitPayingsModel.fromJson(element));
-//       }
-//     } catch (e) {
-//       if (kDebugMode) {
-//         print(e);
-//       }
-//     }
-//   }
+  //     for (var element in data) {
+  //       debitPayingsModels.add(DebitPayingsModel.fromJson(element));
+  //     }
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print(e);
+  //     }
+  //   }
+  // }
 
 //   //------------------------------------------------------------------
 //   // Todo Receipts Table
@@ -1457,42 +1829,6 @@ class DataCubit extends Cubit<DataState> {
 
 //   //------------------------------------------------------------------
 //   // Todo Category Table
-//   createCategoryTable(Database db) async {
-//     await db.execute('''
-//     CREATE TABLE "${CategoryModel.CategoryModelName}" (
-//       "${CategoryModel.columnId}" INTEGER NOT NULL PRIMARY KEY ,
-//       "${CategoryModel.columnCompanyId}" INTEGER ,
-//       "${CategoryModel.columnIsActive}" INTEGER ,
-//       "${CategoryModel.columnName}" TEXT ,
-//       "${CategoryModel.columnDescription}" TEXT
-//     )
-//     ''');
-//   }
-
-//   insertCategoryTable(CategoryModel item) async {
-//     try {
-//       await insertData('''
-//           INSERT INTO
-//           '${CategoryModel.CategoryModelName}'
-//           ('${CategoryModel.columnId}',
-//           '${CategoryModel.columnCompanyId}',
-//           '${CategoryModel.columnIsActive}',
-//           '${CategoryModel.columnDescription}',
-//           '${CategoryModel.columnName}')
-//           VALUES (
-//             '${item.id}',
-//           '${item.companyId}',
-//           '${item.isActive! ? 1 : 0}',
-//           '${item.description}',
-//           '${item.name}'
-//           )
-//           ''');
-//     } catch (e) {
-//       if (kDebugMode) {
-//         print(e);
-//       }
-//     }
-//   }
 
 //   getCategoryModelById(var id) async {
 //     try {
@@ -1552,95 +1888,29 @@ class DataCubit extends Cubit<DataState> {
 //     }
 //   }
 
-//   List<CategoryModel> categoryModels = [];
-//   getAllCategoryTable() async {
-//     emit(GetAllCategoryTableLoading());
-//     try {
-//       categoryModels = [];
-//       List<Map<String, dynamic>> data =
-//           await readData("SELECT * FROM '${CategoryModel.CategoryModelName}' ");
+  // List<CategoryModel> categoryModels = [];
+  // getAllCategoryTable() async {
+  //   emit(GetAllCategoryTableLoading());
+  //   try {
+  //     categoryModels = [];
+  //     List<Map<String, dynamic>> data =
+  //         await readData("SELECT * FROM '${CategoryModel.CategoryModelName}' ");
 
-//       for (var element in data) {
-//         categoryModels.add(CategoryModel.fromJsonEdit(element));
-//       }
-//       emit(GetAllCategoryTableSuccess());
-//     } catch (e) {
-//       if (kDebugMode) {
-//         print(e);
-//       }
-//       emit(GetAllCategoryTableError());
-//     }
-//   }
+  //     for (var element in data) {
+  //       categoryModels.add(CategoryModel.fromJsonEdit(element));
+  //     }
+  //     emit(GetAllCategoryTableSuccess());
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print(e);
+  //     }
+  //     emit(GetAllCategoryTableError());
+  //   }
+  // }
 
 //   //------------------------------------------------------------------
 //   // Todo Order Table
-//   createOrderTable(Database db) async {
-//     await db.execute('''
-//     CREATE TABLE "${OrderModel.OrderModelName}" (
-//       "${OrderModel.columnId}" TEXT NOT NULL PRIMARY KEY ,
-//       "${OrderModel.columnClientID}" INTEGER ,
-//       "${OrderModel.columnPayTypeID}" INTEGER ,
-//       "${OrderModel.columnEmpID}" INTEGER ,
-//       "${OrderModel.columnIsPayCash}" INTEGER ,
-//       "${OrderModel.columnCreateDate}" TEXT ,
-//       "${OrderModel.columnUpdateDate}" TEXT ,
-//       "${OrderModel.columnDiscount}" REAL ,
-//       "${OrderModel.columnTotalCost}" REAL ,
-//       "${OrderModel.columnTaxes}" REAL ,
-//       "${OrderModel.columnCostNet}" REAL ,
-//       "${OrderModel.columnDebitPay}" REAL ,
-//       "${OrderModel.columnPayAmount}" REAL ,
-//       "${OrderModel.columnQrcode}" TEXT ,
-//       "${OrderModel.columnIsReturn}" INTEGER ,
-//       "${OrderModel.columnReturnDesc}" TEXT
-//     )
-//     ''');
-//   }
 
-//   insertOrderTable(OrderModel item) async {
-//     try {
-//       await insertData('''
-//           INSERT INTO
-//           '${OrderModel.OrderModelName}'
-//           ('${OrderModel.columnId}',
-//           '${OrderModel.columnClientID}',
-//           '${OrderModel.columnPayTypeID}',
-//           '${OrderModel.columnEmpID}',
-//           '${OrderModel.columnIsPayCash}',
-//           '${OrderModel.columnCreateDate}',
-//           '${OrderModel.columnUpdateDate}',
-//           '${OrderModel.columnDiscount}',
-//           '${OrderModel.columnTotalCost}',
-//           '${OrderModel.columnTaxes}',
-//           '${OrderModel.columnCostNet}',
-//           '${OrderModel.columnDebitPay}',
-//           '${OrderModel.columnPayAmount}',
-//           '${OrderModel.columnQrcode}',
-//           '${OrderModel.columnIsReturn}',
-//           '${OrderModel.columnReturnDesc}')
-//           VALUES (
-//             '${item.id}',
-//           '${item.clientID}',
-//           '${item.payTypeID}',
-//           '${item.empID}',
-//           '${item.isPayCash! ? 1 : 0}',
-//           '${item.createDate}',
-//           '${item.updateDate}',
-//           '${item.discount}',
-//           '${item.totalCost}',
-//           '${item.taxes}',
-//           '${item.costNet}',
-//           '${item.debitPay}',
-//           '${item.payAmount}',
-//           '${item.qrcode}',
-//           '${item.isReturn! ? 1 : 0}',
-//           '${item.returnDesc}'
-//           )
-//           ''');
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
 
 //   getOrderModelById(var id) async {
 //     try {
@@ -1711,105 +1981,23 @@ class DataCubit extends Cubit<DataState> {
 //     }
 //   }
 
-//   List<OrderModel> orderModels = [];
-//   getAllOrderTable() async {
-//     try {
-//       orderModels = [];
-//       List<Map<String, dynamic>> data =
-//           await readData("SELECT * FROM '${OrderModel.OrderModelName}' ");
+  // List<OrderModel> orderModels = [];
+  // getAllOrderTable() async {
+  //   try {
+  //     orderModels = [];
+  //     List<Map<String, dynamic>> data =
+  //         await readData("SELECT * FROM '${OrderModel.OrderModelName}' ");
 
-//       for (var element in data) {
-//         orderModels.add(OrderModel.fromJsonEdit(element));
-//       }
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
+  //     for (var element in data) {
+  //       orderModels.add(OrderModel.fromJsonEdit(element));
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
 //   //------------------------------------------------------------------
 //   // Todo Product Table
-//   createProductTable(Database db) async {
-//     await db.execute('''
-//     CREATE TABLE "${ProductModel.ProductModelName}" (
-//       "${ProductModel.columnId}" TEXT NOT NULL PRIMARY KEY ,
-//       "${ProductModel.columnName}" TEXT ,
-//       "${ProductModel.columnBuyingPrice}" REAL ,
-//       "${ProductModel.columnUnitPackage}" INTEGER ,
-//       "${ProductModel.columnUnitID}" INTEGER ,
-//       "${ProductModel.columnStockQuantity}" INTEGER ,
-//       "${ProductModel.columnQrCode}" TEXT ,
-//       "${ProductModel.columnCreateDate}" TEXT ,
-//       "${ProductModel.columnUpdateDate}" TEXT ,
-//       "${ProductModel.columnImage}" TEXT ,
-//       "${ProductModel.columnDiscount}" REAL ,
-//       "${ProductModel.columnExpirationDate}" TEXT ,
-//       "${ProductModel.columnProductNumber}" TEXT ,
-//       "${ProductModel.columnCatID}" INTEGER ,
-//       "${ProductModel.columnCompID}" INTEGER ,
-//       "${ProductModel.columnIsPetrolGas}" INTEGER ,
-//       "${ProductModel.columnPriceOne}" REAL ,
-//       "${ProductModel.columnPriceThree}" REAL ,
-//       "${ProductModel.columnPriceTwo}" REAL ,
-//       "${ProductModel.columnDescription}" TEXT ,
-//       "${ProductModel.columnIsActive}" INTEGER
-//     )
-//     ''');
-//   }
-
-//   insertProductTable(ProductModel item) async {
-//     try {
-//       await insertData('''
-//           INSERT INTO
-//           '${ProductModel.ProductModelName}'
-//           ('${ProductModel.columnId}',
-//           '${ProductModel.columnName}',
-//           '${ProductModel.columnBuyingPrice}',
-//           '${ProductModel.columnUnitPackage}',
-//           '${ProductModel.columnUnitID}',
-//           '${ProductModel.columnCreateDate}',
-//           '${ProductModel.columnUpdateDate}',
-//           '${ProductModel.columnDiscount}',
-//           '${ProductModel.columnStockQuantity}',
-//           '${ProductModel.columnQrCode}',
-//           '${ProductModel.columnImage}',
-//           '${ProductModel.columnExpirationDate}',
-//           '${ProductModel.columnProductNumber}',
-//           '${ProductModel.columnCatID}',
-//           '${ProductModel.columnCompID}',
-//           '${ProductModel.columnPriceOne}',
-//           '${ProductModel.columnPriceThree}',
-//           '${ProductModel.columnPriceTwo}',
-//           '${ProductModel.columnDescription}',
-//           '${ProductModel.columnIsActive}',
-//           '${ProductModel.columnIsPetrolGas}')
-//           VALUES (
-//             '${item.prodId}',
-//           '${item.name}',
-//           '${item.buyingPrice}',
-//           '${item.unitPackage}',
-//           '${item.unitID}',
-//           '${item.createDate}',
-//           '${item.updateDate}',
-//           '${item.discount}',
-//           '${item.stockQuantity}',
-//           '${item.qrCode}',
-//           '${item.image}',
-//           '${item.expirationDate}',
-//           '${item.productNumber}',
-//           '${item.catID}',
-//           '${item.compID}',
-//           '${item.priceOne}',
-//           '${item.priceThree}',
-//           '${item.priceTwo}',
-//           '${item.description}',
-//           '${item.isActive! ? 1 : 0}',
-//           '${item.isPetrolGas! ? 1 : 0}'
-//           )
-//           ''');
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
 
 //   getProductModelById(var id) async {
 //     try {
@@ -1885,97 +2073,34 @@ class DataCubit extends Cubit<DataState> {
 //     }
 //   }
 
-//   List<ProductModel> productModels = [];
-//   getAllProductTable() async {
-//     emit(GetAllProductTableLoading());
-//     try {
-//       productModels = [];
-//       List<Map<String, dynamic>> data =
-//           await readData("SELECT * FROM '${ProductModel.ProductModelName}' ");
+  // List<ProductModel> productModels = [];
+  // getAllProductTable() async {
+  //   emit(GetAllProductTableLoading());
+  //   try {
+  //     productModels = [];
+  //     List<Map<String, dynamic>> data =
+  //         await readData("SELECT * FROM '${ProductModel.ProductModelName}' ");
 
-//       for (var element in data) {
-//         // Database? mydb = await db;
+  //     for (var element in data) {
+  //       // Database? mydb = await db;
 
-//         // print(await mydb!.delete(ProductModel.ProductModelName,
-//         //     where: '${ProductModel.columnId} = ?',
-//         //     whereArgs: [element["Prod_Id"]]));
+  //       // print(await mydb!.delete(ProductModel.ProductModelName,
+  //       //     where: '${ProductModel.columnId} = ?',
+  //       //     whereArgs: [element["Prod_Id"]]));
 
-//         productModels.add(ProductModel.fromJsonEdit(element));
-//       }
+  //       productModels.add(ProductModel.fromJsonEdit(element));
+  //     }
 
-//       emit(GetAllProductTableSuccess());
-//     } catch (e) {
-//       print(e);
-//       emit(GetAllProductTableError());
-//     }
-//   }
+  //     emit(GetAllProductTableSuccess());
+  //   } catch (e) {
+  //     print(e);
+  //     emit(GetAllProductTableError());
+  //   }
+  // }
 
 //   //------------------------------------------------------------------
 //   // Todo Client Table
-//   createClientTable(Database db) async {
-//     await db.execute('''
-//     CREATE TABLE "${ClientModel.ClientModelName}" (
-//       "${ClientModel.columnId}" TEXT NOT NULL PRIMARY KEY ,
-//       "${ClientModel.columnName}" TEXT ,
-//       "${ClientModel.columnPhone}" TEXT ,
-//       "${ClientModel.columnAddress}" TEXT ,
-//       "${ClientModel.columnLoacation}" TEXT ,
-//       "${ClientModel.columnComment}" TEXT ,
-//       "${ClientModel.columnTaxNumber}" TEXT ,
-//       "${ClientModel.columnCreateDate}" TEXT ,
-//       "${ClientModel.columnUpdateDate}" TEXT ,
-//       "${ClientModel.columnAmmountTobePaid}" REAL ,
-//       "${ClientModel.columnMaxDebitLimit}" REAL ,
-//       "${ClientModel.columnMaxLimtDebitRecietCount}" REAL ,
-//       "${ClientModel.columnCompanyId}" INTEGER ,
-//       "${ClientModel.columnEmpID}" INTEGER ,
-//       "${ClientModel.columnIsActive}" INTEGER
-//     )
-//     ''');
-//   }
 
-//   insertClientTable(ClientModel item) async {
-//     try {
-//       await insertData('''
-//           INSERT INTO
-//           '${ClientModel.ClientModelName}'
-//           ('${ClientModel.columnId}',
-//           '${ClientModel.columnName}',
-//           '${ClientModel.columnPhone}',
-//           '${ClientModel.columnLoacation}',
-//           '${ClientModel.columnComment}',
-//           '${ClientModel.columnTaxNumber}',
-//           '${ClientModel.columnCreateDate}',
-//           '${ClientModel.columnUpdateDate}',
-//           '${ClientModel.columnAmmountTobePaid}',
-//           '${ClientModel.columnMaxDebitLimit}',
-//           '${ClientModel.columnMaxLimtDebitRecietCount}',
-//           '${ClientModel.columnEmpID}',
-//           '${ClientModel.columnCompanyId}',
-//           '${ClientModel.columnIsActive}',
-//           '${ClientModel.columnAddress}')
-//           VALUES (
-//             '${item.id}',
-//           '${item.name}',
-//           '${item.phone}',
-//           '${item.loacation}',
-//           '${item.comment}',
-//           '${item.taxNumber}',
-//           '${item.createDate}',
-//           '${item.updateDate}',
-//           '${item.ammountTobePaid}',
-//           '${item.maxDebitLimit}',
-//           '${item.maxLimtDebitRecietCount}',
-//           '${item.empID}',
-//           '${item.companyId}',
-//           '${item.isActive! ? 1 : 0}',
-//           '${item.address}'
-//           )
-//           ''');
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
 
 //   getClientModelById(var id) async {
 //     try {
@@ -2042,24 +2167,6 @@ class DataCubit extends Cubit<DataState> {
 //           where: '${ClientModel.columnId} = ?', whereArgs: [item.id]);
 //     } catch (e) {
 //       print(e);
-//     }
-//   }
-
-//   List<ClientModel> clientModels = [];
-//   getAllClientTable() async {
-//     emit(GetAllClientTableLoading());
-//     try {
-//       clientModels = [];
-//       List<Map<String, dynamic>> data =
-//           await readData("SELECT * FROM '${ClientModel.ClientModelName}' ");
-
-//       for (var element in data) {
-//         clientModels.add(ClientModel.fromJsonEdit(element));
-//       }
-//       emit(GetAllClientTableSuccess());
-//     } catch (e) {
-//       print(e);
-//       emit(GetAllClientTableError());
 //     }
 //   }
 

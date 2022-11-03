@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
-import 'package:sandc_pos/models/order.dart';
-import 'package:sandc_pos/models/products.dart';
-import 'package:uuid/uuid.dart';
+import 'package:sandc_pos/online_models/order_response_model.dart';
 
-import '../../models/invoice_details.dart';
+import 'package:uuid/uuid.dart';
 
 class SearchOrdersSalesReturnScreen extends StatefulWidget {
   SearchOrdersSalesReturnScreen({Key? key}) : super(key: key);
@@ -20,7 +18,7 @@ class _SearchOrdersSalesReturnScreenState
     extends State<SearchOrdersSalesReturnScreen> {
   TextEditingController? controller = TextEditingController();
 
-  List<OrderModel> orders = [];
+  List<OrderResponseModel> orders = [];
 
   @override
   void initState() {
@@ -61,7 +59,7 @@ class _SearchOrdersSalesReturnScreenState
     );
   }
 
-  _buildItemSearch(OrderModel order) {
+  _buildItemSearch(OrderResponseModel order) {
     return Card(
       child: ListTile(
         onTap: () {

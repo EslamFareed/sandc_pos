@@ -7,7 +7,7 @@ import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:sandc_pos/core/components/default_buttons.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
-import 'package:sandc_pos/models/order.dart';
+import 'package:sandc_pos/online_models/order_response_model.dart';
 import 'package:uuid/uuid.dart';
 
 class ItemModel {
@@ -26,21 +26,21 @@ class TableSalesReturns extends StatefulWidget {
 }
 
 class _TableSalesReturnsState extends State<TableSalesReturns> {
-  List<OrderModel> orders = [
-    OrderModel(
-      clientID: 1,
+  List<OrderResponseModel> orders = [
+    OrderResponseModel(
+      clientID: "1",
       totalCost: 1500,
       createDate: "2022-2-10",
       id: Uuid().v1(),
     ),
-    OrderModel(
-      clientID: 1,
+    OrderResponseModel(
+      clientID: "1",
       totalCost: 1500,
       createDate: "2022-2-10",
       id: Uuid().v1(),
     ),
-    OrderModel(
-      clientID: 1,
+    OrderResponseModel(
+      clientID: "1",
       totalCost: 1500,
       createDate: "2022-2-10",
       id: Uuid().v1(),

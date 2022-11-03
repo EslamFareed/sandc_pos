@@ -2,9 +2,9 @@ import 'dart:typed_data';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:sandc_pos/models/category.dart';
+import 'package:sandc_pos/online_models/category_response_model.dart';
 
-Future<Uint8List> makePdf(List<CategoryModel> categories) async {
+Future<Uint8List> makePdf(List<CategoryResponseModel> categories) async {
   final pdf = Document();
 
   pdf.addPage(
