@@ -5,6 +5,14 @@ abstract class DataOnlineState {}
 
 class DataOnlineInitial extends DataOnlineState {}
 
+////////////////////////////////////////////////////
+
+class GetAllDataOfflineLoading extends DataOnlineState {}
+
+class GetAllDataOfflineSuccess extends DataOnlineState {}
+
+class GetAllDataOfflineError extends DataOnlineState {}
+
 //!
 class GetDataOnlineSuccessState extends DataOnlineState {}
 

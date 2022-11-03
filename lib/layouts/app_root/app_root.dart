@@ -27,24 +27,7 @@ class AppRoot extends StatelessWidget {
         BlocProvider(create: (BuildContext context) => ChatCubit()),
         BlocProvider(create: (BuildContext context) => AuthCubit()),
         BlocProvider(create: (BuildContext context) => DataOnlineCubit()),
-        BlocProvider(create: (BuildContext context) => DataCubit()..db
-            // ..getAllBillTable()
-            // ..getAllBranchProductTable()
-            // ..getAllBranchTable()
-            // ..getAllCategoryTable()
-            // ..getAllClientTable()
-            // ..getAllCompanyTable()
-            // ..getAllCurrencyTable()
-            // ..getAllDebitPayingsTable()
-            // ..getAllEmpTypesTable()
-            // ..getAllEmployeeTable()
-            // ..getAllInvoiceDetailsTable()
-            // ..getAllOrderTable()
-            // ..getAllPayTypeTable()
-            // ..getAllProductTable()
-            // ..getAllReceiptsTable()
-            // ..getAllUnitTable()
-            ),
+        BlocProvider(create: (BuildContext context) => DataCubit()..db),
       ],
       child: BlocConsumer<MainCubit, MainStates>(
         listener: (context, state) {},

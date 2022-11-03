@@ -1,12 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' as getx;
 import 'package:responsive_grid/responsive_grid.dart';
+import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/cubits/data_online_cubit/data_online_cubit.dart';
 import 'package:sandc_pos/layouts/main_screen/widgets/home_item.dart';
 import 'package:sandc_pos/reposetories/shared_pref/cache_keys.dart';
@@ -42,6 +44,11 @@ class _MainScreenState extends State<MainScreen> {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         _showDialog();
       });
+      _getDataFirstTime();
+    } else {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        _showDialog();
+      });
       _getData();
     }
 
@@ -68,6 +75,10 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   _getData() async {
+    await DataOnlineCubit.get(context).getAllOfflineData(context);
+  }
+
+  _getDataFirstTime() async {
     await DataOnlineCubit.get(context).getAllDataForFirstTime(context);
   }
 
@@ -105,14 +116,17 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DataOnlineCubit, DataOnlineState>(
-      builder: (context, state) => WillPopScope(
-        child: Scaffold(
-          appBar: _buildAppBar(),
-          drawer: _buildDrawer(),
-          body: SingleChildScrollView(child: _buildBody()),
-        ),
-        onWillPop: () => _onWillPop(),
-      ),
+      builder: (context, state) {
+        var cubit = DataOnlineCubit.get(context);
+        return WillPopScope(
+          child: Scaffold(
+            appBar: _buildAppBar(),
+            drawer: _buildDrawer(context, state),
+            body: SingleChildScrollView(child: _buildBody()),
+          ),
+          onWillPop: () => _onWillPop(),
+        );
+      },
       listener: (context, state) {
         if (state is GetDataOnlineSuccessState) {
           getx.Get.back(closeOverlays: true);
@@ -124,6 +138,21 @@ class _MainScreenState extends State<MainScreen> {
 
         if (state is GetDataOnlineErrorState) {
           getx.Get.back();
+          getx.Get.showSnackbar(const getx.GetSnackBar(
+            message: "Error please try again",
+            duration: Duration(seconds: 4),
+          ));
+        }
+        if (state is GetAllDataOfflineSuccess) {
+          getx.Get.back(closeOverlays: true);
+          getx.Get.showSnackbar(const getx.GetSnackBar(
+            message: "Data updated successfuly",
+            duration: Duration(seconds: 4),
+          ));
+        }
+
+        if (state is GetAllDataOfflineError) {
+          getx.Get.back(closeOverlays: true);
           getx.Get.showSnackbar(const getx.GetSnackBar(
             message: "Error please try again",
             duration: Duration(seconds: 4),
@@ -251,104 +280,140 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  _buildDrawer() {
-    return Drawer(
-      child: Column(
-        children: [
-          Container(
-              color: AppColors.primaryColor,
-              height: getx.Get.height * .25,
-              width: getx.Get.width,
-              child: Column()),
-          SizedBox(
-            height: getx.Get.height * .75,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+  _buildDrawer(BuildContext context, DataOnlineState state) {
+    if (DataCubit.get(context).companyModels.isNotEmpty) {
+      Uint8List _bytesImage = const Base64Decoder().convert(
+          DataCubit.get(context)
+              .companyModels[0]
+              .logo!
+              .split("data:image/png;base64,")
+              .last);
+
+      return Drawer(
+        child: Column(
+          children: [
+            Container(
+                color: AppColors.primaryColor,
+                height: getx.Get.height * .25,
+                width: getx.Get.width,
+                child: Row(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: 10.h),
-                      child: Card(
-                        color: const Color.fromARGB(255, 215, 215, 215),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0.r),
-                        ),
-                        child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 25.w, vertical: 2.h),
-                            child: Text(
-                              "Test Version",
-                              style: AppTextStyle.caption().copyWith(
-                                  color:
-                                      const Color.fromARGB(255, 155, 155, 155)),
-                            )),
+                      margin: const EdgeInsets.all(20),
+                      child: CircleAvatar(
+                        backgroundImage: MemoryImage(_bytesImage),
+                        radius: 50.r,
                       ),
                     ),
-                    SizedBox(height: 10.h),
-                    // ListTile(
-                    //   onTap: () {
-                    //     Get.to(
-                    //         ContactWithAdminScreen(
-                    //           userID: '1',
-                    //         ),
-                    //         transition: Transition.zoom);
-                    //   },
-                    //   title: const Text("Chat With Admin"),
-                    //   trailing: const Icon(Icons.chat),
-                    // ),
-                    ListTile(
-                      onTap: () {
-                        getx.Get.to(const AboutScreen(),
-                            transition: getx.Transition.zoom);
-                      },
-                      title: const Text("More Information"),
-                      trailing: const Icon(Icons.info),
-                    ),
-                    ListTile(
-                      onTap: () {
-                        getx.Get.to(ContactUsScreen(),
-                            transition: getx.Transition.zoom);
-                      },
-                      title: const Text("Contact with us"),
-                      trailing: const Icon(Icons.contact_support),
-                    ),
-                    ListTile(
-                      onTap: () async {
-                        await CacheHelper.saveData(
-                            key: "userToken", value: "NO");
-                        getx.Get.offAll(LoginScreen(),
-                            transition: getx.Transition.zoom);
-                      },
-                      title: const Text("Logout"),
-                      trailing: const Icon(Icons.exit_to_app),
-                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          DataCubit.get(context).companyModels[0].empName!,
+                          style: AppTextStyle.appBarText()
+                              .copyWith(color: Colors.white),
+                        ),
+                        Text(
+                          DataCubit.get(context).companyModels[0].empPhone!,
+                          style: AppTextStyle.caption()
+                              .copyWith(color: Colors.white),
+                        ),
+                        Text(
+                          DataCubit.get(context).companyModels[0].empEmail!,
+                          style: AppTextStyle.caption()
+                              .copyWith(color: Colors.white),
+                        ),
+                        Text(
+                          DataCubit.get(context).companyModels[0].branchName!,
+                          style: AppTextStyle.caption()
+                              .copyWith(color: Colors.white),
+                        ),
+                      ],
+                    )
                   ],
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 10.h),
-                  child: Card(
-                    color: const Color.fromARGB(255, 215, 215, 215),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0.r),
-                    ),
-                    child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 25.w, vertical: 2.h),
-                        child: Text(
-                          "All Rights Reserved Sandc",
-                          style: AppTextStyle.caption().copyWith(
-                              color: const Color.fromARGB(255, 155, 155, 155),
-                              fontSize: 12.sp),
-                        )),
+                )),
+            SizedBox(
+              height: getx.Get.height * .75,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 10.h),
+                        child: Card(
+                          color: const Color.fromARGB(255, 215, 215, 215),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0.r),
+                          ),
+                          child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 25.w, vertical: 2.h),
+                              child: Text(
+                                "Test Version",
+                                style: AppTextStyle.caption().copyWith(
+                                    color: const Color.fromARGB(
+                                        255, 155, 155, 155)),
+                              )),
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      ListTile(
+                        onTap: () {
+                          getx.Get.to(const AboutScreen(),
+                              transition: getx.Transition.zoom);
+                        },
+                        title: const Text("More Information"),
+                        trailing: const Icon(Icons.info),
+                      ),
+                      ListTile(
+                        onTap: () {
+                          getx.Get.to(ContactUsScreen(),
+                              transition: getx.Transition.zoom);
+                        },
+                        title: const Text("Contact with us"),
+                        trailing: const Icon(Icons.contact_support),
+                      ),
+                      ListTile(
+                        onTap: () async {
+                          await CacheHelper.saveData(
+                              key: "userToken", value: "NO");
+                          getx.Get.offAll(LoginScreen(),
+                              transition: getx.Transition.zoom);
+                        },
+                        title: const Text("Logout"),
+                        trailing: const Icon(Icons.exit_to_app),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10.h),
+                    child: Card(
+                      color: const Color.fromARGB(255, 215, 215, 215),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0.r),
+                      ),
+                      child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 25.w, vertical: 2.h),
+                          child: Text(
+                            "All Rights Reserved Sandc",
+                            style: AppTextStyle.caption().copyWith(
+                                color: const Color.fromARGB(255, 155, 155, 155),
+                                fontSize: 12.sp),
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    } else {
+      return const CircularProgressIndicator();
+    }
   }
 }

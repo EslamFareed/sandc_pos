@@ -66,8 +66,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-
     if (CacheKeysManger.getUserTokenFromCache() == "NO") {
       Future.delayed(const Duration(seconds: 4)).then((value) => getx.Get.off(
           LoginScreen(),
@@ -90,15 +88,3 @@ class _SplashScreenState extends State<SplashScreen> {
         password: CacheKeysManger.gePasswordFromCache());
   }
 }
-
-//   // _getData() async{
-
-  // }
-
-  // @override
-  // void dispose() {
-  //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-  //       overlays: SystemUiOverlay.values);
-  //   super.dispose();
-  // }
-

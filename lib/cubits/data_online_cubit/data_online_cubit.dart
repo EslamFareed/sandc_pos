@@ -25,6 +25,27 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
 
   static DataOnlineCubit get(context) => BlocProvider.of(context);
 
+  //? Get All Data Offline
+  getAllOfflineData(BuildContext context) async {
+    emit(GetAllDataOfflineLoading());
+    try {
+      await DataCubit.get(context).getAllCategoryTable();
+      await DataCubit.get(context).getAllClientTable();
+      await DataCubit.get(context).getAllCompanyTable();
+      await DataCubit.get(context).getAllDebitPayingsTable();
+      await DataCubit.get(context).getAllInvoiceDetailsTable();
+      await DataCubit.get(context).getAllOrderTable();
+      await DataCubit.get(context).getAllPayTypeTable();
+      await DataCubit.get(context).getAllProductTable();
+      emit(GetAllDataOfflineSuccess());
+    } catch (e) {
+      emit(GetAllDataOfflineError());
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
   //todo save offline all data
   saveAllDataToOffline() {}
 
