@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:responsive_grid/responsive_grid.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/cubits/data_online_cubit/data_online_cubit.dart';
 import 'package:sandc_pos/layouts/main_screen/widgets/home_item.dart';
+import 'package:sandc_pos/reposetories/remote/dio/dio_helper.dart';
 import 'package:sandc_pos/reposetories/shared_pref/cache_keys.dart';
 import '../../core/style/color/app_colors.dart';
 
@@ -166,78 +168,43 @@ class _MainScreenState extends State<MainScreen> {
     return Container(
       padding: const EdgeInsets.all(10),
       child: ResponsiveGridRow(children: [
-        ...items.map(
-          (e) =>
-              _buildItemCard(e.image.toString(), e.title.toString(), e.onTap!),
-        )
-      ]),
-    );
-  }
-
-  List<HomeItem> items = [
-    HomeItem(
-        title: "Sales",
-        image: "assets/images/logo.png",
-        onTap: () {
+        // ...items.map(
+        //   (e) =>
+        //       _buildItemCard(e.image.toString(), e.title.toString(), e.onTap!),
+        _buildItemCard("assets/images/logo.png", "Sales", () {
           getx.Get.to(SalesScreen(), transition: getx.Transition.zoom);
         }),
-    HomeItem(
-        title: "Clients",
-        image: "assets/images/logo.png",
-        onTap: () {
+        _buildItemCard("assets/images/logo.png", "Clients", () {
           getx.Get.to(const CustomersHome(), transition: getx.Transition.zoom);
         }),
-    HomeItem(
-        title: "Stock",
-        image: "assets/images/logo.png",
-        onTap: () {
+        _buildItemCard("assets/images/logo.png", "Stock", () {
           getx.Get.to(const ProductsHome(), transition: getx.Transition.zoom);
         }),
-    HomeItem(
-        title: "Reports",
-        image: "assets/images/logo.png",
-        onTap: () {
+        _buildItemCard("assets/images/logo.png", "Reports", () {
           getx.Get.to(const ReportsHome(), transition: getx.Transition.zoom);
         }),
-    HomeItem(
-        title: "Sales Returns",
-        image: "assets/images/logo.png",
-        onTap: () {
+        _buildItemCard("assets/images/logo.png", "Sales Returns", () {
           getx.Get.to(const SalesReturnsScreen(),
               transition: getx.Transition.zoom);
         }),
-    HomeItem(
-        title: "Settings",
-        image: "assets/images/logo.png",
-        onTap: () {
-          getx.Get.to(SettingsScreen(), transition: getx.Transition.zoom);
+        _buildItemCard("assets/images/logo.png", "Settings", () {
+          getx.Get.to(const SettingsScreen(), transition: getx.Transition.zoom);
         }),
-    HomeItem(
-        title: "Printer",
-        image: "assets/images/logo.png",
-        onTap: () {
+        _buildItemCard("assets/images/logo.png", "Printer", () {
           getx.Get.to(const SettingsPrinter(),
               transition: getx.Transition.zoom);
         }),
-    HomeItem(
-        title: "Update To cloud",
-        image: "assets/images/logo.png",
-        onTap: () {
-          getx.Get.showSnackbar(const getx.GetSnackBar(
-            message: "Updated To cloud successfully",
-            duration: Duration(seconds: 2),
-          ));
+        _buildItemCard("assets/images/logo.png", "Update To cloud", () async {
+          _showDialog();
+          await DataOnlineCubit.get(context).checkIfDataUptodate(context);
         }),
-    HomeItem(
-        title: "Update From cloud",
-        image: "assets/images/logo.png",
-        onTap: () {
-          getx.Get.showSnackbar(getx.GetSnackBar(
-            message: "Updated From cloud successfully",
-            duration: Duration(seconds: 2),
-          ));
+        _buildItemCard("assets/images/logo.png", "Update From cloud", () async {
+          _showDialog();
+          await DataOnlineCubit.get(context).getAllDataForFirstTime(context);
         }),
-  ];
+      ]),
+    );
+  }
 
   _buildItemCard(String image, String title, void Function() onTap) {
     return ResponsiveGridCol(

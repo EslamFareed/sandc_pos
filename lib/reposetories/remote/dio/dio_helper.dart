@@ -73,14 +73,30 @@ class DioHelper {
     );
   }
 
+  static Future<Response> postListDataWithToken({
+    required String url,
+    required dynamic data,
+    Map<String, dynamic>? query,
+  }) async {
+    dio.options.headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${CacheKeysManger.getUserTokenFromCache()}"
+    };
+    return await dio.post(
+      url,
+      queryParameters: query,
+      data: data,
+    );
+  }
+
   static Future<Response> postForm({
     required String url,
     required FormData data,
     Map<String, dynamic>? query,
   }) async {
-    dio.options.headers = {
-      "Content-Type": "application/json",
-    };
+    // dio.options.headers = {
+    //   "Content-Type": "application/json",
+    // };
     return await dio.post(
       url,
       queryParameters: query,

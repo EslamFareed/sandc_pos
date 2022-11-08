@@ -185,6 +185,20 @@ class DataCubit extends Cubit<DataState> {
     }
   }
 
+  deleteAllClients() async {
+    try {
+      Database? mydb = await db;
+
+      for (var element in clientModels) {
+        mydb!.delete(ClientResponseModel.ClientModelName,
+            where: '${ClientResponseModel.columnId} = ?',
+            whereArgs: [element.id]);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   //////////////////////////////////////////////////////////////////
   //! Products Offline
   createProductTable(Database db) async {
@@ -311,6 +325,20 @@ class DataCubit extends Cubit<DataState> {
     }
   }
 
+  deleteAllProducts() async {
+    try {
+      Database? mydb = await db;
+
+      for (var element in productModels) {
+        mydb!.delete(ProductResponseModel.ProductModelName,
+            where: '${ProductResponseModel.columnId} = ?',
+            whereArgs: [element.prodId]);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   //////////////////////////////////////////////////////////////////
   //! Pay Types Offline
   createPayTypeTable(Database db) async {
@@ -360,6 +388,20 @@ class DataCubit extends Cubit<DataState> {
       if (kDebugMode) {
         print(e);
       }
+    }
+  }
+
+  deleteAllPayTypes() async {
+    try {
+      Database? mydb = await db;
+
+      for (var element in payTypeModels) {
+        mydb!.delete(PayTypeResponseModel.PayTypeModelName,
+            where: '${PayTypeResponseModel.columnId} = ?',
+            whereArgs: [element.id]);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -431,6 +473,20 @@ class DataCubit extends Cubit<DataState> {
       if (kDebugMode) {
         print(e);
       }
+    }
+  }
+
+  deleteAllCategories() async {
+    try {
+      Database? mydb = await db;
+
+      for (var element in categoryModels) {
+        mydb!.delete(CategoryResponseModel.CategoryModelName,
+            where: '${CategoryResponseModel.columnId} = ?',
+            whereArgs: [element.id]);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -543,6 +599,20 @@ class DataCubit extends Cubit<DataState> {
     }
   }
 
+  deleteAllOrders() async {
+    try {
+      Database? mydb = await db;
+
+      for (var element in orderModels) {
+        mydb!.delete(OrderResponseModel.OrderModelName,
+            where: '${OrderResponseModel.columnId} = ?',
+            whereArgs: [element.id]);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   //////////////////////////////////////////////////////////////////
   //! Invoice Details Offline
   createInvoiceDetailsTable(Database db) async {
@@ -630,6 +700,20 @@ class DataCubit extends Cubit<DataState> {
       if (kDebugMode) {
         print(e);
       }
+    }
+  }
+
+  deleteAllInvoiceDetails() async {
+    try {
+      Database? mydb = await db;
+
+      for (var element in invoiceDetailsModels) {
+        mydb!.delete(GetInVoiceDetails.InvoiceDetailsModelName,
+            where: '${GetInVoiceDetails.columnId} = ?',
+            whereArgs: [element.id]);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -729,6 +813,20 @@ class DataCubit extends Cubit<DataState> {
       if (kDebugMode) {
         print(e);
       }
+    }
+  }
+
+  deleteAllDebitPayings() async {
+    try {
+      Database? mydb = await db;
+
+      for (var element in debitPayingsModels) {
+        mydb!.delete(DebitPayingResponseModel.DebitPayingsModelName,
+            where: '${DebitPayingResponseModel.columnId} = ?',
+            whereArgs: [element.id]);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -834,6 +932,20 @@ class DataCubit extends Cubit<DataState> {
       if (kDebugMode) {
         print(e);
       }
+    }
+  }
+
+  deleteAllCompanies() async {
+    try {
+      Database? mydb = await db;
+
+      for (var element in companyModels) {
+        mydb!.delete(CompanyInfoResponseModel.CompanyModelName,
+            where: '${CompanyInfoResponseModel.columnId} = ?',
+            whereArgs: [element.compId]);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }
@@ -1077,18 +1189,18 @@ class DataCubit extends Cubit<DataState> {
 //     }
 //   }
 
-//   deleteAllEmpTypesModel() async {
-//     try {
-//       Database? mydb = await db;
+  // deleteAllEmpTypesModel() async {
+  //   try {
+  //     Database? mydb = await db;
 
-//       for (var element in empTypesModels) {
-//         mydb!.delete(EmpTypesModel.EmpTypesModelName,
-//             where: '${EmpTypesModel.columnId} = ?', whereArgs: [element.id]);
-//       }
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
+  //     for (var element in empTypesModels) {
+  //       mydb!.delete(EmpTypesModel.EmpTypesModelName,
+  //           where: '${EmpTypesModel.columnId} = ?', whereArgs: [element.id]);
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
 //   updateEmpTypesModel(EmpTypesModel item) async {
 //     try {
@@ -2102,38 +2214,38 @@ class DataCubit extends Cubit<DataState> {
 //   // Todo Client Table
 
 
-//   getClientModelById(var id) async {
-//     try {
-//       Database? mydb = await db;
+  // getClientModelById(var id) async {
+  //   try {
+  //     Database? mydb = await db;
 
-//       List<Map<String, dynamic>> maps =
-//           await mydb!.query(ClientModel.ClientModelName,
-//               columns: [
-//                 ClientModel.columnId,
-//                 ClientModel.columnName,
-//                 ClientModel.columnPhone,
-//                 ClientModel.columnLoacation,
-//                 ClientModel.columnComment,
-//                 ClientModel.columnTaxNumber,
-//                 ClientModel.columnCreateDate,
-//                 ClientModel.columnUpdateDate,
-//                 ClientModel.columnAmmountTobePaid,
-//                 ClientModel.columnMaxDebitLimit,
-//                 ClientModel.columnMaxLimtDebitRecietCount,
-//                 ClientModel.columnEmpID,
-//                 ClientModel.columnCompanyId,
-//                 ClientModel.columnIsActive,
-//                 ClientModel.columnAddress
-//               ],
-//               where: '${ClientModel.columnId} = ?',
-//               whereArgs: [id]);
-//       if (maps.isNotEmpty) {
-//         return ClientModel.fromJsonEdit(maps.first);
-//       }
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
+  //     List<Map<String, dynamic>> maps =
+  //         await mydb!.query(ClientModel.ClientModelName,
+  //             columns: [
+  //               ClientModel.columnId,
+  //               ClientModel.columnName,
+  //               ClientModel.columnPhone,
+  //               ClientModel.columnLoacation,
+  //               ClientModel.columnComment,
+  //               ClientModel.columnTaxNumber,
+  //               ClientModel.columnCreateDate,
+  //               ClientModel.columnUpdateDate,
+  //               ClientModel.columnAmmountTobePaid,
+  //               ClientModel.columnMaxDebitLimit,
+  //               ClientModel.columnMaxLimtDebitRecietCount,
+  //               ClientModel.columnEmpID,
+  //               ClientModel.columnCompanyId,
+  //               ClientModel.columnIsActive,
+  //               ClientModel.columnAddress
+  //             ],
+  //             where: '${ClientModel.columnId} = ?',
+  //             whereArgs: [id]);
+  //     if (maps.isNotEmpty) {
+  //       return ClientModel.fromJsonEdit(maps.first);
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
 //   deleteClientModel(var id) async {
 //     try {

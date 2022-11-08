@@ -1,4 +1,4 @@
-const BASE_URL = "http://www.palconjed-consulate.somee.com/api/";
+const BASE_URL = "http://www.postest.somee.com/api/";
 
 ///////////////////////////////////////////////////
 const LOGIN = "Login/login";
@@ -11,3 +11,5 @@ const GET_ALL_CATEGORIES = "ProductMobileApp/Categories";
 const GET_INFO_COMPANY = "InfoUser";
 const GET_ALL_DEBIT_PAYINGS = "DebitPay/GetDebitPay";
 ///////////////////////////////////////////////////
+const ADD_CLIENT = "Client/Get/Post";
+const EDIT_CLIENT = "Client/Clients";

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/online_models/client_response_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -190,30 +191,7 @@ class AddCustomer extends StatelessWidget {
         DefaultButton(
           onPress: () async {
             if (_keyForm.currentState!.validate()) {
-              ClientResponseModel item = ClientResponseModel(
-                  id: Uuid().v1(),
-                  name: fullnameController.text,
-                  phone: phoneController.text,
-                  address: addressController.text,
-                  ammountTobePaid: double.parse(amountOnHimController.text),
-                  comment: notesController.text,
-                  companyId: 1,
-                  createDate: "date",
-                  empID: "1",
-                  isActive: true,
-                  loacation: "location",
-                  maxDebitLimit: double.parse(maxDebitController.text),
-                  maxLimtDebitRecietCount:
-                      int.parse(maxDebitBillsController.text),
-                  taxNumber: taxNumberController.text,
-                  updateDate: "date");
-              // await DataCubit.get(context).insertClientTable(item);
-              // await DataCubit.get(context).getAllClientTable();
-              Get.showSnackbar(const GetSnackBar(
-                message: "Create successfully",
-                duration: Duration(seconds: 2),
-              ));
-              Get.back(closeOverlays: true);
+              _saveOffline(context);
             } else {
               Get.showSnackbar(const GetSnackBar(
                 message: "Create Error",
@@ -228,5 +206,30 @@ class AddCustomer extends StatelessWidget {
         SizedBox(height: 25.h),
       ],
     );
+  }
+
+  _saveOffline(BuildContext context) async {
+    ClientResponseModel item = ClientResponseModel(
+      offlineDatabase: false,
+      updateDataBase: false,
+      id: Uuid().v4(),
+      name: fullnameController.text,
+      phone: phoneController.text,
+      address: addressController.text,
+      ammountTobePaid: double.parse(amountOnHimController.text),
+      comment: notesController.text,
+      isActive: true,
+      loacation: "location",
+      maxDebitLimit: double.parse(maxDebitController.text),
+      maxLimtDebitRecietCount: int.parse(maxDebitBillsController.text),
+      taxNumber: taxNumberController.text,
+    );
+    await DataCubit.get(context).insertClientTable(item);
+    await DataCubit.get(context).getAllClientTable();
+    Get.showSnackbar(const GetSnackBar(
+      message: "Create successfully",
+      duration: Duration(seconds: 2),
+    ));
+    Get.back(closeOverlays: true);
   }
 }

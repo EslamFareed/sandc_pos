@@ -25,6 +25,20 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
 
   static DataOnlineCubit get(context) => BlocProvider.of(context);
 
+  //! Make Sure if data is up to date
+  checkIfDataUptodate(BuildContext context) async {
+    await insertClients(DataCubit.get(context)
+        .clientModels
+        .where((element) => !element.offlineDatabase!)
+        .toList());
+    await updateClients(DataCubit.get(context)
+        .clientModels
+        .where((element) => !element.updateDataBase!)
+        .toList());
+
+    await getAllDataForFirstTime(context);
+  }
+
   //? Get All Data Offline
   getAllOfflineData(BuildContext context) async {
     emit(GetAllDataOfflineLoading());
@@ -49,6 +63,62 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
   //todo save offline all data
   saveAllDataToOffline() {}
 
+  insertClients(List<ClientResponseModel> items) async {
+    if (items.isNotEmpty) {
+      try {
+        for (var element in items) {
+          element.offlineDatabase = true;
+          element.updateDataBase = true;
+        }
+        await DioHelper.postListDataWithToken(url: ADD_CLIENT, data: items)
+            .then((value) {
+          if (value.data == 200) {
+            if (kDebugMode) {
+              print(
+                  "success adding ${items.length} items in clients ---------------------------------------");
+            }
+          } else {
+            if (kDebugMode) {
+              print(value.data);
+            }
+          }
+        });
+      } catch (e) {
+        if (kDebugMode) {
+          print(e.toString());
+        }
+      }
+    }
+  }
+
+  updateClients(List<ClientResponseModel> items) async {
+    if (items.isNotEmpty) {
+      try {
+        for (var element in items) {
+          element.offlineDatabase = true;
+          element.updateDataBase = true;
+        }
+        await DioHelper.postListDataWithToken(url: EDIT_CLIENT, data: items)
+            .then((value) {
+          if (value.data == 200) {
+            if (kDebugMode) {
+              print(
+                  "success editing ${items.length} items in clients ---------------------------------------");
+            }
+          } else {
+            if (kDebugMode) {
+              print(value.data);
+            }
+          }
+        });
+      } catch (e) {
+        if (kDebugMode) {
+          print(e.toString());
+        }
+      }
+    }
+  }
+
   getAllDataForFirstTime(BuildContext context) async {
     emit(GetDataOnlineLoadingState());
     try {
@@ -61,35 +131,52 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
       await getAllDebitPayings(context);
       await getCompanyInfo(context);
 
+      //? Deleta All Offline Data
+      await DataCubit.get(context).deleteAllCategories();
+      await DataCubit.get(context).deleteAllClients();
+      await DataCubit.get(context).deleteAllCompanies();
+      await DataCubit.get(context).deleteAllDebitPayings();
+      await DataCubit.get(context).deleteAllInvoiceDetails();
+      await DataCubit.get(context).deleteAllOrders();
+      await DataCubit.get(context).deleteAllPayTypes();
+      await DataCubit.get(context).deleteAllProducts();
+
       //? Get Offline Data From Sql
       //! Get Offline Clients
       await DataCubit.get(context).insertClientsByList(onlineClients);
       await DataCubit.get(context).getAllClientTable();
+      onlineClients = [];
 
       //! Get Offline Products
       await DataCubit.get(context).insertProductsByList(onlineProducts);
       await DataCubit.get(context).getAllProductTable();
+      onlineProducts = [];
 
       //! Get Offline Pay Types
       await DataCubit.get(context).insertPayTypesByList(onlinePayTypes);
       await DataCubit.get(context).getAllPayTypeTable();
+      onlinePayTypes = [];
 
       //! Get Offline Categories
       await DataCubit.get(context).insertCategoriesByList(onlineCategories);
       await DataCubit.get(context).getAllCategoryTable();
+      onlineCategories = [];
 
       //! Get Offline Products
       await DataCubit.get(context).insertOrdersByList(onlineOrders);
       await DataCubit.get(context).getAllOrderTable();
       await DataCubit.get(context).getAllInvoiceDetailsTable();
+      onlineOrders = [];
 
       //! Get Offline Products
       await DataCubit.get(context).insertDebitPayingsByList(onlineDebitPayings);
       await DataCubit.get(context).getAllDebitPayingsTable();
+      onlineDebitPayings = [];
 
       //! Get Comapny Info
       await DataCubit.get(context).insertCompanyTable(onlineCompanyInfo!);
       await DataCubit.get(context).getAllCompanyTable();
+      onlineCompanyInfo = null;
 
       await CacheHelper.saveData(key: "isFirstTime", value: false);
       emit(GetDataOnlineSuccessState());

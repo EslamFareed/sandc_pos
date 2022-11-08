@@ -12,11 +12,11 @@ class MakePdfProducts extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('PDF Preview'),
+        title: const Text('PDF Preview'),
       ),
-      // body: PdfPreview(
-      //   build: (ctx) => makePdf(DataCubit.get(context).productModels),
-      // ),
+      body: PdfPreview(
+        build: (ctx) => makePdf(DataCubit.get(context).productModels),
+      ),
     );
   }
 }

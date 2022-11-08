@@ -17,49 +17,31 @@ class TableCategory extends StatefulWidget {
 
 class _TableCategoryState extends State<TableCategory> {
   @override
-  void initState() {
-    _getData();
-    super.initState();
-  }
-
-  _getData() async {
-    // await DataCubit.get(context).getAllCategoryTable();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocConsumer<DataCubit, DataState>(
         listener: (context, state) {},
         builder: (context, state) {
           var cubit = DataCubit.get(context);
 
-          // return cubit.categoryModels.isNotEmpty &&
-          //         state is GetAllCategoryTableSuccess
-          //     ? HorizontalDataTable(
-          //         leftHandSideColumnWidth: Get.width * .5,
-          //         rightHandSideColumnWidth: Get.width * .5,
-          //         isFixedHeader: true,
-          //         headerWidgets: _getTitleWidget(),
-          //         // refreshIndicator: RefreshProgressIndicator(),
-          //         // htdRefreshController: HDTRefreshController(),
-          //         // onRefresh: () {},
-          //         // enablePullToRefresh: true,
-          //         leftSideItemBuilder: _generateFirstColumnRow,
-          //         rightSideItemBuilder: _generateRightHandSideColumnRow,
-          //         itemCount: cubit.categoryModels.length,
-          //         rowSeparatorWidget: const Divider(
-          //           color: Colors.black54,
-          //           height: 1.0,
-          //           thickness: 0.0,
-          //         ),
-          //         leftHandSideColBackgroundColor: const Color(0xFFFFFFFF),
-          //         rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
-          //       )
-          //     :
-          return const Scaffold(
-            body: Center(
-              child: Text("No items found.."),
+          return HorizontalDataTable(
+            leftHandSideColumnWidth: Get.width * .5,
+            rightHandSideColumnWidth: Get.width * .5,
+            isFixedHeader: true,
+            headerWidgets: _getTitleWidget(),
+            // refreshIndicator: RefreshProgressIndicator(),
+            // htdRefreshController: HDTRefreshController(),
+            // onRefresh: () {},
+            // enablePullToRefresh: true,
+            leftSideItemBuilder: _generateFirstColumnRow,
+            rightSideItemBuilder: _generateRightHandSideColumnRow,
+            itemCount: cubit.categoryModels.length,
+            rowSeparatorWidget: const Divider(
+              color: Colors.black54,
+              height: 1.0,
+              thickness: 0.0,
             ),
+            leftHandSideColBackgroundColor: const Color(0xFFFFFFFF),
+            rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
           );
         });
   }
@@ -90,7 +72,7 @@ class _TableCategoryState extends State<TableCategory> {
       height: 52.h,
       padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
       alignment: Alignment.centerLeft,
-      // child: Text(DataCubit.get(context).categoryModels[index].name!),
+      child: Text(DataCubit.get(context).categoryModels[index].name!),
     );
   }
 
@@ -102,8 +84,8 @@ class _TableCategoryState extends State<TableCategory> {
           height: 52.h,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          // child:
-          //     Text(DataCubit.get(context).categoryModels[index].description!),
+          child:
+              Text(DataCubit.get(context).categoryModels[index].description!),
         ),
       ],
     );

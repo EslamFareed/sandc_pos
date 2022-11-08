@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
+import 'package:sandc_pos/modules/products/scan_code.dart';
+import 'package:sandc_pos/modules/products/search_products_details.dart';
 import 'package:sandc_pos/modules/products/table_product.dart';
 
 import '../../core/style/color/app_colors.dart';
-import '../sales/print_screen.dart';
 import '../sales/scan_code.dart';
 import '../sales/search_products.dart';
-import '../sales/table_sales.dart';
 import 'make_pdf_products.dart';
 
 class ShowProducts extends StatelessWidget {
@@ -16,13 +16,13 @@ class ShowProducts extends StatelessWidget {
 
   _buildAppBar() {
     return AppBar(
-      title: Text("Sales"),
+      title: Text("Products"),
       centerTitle: true,
       actions: [
         //open printer page
         IconButton(
           onPressed: () {
-            Get.to(MakePdfProducts(), transition: Transition.zoom);
+            Get.to(const MakePdfProducts(), transition: Transition.zoom);
           },
           icon: const Icon(Icons.print_rounded),
         )
@@ -53,10 +53,10 @@ class ShowProducts extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                // Get.to(
-                //   SearchProductsScreen(),
-                //   transition: Transition.fadeIn,
-                // );
+                Get.to(
+                  SearchProductsDetailsScreen(),
+                  transition: Transition.fadeIn,
+                );
               },
               child: Container(
                 margin: const EdgeInsets.all(5),
@@ -96,7 +96,8 @@ class ShowProducts extends StatelessWidget {
               size: 30,
             ),
             onPressed: () {
-              Get.to(const ScanCodeScreen(), transition: Transition.zoom);
+              Get.to(const ScanCodeProductDetailsScreen(),
+                  transition: Transition.zoom);
             },
           )
         ],
