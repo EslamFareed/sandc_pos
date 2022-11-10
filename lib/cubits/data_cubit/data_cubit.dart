@@ -165,6 +165,56 @@ class DataCubit extends Cubit<DataState> {
     }
   }
 
+  insertClientInSaleScreen(ClientResponseModel item) async {
+    try {
+      await insertData('''
+          INSERT INTO 
+          '${ClientResponseModel.ClientModelName}'
+          ('${ClientResponseModel.columnId}',
+          '${ClientResponseModel.columnName}',
+          '${ClientResponseModel.columnPhone}',
+          '${ClientResponseModel.columnLocation}',
+          '${ClientResponseModel.columnComment}',
+          '${ClientResponseModel.columnTaxNumber}',
+          '${ClientResponseModel.columnCreateDate}',
+          '${ClientResponseModel.columnUpdateDate}',          
+          '${ClientResponseModel.columnAmmountTobePaid}',          
+          '${ClientResponseModel.columnMaxDebitLimit}',          
+          '${ClientResponseModel.columnMaxLimtDebitRecietCount}',          
+          '${ClientResponseModel.columnEmpID}',          
+          '${ClientResponseModel.columnCompanyId}',          
+          '${ClientResponseModel.columnIsActive}',
+          '${ClientResponseModel.columnUpdateDataBase}',
+          '${ClientResponseModel.columnOfflineDataBase}',
+          '${ClientResponseModel.columnAddress}')
+          VALUES (
+            '${item.id}',
+          '${item.name}',
+          '${item.phone}',
+          '${item.loacation}',
+          '${item.comment}',
+          '${item.taxNumber}',
+          '${item.createDate}',
+          '${item.updateDate}',
+          '${item.ammountTobePaid}',
+          '${item.maxDebitLimit}',
+          '${item.maxLimtDebitRecietCount}',
+          '${item.empID}',
+          '${item.companyId}',
+          '${item.isActive! ? 1 : 0}',
+          '${item.updateDataBase! ? 1 : 0}',
+          '${item.offlineDatabase! ? 1 : 0}',
+          '${item.address}'
+          ) 
+          ''');
+      emit(InsertClientInSaleScreenState());
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
   List<ClientResponseModel> clientModels = [];
   getAllClientTable() async {
     try {
@@ -194,6 +244,18 @@ class DataCubit extends Cubit<DataState> {
             where: '${ClientResponseModel.columnId} = ?',
             whereArgs: [element.id]);
       }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  updateClientModel(ClientResponseModel item) async {
+    try {
+      Database? mydb = await db;
+
+      return await mydb!.update(
+          ClientResponseModel.ClientModelName, item.toJson(),
+          where: '${ClientResponseModel.columnId} = ?', whereArgs: [item.id]);
     } catch (e) {
       print(e);
     }
@@ -277,7 +339,7 @@ class DataCubit extends Cubit<DataState> {
             '${item.prodId}',
           '${item.name}',
           '${item.buyingPrice}',
-          '${item.unitPackage}',
+          '${item.unitPackage ?? 0}',
           '${item.unitID}',
           '${item.createDate}',
           '${item.updateDate}',
@@ -331,6 +393,21 @@ class DataCubit extends Cubit<DataState> {
 
       for (var element in productModels) {
         mydb!.delete(ProductResponseModel.ProductModelName,
+            where: '${ProductResponseModel.columnId} = ?',
+            whereArgs: [element.prodId]);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  updateListProduct(List<ProductResponseModel> items) async {
+    try {
+      Database? mydb = await db;
+
+      for (var element in items) {
+        await mydb!.update(
+            ProductResponseModel.ProductModelName, element.toJson(),
             where: '${ProductResponseModel.columnId} = ?',
             whereArgs: [element.prodId]);
       }
@@ -947,6 +1024,261 @@ class DataCubit extends Cubit<DataState> {
     } catch (e) {
       print(e);
     }
+  }
+
+  //!---------------------------------------------------------------------
+
+  finishCurrentOrder() async {
+    currentOrder!.empID = companyModels[0].empId;
+    currentOrder!.isReturn = false;
+    currentOrder!.offlineDatabase = false;
+    currentOrder!.updateDataBase = false;
+    currentOrder!.returnDesc = "no";
+    currentOrder!.qrcode = "no";
+    currentOrder!.updateDate = "no";
+    currentOrder!.createDate = "no";
+
+    await insertOrderTable(currentOrder!);
+    await insertInvoiceDetailsByList(itemsCurrentOrder);
+    await updateListProduct(productsCurrentOrder);
+
+    await getAllProductTable();
+    await getAllInvoiceDetailsTable();
+    await getAllOrderTable();
+
+    itemsCurrentOrder = [];
+    productsCurrentOrder = [];
+    currentOrder = OrderResponseModel(id: Uuid().v4());
+    total = 0;
+    afterDiscount = 0;
+    afterTaxes = 0;
+    discount = 0;
+    emit(OrderFinishedState());
+  }
+
+  //!---------------------------------------------------------------------
+
+  ClientResponseModel? chosenClient;
+  void chooseClient(ClientResponseModel? client) {
+    chosenClient = client;
+    emit(ChangeClientChosenState());
+  }
+
+  String? payingType = "";
+  void changePayingType(String? payType) {
+    payingType = payType;
+    emit(ChangePayTypeState());
+  }
+
+  String? isPayingCash = "Cash";
+  void changeIsPayingCash(String? isCash) {
+    isPayingCash = isCash;
+    emit(ChangeIsPayingCashState());
+  }
+
+  String? chosenSale = "precentage";
+  void chooseSale(String sale) {
+    chosenSale = sale;
+    emit(ChangeSaleChosenState());
+
+    calcDiscount();
+  }
+
+  List<ProductResponseModel> products = [];
+  List<ProductResponseModel> productsOfCategories = [];
+
+  void searchProducts(String query, BuildContext context) {
+    final productsSearched =
+        DataCubit.get(context).productModels.where((element) {
+      final productName = element.name!.toLowerCase();
+      final input = query.toLowerCase();
+
+      return productName.contains(input);
+    });
+    products = productsSearched.toList();
+    emit(SearchProdcutLoading());
+  }
+
+  void searchProductsOfCategories(String query, BuildContext context) {
+    final productsSearched =
+        DataCubit.get(context).productModels.where((element) {
+      final productName = element.categoryName!.toLowerCase();
+      final input = query.toLowerCase();
+
+      return productName.contains(input);
+    });
+    products = productsSearched.toList();
+    emit(SearchProdcutLoading());
+  }
+
+  OrderResponseModel? currentOrder;
+  List<ProductResponseModel> productsCurrentOrder = [];
+  List<GetInVoiceDetails> itemsCurrentOrder = [];
+
+  double total = 0;
+  double afterDiscount = 0;
+  double afterTaxes = 0;
+  double discount = 0;
+
+  setDiscount(double dis) {
+    discount = dis;
+    emit(ChangeSaleAmountState());
+  }
+
+  void calcDiscount() {
+    afterDiscount = chosenSale == "precentage"
+        ? total - (total * (discount * .01))
+        : total - discount;
+    if (companyModels[0].isTaxes!) {
+      afterTaxes = ((afterDiscount *
+              (double.parse(companyModels[0].compTaxAmount!) * .01)) +
+          afterDiscount);
+    }
+
+    emit(ChangeSaleAmountState());
+  }
+
+  deleteProdcutFromCart(ProductResponseModel product, BuildContext context) {
+    emit(DeleteProductFromHomeLoading());
+
+    productsCurrentOrder.remove(product);
+
+    product.stockQuantity = product.stockQuantity! +
+        itemsCurrentOrder
+            .where((element) => element.prodId == product.prodId)
+            .first
+            .quantity!;
+    itemsCurrentOrder
+        .removeWhere((element) => element.prodId == product.prodId);
+    total = 0;
+    itemsCurrentOrder.forEach((element) {
+      total += element.totalCost!;
+    });
+    calcDiscount();
+    // InvoiceDetailsModel currentItem = DataCubit.get(context).itemsCurrentOrder[
+    //     DataCubit.get(context)
+    //         .itemsCurrentOrder
+    //         .indexWhere((element) => element.prodId == product.prodId)];
+
+    // currentItem.quanitiy = currentItem.quanitiy! - 1;
+    // currentItem.totalCost = currentItem.quanitiy! * currentItem.unitPrice!;
+
+    // DataCubit.get(context).itemsCurrentOrder[DataCubit.get(context)
+    //         .itemsCurrentOrder
+    //         .indexWhere((element) => element.prodId == product.prodId)] =
+    //     currentItem;
+    emit(DeleteProductFromHomeSuccess());
+  }
+
+  mineseQuantityProdcutFromHome(
+      ProductResponseModel product, BuildContext context) {
+    emit(AddQuantityProdcutLoading());
+
+    GetInVoiceDetails currentItem = itemsCurrentOrder[itemsCurrentOrder
+        .indexWhere((element) => element.prodId == product.prodId)];
+
+    currentItem.quantity = currentItem.quantity! - 1;
+    currentItem.totalCost = currentItem.quantity! * currentItem.unitPrice!;
+
+    itemsCurrentOrder[itemsCurrentOrder.indexWhere(
+        (element) => element.prodId == product.prodId)] = currentItem;
+    product.stockQuantity = product.stockQuantity! + 1;
+
+    total = 0;
+    itemsCurrentOrder.forEach((element) {
+      total += element.totalCost!;
+    });
+    calcDiscount();
+
+    emit(AddQuantityProdcutSuccess());
+  }
+
+  addQuantityProdcutFromHome(
+      ProductResponseModel product, BuildContext context) {
+    emit(AddQuantityProdcutLoading());
+
+    GetInVoiceDetails currentItem = itemsCurrentOrder[itemsCurrentOrder
+        .indexWhere((element) => element.prodId == product.prodId)];
+
+    currentItem.quantity = currentItem.quantity! + 1;
+    currentItem.totalCost = currentItem.quantity! * currentItem.unitPrice!;
+
+    itemsCurrentOrder[itemsCurrentOrder.indexWhere(
+        (element) => element.prodId == product.prodId)] = currentItem;
+    product.stockQuantity = product.stockQuantity! - 1;
+
+    total = 0;
+    itemsCurrentOrder.forEach((element) {
+      total += element.totalCost!;
+    });
+    calcDiscount();
+
+    emit(AddQuantityProdcutSuccess());
+  }
+
+  addQuantityProdcut(ProductResponseModel product, BuildContext context) {
+    emit(AddQuantityProdcutLoading());
+    Get.showSnackbar(const GetSnackBar(
+      message: "Product added quantity successfully",
+      duration: Duration(milliseconds: 1000),
+      animationDuration: Duration(milliseconds: 100),
+    ));
+
+    GetInVoiceDetails currentItem = itemsCurrentOrder[itemsCurrentOrder
+        .indexWhere((element) => element.prodId == product.prodId)];
+
+    currentItem.quantity = currentItem.quantity! + 1;
+    currentItem.totalCost = currentItem.quantity! * currentItem.unitPrice!;
+
+    product.stockQuantity = product.stockQuantity! - 1;
+
+    itemsCurrentOrder[itemsCurrentOrder.indexWhere(
+        (element) => element.prodId == product.prodId)] = currentItem;
+
+    total = 0;
+    itemsCurrentOrder.forEach((element) {
+      total += element.totalCost!;
+    });
+    calcDiscount();
+
+    emit(AddQuantityProdcutSuccess());
+  }
+
+  addNewProduct(ProductResponseModel product, BuildContext context) {
+    emit(AddNewProductLoading());
+
+    Get.showSnackbar(const GetSnackBar(
+      message: "Product added successfully",
+      duration: Duration(milliseconds: 500),
+      animationDuration: Duration(milliseconds: 100),
+    ));
+
+    productsCurrentOrder.add(product);
+
+    itemsCurrentOrder.add(
+      GetInVoiceDetails(
+          id: Uuid().v4(),
+          isReturn: false,
+          orderID: currentOrder!.id,
+          prodId: product.prodId,
+          quantity: 1,
+          quantReturns: 0,
+          reasonForReturn: "no",
+          totalCost: product.priceOne,
+          unitPrice: product.priceOne,
+          updateDate: "no",
+          offlineDatabase: false,
+          updateDataBase: false),
+    );
+    product.stockQuantity = product.stockQuantity! - 1;
+
+    total = 0;
+    itemsCurrentOrder.forEach((element) {
+      total += element.totalCost!;
+    });
+    calcDiscount();
+
+    emit(AddNewProductSuccess());
   }
 }
 
@@ -2271,16 +2603,16 @@ class DataCubit extends Cubit<DataState> {
 //     }
 //   }
 
-//   updateClientModel(ClientModel item) async {
-//     try {
-//       Database? mydb = await db;
+  // updateClientModel(ClientModel item) async {
+  //   try {
+  //     Database? mydb = await db;
 
-//       return await mydb!.update(ClientModel.ClientModelName, item.toJson(),
-//           where: '${ClientModel.columnId} = ?', whereArgs: [item.id]);
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
+  //     return await mydb!.update(ClientModel.ClientModelName, item.toJson(),
+  //         where: '${ClientModel.columnId} = ?', whereArgs: [item.id]);
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
 //   //------------------------------------------------------------------
 //   // Todo Bill Table

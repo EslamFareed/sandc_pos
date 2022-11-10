@@ -200,7 +200,7 @@ class _MainScreenState extends State<MainScreen> {
         }),
         _buildItemCard("assets/images/logo.png", "Update From cloud", () async {
           _showDialog();
-          await DataOnlineCubit.get(context).getAllDataForFirstTime(context);
+          await DataOnlineCubit.get(context).checkIfDataUptodate(context);
         }),
       ]),
     );

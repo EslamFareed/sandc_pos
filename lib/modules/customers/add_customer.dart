@@ -223,13 +223,12 @@ class AddCustomer extends StatelessWidget {
       maxDebitLimit: double.parse(maxDebitController.text),
       maxLimtDebitRecietCount: int.parse(maxDebitBillsController.text),
       taxNumber: taxNumberController.text,
+      companyId: DataCubit.get(context).companyModels[0].compId,
+      empID: DataCubit.get(context).companyModels[0].empId,
     );
-    await DataCubit.get(context).insertClientTable(item);
+    await DataCubit.get(context).insertClientInSaleScreen(item);
     await DataCubit.get(context).getAllClientTable();
-    Get.showSnackbar(const GetSnackBar(
-      message: "Create successfully",
-      duration: Duration(seconds: 2),
-    ));
-    Get.back(closeOverlays: true);
+
+    Get.back();
   }
 }

@@ -110,18 +110,19 @@ class ProductResponseModel {
     qrCode = json['qrCode'];
     description = json['description'];
     productNumber = json['product_Number'];
-    priceOne = json['priceOne'];
-    priceTwo = json['priceTwo'];
-    priceThree = json['priceThree'];
+    priceOne = json['priceOne'] ?? 0;
+    priceTwo = json['priceTwo'] ?? 0;
+    priceThree = json['priceThree'] ?? 0;
     image = json['image'];
-    buyingPrice = json['buyingPrice'];
-    stockQuantity = json['stockQuantity'];
-    discount = json['discount'];
+    buyingPrice = json['buyingPrice'] ?? 0;
+    stockQuantity = json['stockQuantity'] ?? 0;
+    discount = json['discount'] ?? 0;
     isPertrolGas = json['isPertrolGas'] == 1 ? true : false;
     unitID = json['unit_ID'];
-    unitPackage = json['unit_Package'];
+    unitPackage =
+        json['unit_Package'].toString().isNotEmpty ? json['unit_Package'] : 0;
     topPackaging = json['top_Packaging'];
-    compID = json['comp_ID'];
+    compID = json['comp_ID'] ?? 0;
     catID = json['cat_ID'];
     expirationDate = json['expiration_Date'];
     createDate = json['createDate'];

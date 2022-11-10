@@ -36,6 +36,16 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
         .where((element) => !element.updateDataBase!)
         .toList());
 
+    await insertOrders(DataCubit.get(context)
+        .orderModels
+        .where((element) => !element.offlineDatabase!)
+        .toList());
+
+    await insertOrdersDetails(DataCubit.get(context)
+        .invoiceDetailsModels
+        .where((element) => !element.offlineDatabase!)
+        .toList());
+
     await getAllDataForFirstTime(context);
   }
 
@@ -63,6 +73,71 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
   //todo save offline all data
   saveAllDataToOffline() {}
 
+  insertOrdersDetails(List<GetInVoiceDetails> items) async {
+    if (items.isNotEmpty) {
+      try {
+        for (var element in items) {
+          element.offlineDatabase = true;
+          element.updateDataBase = true;
+        }
+        await DioHelper.postListDataWithToken(
+                url: ADD_ORDER_DETAILS, data: items)
+            .then((value) {
+          if (value.data == 200) {
+            if (kDebugMode) {
+              print(
+                  "success adding ${items.length} items in order details ---------------------------------------");
+            }
+          } else {
+            if (kDebugMode) {
+              print(value.data);
+            }
+          }
+        }).catchError((onError) {
+          if (kDebugMode) {
+            print(onError.toString());
+          }
+        });
+      } catch (e) {
+        if (kDebugMode) {
+          print(e.toString());
+        }
+      }
+    }
+  }
+
+  insertOrders(List<OrderResponseModel> items) async {
+    if (items.isNotEmpty) {
+      try {
+        for (var element in items) {
+          element.offlineDatabase = true;
+          element.updateDataBase = true;
+        }
+        await DioHelper.postListDataWithToken(url: ADD_ORDER, data: items)
+            .then((value) {
+          if (value.data == 200) {
+            if (kDebugMode) {
+              print(
+                  "success adding ${items.length} items in orders ---------------------------------------");
+            }
+          } else {
+            if (kDebugMode) {
+              print(value.data);
+            }
+          }
+        }).catchError((onError) {
+          if (kDebugMode) {
+            print(onError.toString());
+          }
+        });
+      } catch (e) {
+        if (kDebugMode) {
+          print(e.toString());
+        }
+      }
+    }
+  }
+
   insertClients(List<ClientResponseModel> items) async {
     if (items.isNotEmpty) {
       try {
@@ -81,6 +156,10 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
             if (kDebugMode) {
               print(value.data);
             }
+          }
+        }).catchError((onError) {
+          if (kDebugMode) {
+            print(onError.toString());
           }
         });
       } catch (e) {
@@ -109,6 +188,10 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
             if (kDebugMode) {
               print(value.data);
             }
+          }
+        }).catchError((onError) {
+          if (kDebugMode) {
+            print(onError.toString());
           }
         });
       } catch (e) {
@@ -206,6 +289,12 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
             print(value.data.toString());
           }
         }
+      }).catchError((onError) {
+        emit(GetDataOnlineErrorState());
+
+        if (kDebugMode) {
+          print(onError.toString());
+        }
       });
     } catch (e) {
       emit(GetDataOnlineErrorState());
@@ -233,6 +322,12 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
           if (kDebugMode) {
             print(value.data.toString());
           }
+        }
+      }).catchError((onError) {
+        emit(GetDataOnlineErrorState());
+
+        if (kDebugMode) {
+          print(onError.toString());
         }
       });
     } catch (e) {
@@ -262,6 +357,12 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
             print(value.data.toString());
           }
         }
+      }).catchError((onError) {
+        emit(GetDataOnlineErrorState());
+
+        if (kDebugMode) {
+          print(onError.toString());
+        }
       });
     } catch (e) {
       emit(GetDataOnlineErrorState());
@@ -290,6 +391,12 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
             print(value.data.toString());
           }
         }
+      }).catchError((onError) {
+        emit(GetDataOnlineErrorState());
+
+        if (kDebugMode) {
+          print(onError.toString());
+        }
       });
     } catch (e) {
       emit(GetDataOnlineErrorState());
@@ -317,6 +424,12 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
           if (kDebugMode) {
             print(value.data.toString());
           }
+        }
+      }).catchError((onError) {
+        emit(GetDataOnlineErrorState());
+
+        if (kDebugMode) {
+          print(onError.toString());
         }
       });
     } catch (e) {
@@ -347,6 +460,12 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
             print(value.data.toString());
           }
         }
+      }).catchError((onError) {
+        emit(GetDataOnlineErrorState());
+
+        if (kDebugMode) {
+          print(onError.toString());
+        }
       });
     } catch (e) {
       emit(GetDataOnlineErrorState());
@@ -365,13 +484,19 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
           onlineCompanyInfo = CompanyInfoResponseModel.fromJson(value.data);
           emit(GetDataOnlineCompanyInfoSuccessState());
           if (kDebugMode) {
-            print("onlineCompanyInfo : ${value.data}");
+            print("onlineCompanyInfo : ${onlineCompanyInfo!.companyName}");
           }
         } else {
           emit(GetDataOnlineErrorState());
           if (kDebugMode) {
             print(value.data.toString());
           }
+        }
+      }).catchError((onError) {
+        emit(GetDataOnlineErrorState());
+
+        if (kDebugMode) {
+          print(onError.toString());
         }
       });
     } catch (e) {

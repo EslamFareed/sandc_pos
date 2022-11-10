@@ -81,15 +81,19 @@ class _TableProductState extends State<TableProduct> {
         height: 52.h,
         padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
         alignment: Alignment.centerLeft,
-        child: FadeInImage(
-          image: MemoryImage(const Base64Decoder().convert(
-              DataCubit.get(context)
-                  .productModels[index]
-                  .image!
-                  .split("data:image/png;base64,")
-                  .last)),
-          placeholder: const AssetImage("assets/images/logo.png"),
-        ),
+        child: DataCubit.get(context).productModels[index].image!.length > 22
+            ? FadeInImage(
+                image: MemoryImage(const Base64Decoder().convert(
+                    DataCubit.get(context)
+                        .productModels[index]
+                        .image!
+                        .split("data:image/png;base64,")
+                        .last)),
+                imageErrorBuilder: (context, error, stackTrace) =>
+                    Image.asset("assets/images/placeholder.png"),
+                placeholder: const AssetImage("assets/images/logo.png"),
+              )
+            : Image.asset("assets/images/placeholder.png"),
       ),
     );
   }

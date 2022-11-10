@@ -31,6 +31,22 @@ class GetAllCategoryTableError extends DataState {}
 
 ////////////////////////////////////////////////////
 
+class OrderFinishedState extends DataState {}
+
+class InsertClientInSaleScreenState extends DataState {}
+
+class ChangeClientChosenState extends DataState {}
+
+class ChangePayTypeState extends DataState {}
+
+class ChangeIsPayingCashState extends DataState {}
+
+class ChangeSaleAmountState extends DataState {}
+
+class ChangeSaleChosenState extends DataState {}
+
+class SearchProdcutLoading extends DataState {}
+
 class AddQuantityProdcutLoading extends DataState {}
 
 class AddQuantityProdcutSuccess extends DataState {}

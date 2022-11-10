@@ -83,14 +83,14 @@ class SettingsScreen extends StatelessWidget {
             data: DataCubit.get(context).companyModels[0].compCurrencyName),
         CheckboxListTile(
           enabled: false,
-          value: false,
+          value: DataCubit.get(context).companyModels[0].isTaxes,
           onChanged: (val) {},
           title: Text("Cancel Taxes"),
         ),
         SizedBox(height: 5.h),
         Row(
           children: [
-            Text("value added tax"),
+            const Text("value added tax"),
             SizedBox(width: 10.w),
             Expanded(
               child: Container(
@@ -99,8 +99,9 @@ class SettingsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       color: const Color.fromARGB(255, 221, 221, 221)),
-                  child:
-                      Text("value added tax", style: AppTextStyle.bodyText())),
+                  child: Text(
+                      DataCubit.get(context).companyModels[0].compTaxAmount!,
+                      style: AppTextStyle.bodyText())),
             ),
             SizedBox(width: 10.w),
             Text(
@@ -112,7 +113,7 @@ class SettingsScreen extends StatelessWidget {
         SizedBox(height: 5.h),
         Row(
           children: [
-            Text("Taxes Number"),
+            const Text("Taxes Number"),
             SizedBox(width: 10.w),
             Expanded(
               child: Container(
@@ -121,21 +122,23 @@ class SettingsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       color: const Color.fromARGB(255, 221, 221, 221)),
-                  child: Text("Taxes Number", style: AppTextStyle.bodyText())),
+                  child: Text(
+                      DataCubit.get(context).companyModels[0].compTaxNumber!,
+                      style: AppTextStyle.bodyText())),
             ),
           ],
         ),
         SizedBox(height: 10.h),
         CheckboxListTile(
           enabled: false,
-          value: false,
+          value: DataCubit.get(context).companyModels[0].isPriceIncludeTaxes,
           onChanged: (val) {},
           title: Text("Price includes Taxes"),
         ),
         SizedBox(height: 10.h),
         CheckboxListTile(
           enabled: false,
-          value: false,
+          value: DataCubit.get(context).companyModels[0].isMustChoosePayCash,
           onChanged: (val) {},
           title: Text("must choose customer when pay cash"),
         ),

@@ -13,3 +13,6 @@ const GET_ALL_DEBIT_PAYINGS = "DebitPay/GetDebitPay";
 ///////////////////////////////////////////////////
 const ADD_CLIENT = "Client/Get/Post";
 const EDIT_CLIENT = "Client/Clients";
+///////////////////////////////////////////////////
+const ADD_ORDER = "order";
+const ADD_ORDER_DETAILS = "Order/OrdeInvoice/Post";

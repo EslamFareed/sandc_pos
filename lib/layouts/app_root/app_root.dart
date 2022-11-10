@@ -11,6 +11,7 @@ import 'package:sandc_pos/cubits/client_cubit/client_cubit.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/cubits/data_online_cubit/data_online_cubit.dart';
 import 'package:sandc_pos/cubits/product_cubit/product_cubit.dart';
+import 'package:sandc_pos/cubits/sales_cubit/sales_cubit.dart';
 
 import '../../../core/style/dark/dark.dart';
 import '../../core/style/light/light.dart';
@@ -31,6 +32,7 @@ class AppRoot extends StatelessWidget {
         BlocProvider(create: (BuildContext context) => DataOnlineCubit()),
         BlocProvider(create: (BuildContext context) => ClientCubit()),
         BlocProvider(create: (BuildContext context) => ProductCubit()),
+        BlocProvider(create: (BuildContext context) => SalesCubit()),
         BlocProvider(create: (BuildContext context) => DataCubit()..db),
       ],
       child: BlocConsumer<MainCubit, MainStates>(

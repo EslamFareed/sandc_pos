@@ -85,25 +85,25 @@ class _ScanCodeScreenState extends State<ScanCodeScreen> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-      // if (DataCubit.get(context).productsCurrentOrder.contains(
-      //     DataCubit.get(context)
-      //         .productModels
-      //         .where((element) => element.qrCode == scanData.code)
-      //         .first)) {
-      //   DataCubit.get(context).addQuantityProdcut(
-      //       DataCubit.get(context)
-      //           .productModels
-      //           .where((element) => element.qrCode == scanData.code)
-      //           .first,
-      //       context);
-      // } else {
-      //   DataCubit.get(context).addNewProduct(
-      //       DataCubit.get(context)
-      //           .productModels
-      //           .where((element) => element.qrCode == scanData.code)
-      //           .first,
-      //       context);
-      // }
+      if (DataCubit.get(context).productsCurrentOrder.contains(
+          DataCubit.get(context)
+              .productModels
+              .where((element) => element.prodId == scanData.code)
+              .first)) {
+        DataCubit.get(context).addQuantityProdcut(
+            DataCubit.get(context)
+                .productModels
+                .where((element) => element.prodId == scanData.code)
+                .first,
+            context);
+      } else {
+        DataCubit.get(context).addNewProduct(
+            DataCubit.get(context)
+                .productModels
+                .where((element) => element.prodId == scanData.code)
+                .first,
+            context);
+      }
       Get.back(closeOverlays: true);
       controller.stopCamera();
     });
