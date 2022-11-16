@@ -1,4 +1,4 @@
-const BASE_URL = "http://www.postest.somee.com/api/";
+const BASE_URL = "http://ahmed4564-001-site1.htempurl.com/api/";
 
 ///////////////////////////////////////////////////
 const LOGIN = "Login/login";

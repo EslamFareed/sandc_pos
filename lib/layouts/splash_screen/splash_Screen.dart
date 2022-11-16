@@ -23,6 +23,9 @@ class _SplashScreenState extends State<SplashScreen> {
       builder: (context, state) => Scaffold(body: _buildBody()),
       listener: (context, state) {
         if (state is LoginSuccessState) {
+          getx.Get.off(MainScreen(),
+              transition: getx.Transition.fade,
+              duration: const Duration(seconds: 1));
           getx.Get.showSnackbar(const getx.GetSnackBar(
             message: "update login data successfuly",
             duration: Duration(seconds: 4),
@@ -73,10 +76,6 @@ class _SplashScreenState extends State<SplashScreen> {
           duration: const Duration(seconds: 1)));
     } else {
       _getData();
-      Future.delayed(const Duration(seconds: 4)).then((value) => getx.Get.off(
-          const MainScreen(),
-          transition: getx.Transition.fade,
-          duration: const Duration(seconds: 1)));
     }
 
     super.initState();

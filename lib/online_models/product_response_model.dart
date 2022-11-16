@@ -160,4 +160,33 @@ class ProductResponseModel {
     data['unitName'] = this.unitName;
     return data;
   }
+
+  Map<String, dynamic> toJsonEdit() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['prod_Id'] = this.prodId;
+    data['name'] = this.name;
+    data['qrCode'] = this.qrCode;
+    data['description'] = this.description;
+    data['product_Number'] = this.productNumber;
+    data['priceOne'] = this.priceOne;
+    data['priceTwo'] = this.priceTwo;
+    data['priceThree'] = this.priceThree;
+    data['image'] = this.image;
+    data['buyingPrice'] = this.buyingPrice;
+    data['stockQuantity'] = this.stockQuantity;
+    data['discount'] = this.discount;
+    data['isPertrolGas'] = this.isPertrolGas! ? 1 : 0;
+    data['unit_ID'] = this.unitID;
+    data['unit_Package'] = this.unitPackage;
+    data['top_Packaging'] = this.topPackaging;
+    data['comp_ID'] = this.compID;
+    data['cat_ID'] = this.catID;
+    data['expiration_Date'] = this.expirationDate;
+    data['createDate'] = this.createDate;
+    data['updateDate'] = this.updateDate;
+    data['isActive'] = this.isActive! ? 1 : 0;
+    data['categoryName'] = this.categoryName;
+    data['unitName'] = this.unitName;
+    return data;
+  }
 }

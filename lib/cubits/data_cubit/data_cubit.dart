@@ -81,6 +81,7 @@ class DataCubit extends Cubit<DataState> {
 
   //! clients offline
   createClientTable(Database db) async {
+    print("createClientTable-----------------------------------------------");
     await db.execute('''
     CREATE TABLE "${ClientResponseModel.ClientModelName}" (
       "${ClientResponseModel.columnId}" TEXT NOT NULL PRIMARY KEY , 
@@ -158,6 +159,7 @@ class DataCubit extends Cubit<DataState> {
           '${item.address}'
           ) 
           ''');
+      print("insert client-----------------------------------------------");
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -207,6 +209,9 @@ class DataCubit extends Cubit<DataState> {
           '${item.address}'
           ) 
           ''');
+      print(
+          "insert client in sale screen-----------------------------------------------");
+
       emit(InsertClientInSaleScreenState());
     } catch (e) {
       if (kDebugMode) {
@@ -244,6 +249,8 @@ class DataCubit extends Cubit<DataState> {
             where: '${ClientResponseModel.columnId} = ?',
             whereArgs: [element.id]);
       }
+      print(
+          "delete all clients-----------------------------------------------");
     } catch (e) {
       print(e);
     }
@@ -253,9 +260,15 @@ class DataCubit extends Cubit<DataState> {
     try {
       Database? mydb = await db;
 
-      return await mydb!.update(
-          ClientResponseModel.ClientModelName, item.toJson(),
-          where: '${ClientResponseModel.columnId} = ?', whereArgs: [item.id]);
+      return await mydb!
+          .update(ClientResponseModel.ClientModelName, item.toJson(),
+              where: '${ClientResponseModel.columnId} = ?',
+              whereArgs: [item.id])
+          .then((value) => print(
+              "updateClientModel-----------------------------------------------"))
+          .catchError((onError) {
+            print(onError);
+          });
     } catch (e) {
       print(e);
     }
@@ -264,6 +277,8 @@ class DataCubit extends Cubit<DataState> {
   //////////////////////////////////////////////////////////////////
   //! Products Offline
   createProductTable(Database db) async {
+    print("createProductTable-----------------------------------------------");
+
     await db.execute('''
     CREATE TABLE "${ProductResponseModel.ProductModelName}" (
       "${ProductResponseModel.columnId}" TEXT NOT NULL PRIMARY KEY , 
@@ -362,6 +377,7 @@ class DataCubit extends Cubit<DataState> {
           '${item.topPackaging!}'
           )
           ''');
+      print("insert product-----------------------------------------------");
     } catch (e) {
       print(e);
     }
@@ -396,6 +412,8 @@ class DataCubit extends Cubit<DataState> {
             where: '${ProductResponseModel.columnId} = ?',
             whereArgs: [element.prodId]);
       }
+      print(
+          "delete all products-----------------------------------------------");
     } catch (e) {
       print(e);
     }
@@ -407,9 +425,10 @@ class DataCubit extends Cubit<DataState> {
 
       for (var element in items) {
         await mydb!.update(
-            ProductResponseModel.ProductModelName, element.toJson(),
+            ProductResponseModel.ProductModelName, element.toJsonEdit(),
             where: '${ProductResponseModel.columnId} = ?',
             whereArgs: [element.prodId]);
+        print("update product-----------------------------------------------");
       }
     } catch (e) {
       print(e);
@@ -570,6 +589,8 @@ class DataCubit extends Cubit<DataState> {
   //////////////////////////////////////////////////////////////////
   //! Orders Offline
   createOrderTable(Database db) async {
+    print("createOrderTable-----------------------------------------------");
+
     await db.execute('''
     CREATE TABLE "${OrderResponseModel.OrderModelName}" (
       "${OrderResponseModel.columnId}" TEXT NOT NULL PRIMARY KEY ,
@@ -651,6 +672,7 @@ class DataCubit extends Cubit<DataState> {
           '${item.returnDesc}'
           )
           ''');
+      print("insert order-----------------------------------------------");
     } catch (e) {
       print(e);
     }
@@ -742,9 +764,9 @@ class DataCubit extends Cubit<DataState> {
           '${GetInVoiceDetails.columnUnitPrice}')
           VALUES (
             '${item.id}',
-          '${item.isReturn! ? 1 : 0}}',
-          '${item.updateDataBase! ? 1 : 0}}',
-          '${item.offlineDatabase! ? 1 : 0}}',
+          '${item.isReturn! ? 1 : 0}',
+          '${item.updateDataBase! ? 1 : 0}',
+          '${item.offlineDatabase! ? 1 : 0}',
           '${item.orderID}',
           '${item.prodId}',
           '${item.quantity}',
@@ -755,6 +777,8 @@ class DataCubit extends Cubit<DataState> {
           '${item.unitPrice}'
           )
           ''');
+
+      // print(item.toJson());
     } catch (e) {
       print(e);
     }
@@ -769,6 +793,7 @@ class DataCubit extends Cubit<DataState> {
 
       for (var element in data) {
         invoiceDetailsModels.add(GetInVoiceDetails.fromJsonEdit(element));
+        // print(element);
       }
       if (kDebugMode) {
         print("invoiceDetailsModels offline : ${invoiceDetailsModels.length}");

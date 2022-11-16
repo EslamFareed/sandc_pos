@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/online_models/company_info_response_model.dart';
@@ -31,6 +30,7 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
         .clientModels
         .where((element) => !element.offlineDatabase!)
         .toList());
+
     await updateClients(DataCubit.get(context)
         .clientModels
         .where((element) => !element.updateDataBase!)
@@ -76,14 +76,17 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
   insertOrdersDetails(List<GetInVoiceDetails> items) async {
     if (items.isNotEmpty) {
       try {
+        List<Map> data = [];
+
         for (var element in items) {
           element.offlineDatabase = true;
           element.updateDataBase = true;
+          data.add(element.toJson());
         }
         await DioHelper.postListDataWithToken(
                 url: ADD_ORDER_DETAILS, data: items)
             .then((value) {
-          if (value.data == 200) {
+          if (value.statusCode == 200) {
             if (kDebugMode) {
               print(
                   "success adding ${items.length} items in order details ---------------------------------------");
@@ -109,13 +112,15 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
   insertOrders(List<OrderResponseModel> items) async {
     if (items.isNotEmpty) {
       try {
+        List<Map> data = [];
         for (var element in items) {
           element.offlineDatabase = true;
           element.updateDataBase = true;
+          data.add(element.toJson());
         }
-        await DioHelper.postListDataWithToken(url: ADD_ORDER, data: items)
+        await DioHelper.postListDataWithToken(url: ADD_ORDER, data: data)
             .then((value) {
-          if (value.data == 200) {
+          if (value.statusCode == 200) {
             if (kDebugMode) {
               print(
                   "success adding ${items.length} items in orders ---------------------------------------");
@@ -141,13 +146,16 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
   insertClients(List<ClientResponseModel> items) async {
     if (items.isNotEmpty) {
       try {
+        List<Map> data = [];
+
         for (var element in items) {
           element.offlineDatabase = true;
           element.updateDataBase = true;
+          data.add(element.toJson());
         }
-        await DioHelper.postListDataWithToken(url: ADD_CLIENT, data: items)
+        await DioHelper.postListDataWithToken(url: ADD_CLIENT, data: data)
             .then((value) {
-          if (value.data == 200) {
+          if (value.statusCode == 200) {
             if (kDebugMode) {
               print(
                   "success adding ${items.length} items in clients ---------------------------------------");
@@ -173,13 +181,16 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
   updateClients(List<ClientResponseModel> items) async {
     if (items.isNotEmpty) {
       try {
+        List<Map> data = [];
+
         for (var element in items) {
           element.offlineDatabase = true;
           element.updateDataBase = true;
+          data.add(element.toJson());
         }
-        await DioHelper.postListDataWithToken(url: EDIT_CLIENT, data: items)
+        await DioHelper.postListDataWithToken(url: EDIT_CLIENT, data: data)
             .then((value) {
-          if (value.data == 200) {
+          if (value.statusCode == 200) {
             if (kDebugMode) {
               print(
                   "success editing ${items.length} items in clients ---------------------------------------");
@@ -419,6 +430,11 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
           if (kDebugMode) {
             print("onlineOrders : ${onlineOrders.length}");
           }
+          // for (var element in onlineOrders) {
+          //   element.getInVoiceDetails!.forEach((e) {
+          //     print(e.offlineDatabase);
+          //   });
+          // }
         } else {
           emit(GetDataOnlineErrorState());
           if (kDebugMode) {

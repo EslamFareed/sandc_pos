@@ -68,18 +68,18 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
     return Card(
       child: ListTile(
         onTap: () {
-          if (DataCubit.get(context).productsCurrentOrder.contains(product)) {
-            if (product.stockQuantity! > 0) {
+          if (product.stockQuantity! > 0) {
+            if (DataCubit.get(context).productsCurrentOrder.contains(product)) {
               DataCubit.get(context).addQuantityProdcut(product, context);
             } else {
-              getx.Get.showSnackbar(const getx.GetSnackBar(
-                message: "this product out of stock",
-                duration: Duration(seconds: 2),
-                animationDuration: Duration(milliseconds: 200),
-              ));
+              DataCubit.get(context).addNewProduct(product, context);
             }
           } else {
-            DataCubit.get(context).addNewProduct(product, context);
+            getx.Get.showSnackbar(const getx.GetSnackBar(
+              message: "this product out of stock",
+              duration: Duration(seconds: 2),
+              animationDuration: Duration(milliseconds: 200),
+            ));
           }
         },
         leading: product.image!.length > 22
