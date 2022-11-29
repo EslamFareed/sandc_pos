@@ -2,9 +2,10 @@ import 'dart:typed_data';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
+import 'package:printing/printing.dart';
 import 'package:sandc_pos/online_models/order_response_model.dart';
 
-Future<Uint8List> makePdf(List<OrderResponseModel> orders) async {
+Future<Uint8List> makePdf(List<OrderResponseModel> orders, double total) async {
   final pdf = Document();
 
   pdf.addPage(
@@ -18,27 +19,11 @@ Future<Uint8List> makePdf(List<OrderResponseModel> orders) async {
                   border: Border.all(width: 1),
                 ),
                 child: Column(children: [
-                  Row(children: [
-                    Expanded(
-                      child: PaddedText("id"),
-                      flex: 1,
-                    ),
-                    Expanded(
-                      child: PaddedText("name"),
-                      flex: 1,
-                    ),
-                    Expanded(
-                      child: PaddedText("date"),
-                      flex: 1,
-                    ),
-                    Expanded(
-                      child: PaddedText("total cost"),
-                      flex: 1,
-                    ),
-                    Expanded(
-                      child: PaddedText("pay amount"),
-                      flex: 1,
-                    ),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Expanded(child: PaddedText("id")),
+                    Expanded(child: PaddedText("date")),
+                    Expanded(child: PaddedText("total cost")),
+                    Expanded(child: PaddedText("pay amount")),
                   ]),
                   Table(
                     border: TableBorder.all(color: PdfColors.black),
@@ -48,29 +33,22 @@ Future<Uint8List> makePdf(List<OrderResponseModel> orders) async {
                           children: [
                             Expanded(
                               child: PaddedText(e.id!),
-                              flex: 1,
-                            ),
-                            Expanded(
-                              child: PaddedText("eslam fareed"),
-                              flex: 1,
                             ),
                             Expanded(
                               child: PaddedText("${e.createDate}"),
-                              flex: 1,
                             ),
                             Expanded(
                               child: PaddedText("${e.totalCost}"),
-                              flex: 1,
                             ),
                             Expanded(
                               child: PaddedText("${e.payAmount}"),
-                              flex: 1,
                             ),
                           ],
                         ),
                       ),
                     ],
                   ),
+                  Text("total : $total", style: TextStyle(fontSize: 25))
                 ])),
           ],
         );
@@ -83,11 +61,9 @@ Future<Uint8List> makePdf(List<OrderResponseModel> orders) async {
 Widget PaddedText(
   final String text, {
   final TextAlign align = TextAlign.left,
-}) =>
-    Padding(
-      padding: EdgeInsets.all(10),
-      child: Text(
-        text,
-        textAlign: align,
-      ),
-    );
+}) {
+  return Text(
+    text,
+    textAlign: align,
+  );
+}

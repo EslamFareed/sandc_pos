@@ -17,6 +17,7 @@ import '../../../core/style/dark/dark.dart';
 import '../../core/style/light/light.dart';
 import '../../cubits/main_cubit/main_cubit.dart';
 import '../../cubits/main_cubit/main_states.dart';
+import '../../cubits/sales_report_cubit/sales_report_cubit.dart';
 import '../splash_screen/splash_Screen.dart';
 
 class AppRoot extends StatelessWidget {
@@ -33,6 +34,7 @@ class AppRoot extends StatelessWidget {
         BlocProvider(create: (BuildContext context) => ClientCubit()),
         BlocProvider(create: (BuildContext context) => ProductCubit()),
         BlocProvider(create: (BuildContext context) => SalesCubit()),
+        BlocProvider(create: (BuildContext context) => SalesReportCubit()),
         BlocProvider(create: (BuildContext context) => DataCubit()..db),
       ],
       child: BlocConsumer<MainCubit, MainStates>(

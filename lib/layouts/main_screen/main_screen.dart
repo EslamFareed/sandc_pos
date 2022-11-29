@@ -168,9 +168,6 @@ class _MainScreenState extends State<MainScreen> {
     return Container(
       padding: const EdgeInsets.all(10),
       child: ResponsiveGridRow(children: [
-        // ...items.map(
-        //   (e) =>
-        //       _buildItemCard(e.image.toString(), e.title.toString(), e.onTap!),
         _buildItemCard("assets/images/logo.png", "Sales", () {
           getx.Get.to(SalesScreen(), transition: getx.Transition.zoom);
         }),
@@ -194,11 +191,7 @@ class _MainScreenState extends State<MainScreen> {
           getx.Get.to(const SettingsPrinter(),
               transition: getx.Transition.zoom);
         }),
-        _buildItemCard("assets/images/logo.png", "Update To cloud", () async {
-          _showDialog();
-          await DataOnlineCubit.get(context).checkIfDataUptodate(context);
-        }),
-        _buildItemCard("assets/images/logo.png", "Update From cloud", () async {
+        _buildItemCard("assets/images/logo.png", "Update With cloud", () async {
           _showDialog();
           await DataOnlineCubit.get(context).checkIfDataUptodate(context);
         }),

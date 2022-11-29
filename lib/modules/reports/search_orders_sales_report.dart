@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart' as getx;
 import 'package:sandc_pos/online_models/order_response_model.dart';
 
-import 'package:uuid/uuid.dart';
+import '../../cubits/sales_report_cubit/sales_report_cubit.dart';
+import 'order_details.dart';
 
 class SearchOrdersSalesReportScreen extends StatefulWidget {
   SearchOrdersSalesReportScreen({Key? key}) : super(key: key);
@@ -18,8 +18,6 @@ class _SearchOrdersSalesReportScreenState
     extends State<SearchOrdersSalesReportScreen> {
   TextEditingController? controller = TextEditingController();
 
-  List<OrderResponseModel> orders = [];
-
   @override
   void initState() {
     // orders = DataCubit.get(context).orderModels;
@@ -28,34 +26,43 @@ class _SearchOrdersSalesReportScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Search By reciet no"),
-      ),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.all(20),
-            child: TextField(
-              controller: controller,
-              onChanged: (value) {
-                searchProducts(value, context);
-              },
-              decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  hintText: "reciet no",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: const BorderSide(color: Colors.black))),
-            ),
+    return BlocConsumer<SalesReportCubit, SalesReportState>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, state) {
+        var cubit = SalesReportCubit.get(context);
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text("Search By reciet no"),
           ),
-          Expanded(
-              child: ListView.builder(
-                  itemCount: orders.length,
-                  itemBuilder: (ctx, i) => _buildItemSearch(orders[i])))
-        ],
-      ),
+          body: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: TextField(
+                  controller: controller,
+                  onChanged: (value) {
+                    cubit.searchOrders(value, context);
+                  },
+                  decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.search),
+                      hintText: "reciet no",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: const BorderSide(color: Colors.black))),
+                ),
+              ),
+              Expanded(
+                  child: ListView.builder(
+                      itemCount: cubit.ordersSearchQuery.length,
+                      itemBuilder: (ctx, i) =>
+                          _buildItemSearch(cubit.ordersSearchQuery[i])))
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -63,11 +70,8 @@ class _SearchOrdersSalesReportScreenState
     return Card(
       child: ListTile(
         onTap: () {
-          // if (DataCubit.get(context).productsCurrentOrder.contains(product)) {
-          //   DataCubit.get(context).addQuantityProdcut(product, context);
-          // } else {
-          //   DataCubit.get(context).addNewProduct(product, context);
-          // }
+          getx.Get.to(OrderDetailsScreen(item: order),
+              transition: getx.Transition.zoom);
         },
         title: Text(order.id!),
         subtitle: Column(
@@ -80,17 +84,5 @@ class _SearchOrdersSalesReportScreenState
         ),
       ),
     );
-  }
-
-  void searchProducts(String query, BuildContext context) {
-    // final ordersSearched = DataCubit.get(context).orderModels.where((element) {
-    //   final orderReciet = element.id!.toLowerCase();
-    //   final input = query.toLowerCase();
-
-    //   return orderReciet.contains(input);
-    // });
-    // setState(() {
-    //   orders = ordersSearched.toList();
-    // });
   }
 }
