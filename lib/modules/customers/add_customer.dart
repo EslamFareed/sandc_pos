@@ -191,7 +191,16 @@ class AddCustomer extends StatelessWidget {
         DefaultButton(
           onPress: () async {
             if (_keyForm.currentState!.validate()) {
-              _saveOffline(context);
+              if (double.parse(amountOnHimController.text) <=
+                      double.parse(maxDebitController.text) &&
+                  int.parse(maxDebitBillsController.text) > 0) {
+                _saveOffline(context);
+              } else {
+                Get.showSnackbar(const GetSnackBar(
+                  message: "Create Error",
+                  duration: Duration(seconds: 2),
+                ));
+              }
             } else {
               Get.showSnackbar(const GetSnackBar(
                 message: "Create Error",

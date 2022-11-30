@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -342,6 +343,7 @@ class _SalesScreenState extends State<SalesScreen> {
                             Text("Make reciet for customer"),
                             GestureDetector(
                                 onTap: () {
+                                  DataCubit.get(context).chooseClient(null);
                                   getx.Get.to(AddCustomer(),
                                       transition: getx.Transition.zoom);
                                 },
@@ -403,6 +405,32 @@ class _SalesScreenState extends State<SalesScreen> {
         animationDuration: Duration(milliseconds: 200),
       ));
     }
+  }
+
+  Widget _customPopupItemBuilderExample2(
+    BuildContext context,
+    ClientResponseModel? item,
+    bool isSelected,
+  ) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 8),
+      decoration: !isSelected
+          ? null
+          : BoxDecoration(
+              border: Border.all(color: Theme.of(context).primaryColor),
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white,
+            ),
+      child: ListTile(
+        selected: isSelected,
+        title: Text(item?.name ?? ''),
+        subtitle: Text(item?.address?.toString() ?? ''),
+        leading: CircleAvatar(
+            // this does not work - throws 404 error
+            // backgroundImage: NetworkImage(item.avatar ?? ''),
+            ),
+      ),
+    );
   }
 
   _validateAndFinishOrder() async {
@@ -511,16 +539,16 @@ class _SalesScreenState extends State<SalesScreen> {
                         .indexOf(DataCubit.get(context).chosenClient!)]
                     .offlineDatabase = false;
 
-                DataCubit.get(context)
-                    .clientModels[DataCubit.get(context)
-                        .clientModels
-                        .indexOf(DataCubit.get(context).chosenClient!)]
-                    .maxDebitLimit = DataCubit.get(context)
-                        .clientModels[DataCubit.get(context)
-                            .clientModels
-                            .indexOf(DataCubit.get(context).chosenClient!)]
-                        .maxDebitLimit! -
-                    double.parse(restController!.text.toString());
+                // DataCubit.get(context)
+                //     .clientModels[DataCubit.get(context)
+                //         .clientModels
+                //         .indexOf(DataCubit.get(context).chosenClient!)]
+                //     .maxDebitLimit = DataCubit.get(context)
+                //         .clientModels[DataCubit.get(context)
+                //             .clientModels
+                //             .indexOf(DataCubit.get(context).chosenClient!)]
+                //         .maxDebitLimit! -
+                //     double.parse(restController!.text.toString());
 
                 DataCubit.get(context)
                     .clientModels[DataCubit.get(context)
