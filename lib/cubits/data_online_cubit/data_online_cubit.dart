@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
+import 'package:sandc_pos/cubits/main_cubit/main_cubit.dart';
 import 'package:sandc_pos/online_models/company_info_response_model.dart';
 import 'package:sandc_pos/online_models/product_response_model.dart';
 import 'package:sandc_pos/reposetories/shared_pref/cache_helper.dart';
@@ -61,6 +62,7 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
       await DataCubit.get(context).getAllOrderTable();
       await DataCubit.get(context).getAllPayTypeTable();
       await DataCubit.get(context).getAllProductTable();
+
       emit(GetAllDataOfflineSuccess());
     } catch (e) {
       emit(GetAllDataOfflineError());
@@ -273,6 +275,7 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
       onlineCompanyInfo = null;
 
       await CacheHelper.saveData(key: "isFirstTime", value: false);
+
       emit(GetDataOnlineSuccessState());
     } catch (e) {
       if (kDebugMode) {

@@ -11,6 +11,7 @@ import 'package:get/get.dart' as getx;
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/cubits/data_online_cubit/data_online_cubit.dart';
+import 'package:sandc_pos/cubits/main_cubit/main_cubit.dart';
 import 'package:sandc_pos/layouts/main_screen/widgets/home_item.dart';
 import 'package:sandc_pos/reposetories/remote/dio/dio_helper.dart';
 import 'package:sandc_pos/reposetories/shared_pref/cache_keys.dart';
@@ -78,10 +79,24 @@ class _MainScreenState extends State<MainScreen> {
 
   _getData() async {
     await DataOnlineCubit.get(context).getAllOfflineData(context);
+    await CacheHelper.saveData(
+        key: "lang",
+        value: DataCubit.get(context).companyModels[0].compLanguage == "عربي"
+            ? "ar"
+            : "en");
+    MainCubit.get(context).changeAppLanguage(context,
+        lang: CacheKeysManger.getLanguageFromCache());
   }
 
   _getDataFirstTime() async {
     await DataOnlineCubit.get(context).getAllDataForFirstTime(context);
+    await CacheHelper.saveData(
+        key: "lang",
+        value: DataCubit.get(context).companyModels[0].compLanguage == "عربي"
+            ? "ar"
+            : "en");
+    MainCubit.get(context).changeAppLanguage(context,
+        lang: CacheKeysManger.getLanguageFromCache());
   }
 
   _onWillPop() {
