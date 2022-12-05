@@ -4,8 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
-import 'package:sandc_pos/modules/reports/order_details.dart';
+
+import '../../../cubits/data_cubit/data_cubit.dart';
+import 'order_details.dart';
 
 class ScanCodeReportSalesScreen extends StatefulWidget {
   const ScanCodeReportSalesScreen({Key? key}) : super(key: key);

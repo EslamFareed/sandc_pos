@@ -147,6 +147,37 @@ class OrderResponseModel {
     }
     return data;
   }
+
+  Map<String, dynamic> toJsonEdit() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['client_ID'] = this.clientID;
+    data['payType_ID'] = this.payTypeID;
+    data['emp_ID'] = this.empID;
+    data['createDate'] = this.createDate;
+    data['updateDate'] = this.updateDate;
+    data['isPayCash'] = this.isPayCash! ? 1 : 0;
+    data['totalCost'] = this.totalCost;
+    data['discount'] = this.discount;
+    data['taxes'] = this.taxes;
+    data['cost_Net'] = this.costNet;
+    data['debitPay'] = this.debitPay;
+    data['payAmount'] = this.payAmount;
+    data['qrcode'] = this.qrcode;
+    data['isReturn'] = this.isReturn! ? 1 : 0;
+    data['returnDesc'] = this.returnDesc;
+    data['updateDataBase'] = this.updateDataBase! ? 1 : 0;
+    data['offlineDatabase'] = this.offlineDatabase! ? 1 : 0;
+    if (this.getInVoiceDetails != null) {
+      data['getInVoiceDetails'] =
+          this.getInVoiceDetails!.map((v) => v.toJson()).toList();
+    }
+    if (this.getDebitPayings != null) {
+      data['getDebitPayings'] =
+          this.getDebitPayings!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }
 
 class GetInVoiceDetails {
@@ -236,6 +267,23 @@ class GetInVoiceDetails {
     data['updateDate'] = this.updateDate;
     data['updateDataBase'] = this.updateDataBase;
     data['offlineDatabase'] = this.offlineDatabase;
+    return data;
+  }
+
+  Map<String, dynamic> toJsonEdit() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['order_ID'] = this.orderID;
+    data['prod_Id'] = this.prodId;
+    data['quantity'] = this.quantity;
+    data['unitPrice'] = this.unitPrice;
+    data['totalCost'] = this.totalCost;
+    data['isReturn'] = this.isReturn! ? 1 : 0;
+    data['reasonForReturn'] = this.reasonForReturn;
+    data['quantReturns'] = this.quantReturns;
+    data['updateDate'] = this.updateDate;
+    data['updateDataBase'] = this.updateDataBase! ? 1 : 0;
+    data['offlineDatabase'] = this.offlineDatabase! ? 1 : 0;
     return data;
   }
 }

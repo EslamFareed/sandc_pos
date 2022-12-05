@@ -4,14 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' as getx;
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 
-import 'package:sandc_pos/core/components/default_buttons.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
-import 'package:sandc_pos/modules/reports/order_details.dart';
-import 'package:sandc_pos/online_models/order_response_model.dart';
-import 'package:uuid/uuid.dart';
 
-import '../../cubits/sales_report_cubit/sales_report_cubit.dart';
+import '../../../cubits/sales_report_cubit/sales_report_cubit.dart';
+import 'order_details.dart';
 
 class ItemModel {
   String title;

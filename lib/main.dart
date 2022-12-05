@@ -15,5 +15,3 @@ void main() async {
   await CacheHelper.init();
   runApp(const AppRoot());
 }
-//todo 
-//popup in sales

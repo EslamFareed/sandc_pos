@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sandc_pos/cubits/sales_report_cubit/sales_report_cubit.dart';
-import 'package:sandc_pos/online_models/order_response_model.dart';
 
-import '../home/widgets/item_setting_data.dart';
+import '../../../cubits/sales_report_cubit/sales_report_cubit.dart';
+import '../../../online_models/order_response_model.dart';
+import '../../home/widgets/item_setting_data.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
   OrderDetailsScreen({super.key, this.item});
@@ -46,6 +46,16 @@ class OrderDetailsScreen extends StatelessWidget {
                     itemBuilder: (context, index) => Card(
                       child: ListTile(
                         title: Text(cubit.orderProducts[index].name!),
+                        trailing: Text(
+                          cubit.orderDetails
+                                  .firstWhere((element) =>
+                                      cubit.orderProducts[index].prodId ==
+                                      element.prodId)
+                                  .isReturn!
+                              ? "Returned"
+                              : "",
+                          style: TextStyle(color: Colors.red),
+                        ),
                         subtitle: Text(
                             "${cubit.orderDetails.firstWhere((element) => cubit.orderProducts[index].prodId == element.prodId).quantity}"),
                       ),

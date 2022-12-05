@@ -712,6 +712,23 @@ class DataCubit extends Cubit<DataState> {
     }
   }
 
+  updateOrderModel(OrderResponseModel item) async {
+    try {
+      Database? mydb = await db;
+
+      return await mydb!
+          .update(OrderResponseModel.OrderModelName, item.toJson(),
+              where: '${OrderResponseModel.columnId} = ?', whereArgs: [item.id])
+          .then((value) => print(
+              "updateOrderResponseModel-----------------------------------------------"))
+          .catchError((onError) {
+            print(onError);
+          });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   //////////////////////////////////////////////////////////////////
   //! Invoice Details Offline
   createInvoiceDetailsTable(Database db) async {
@@ -814,6 +831,23 @@ class DataCubit extends Cubit<DataState> {
             where: '${GetInVoiceDetails.columnId} = ?',
             whereArgs: [element.id]);
       }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  updateInvoiceDetailsModel(GetInVoiceDetails item) async {
+    try {
+      Database? mydb = await db;
+
+      return await mydb!
+          .update(GetInVoiceDetails.InvoiceDetailsModelName, item.toJsonEdit(),
+              where: '${GetInVoiceDetails.columnId} = ?', whereArgs: [item.id])
+          .then((value) => print(
+              "updateGetInVoiceDetails-----------------------------------------------"))
+          .catchError((onError) {
+            print(onError);
+          });
     } catch (e) {
       print(e);
     }

@@ -12,6 +12,7 @@ import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/cubits/data_online_cubit/data_online_cubit.dart';
 import 'package:sandc_pos/cubits/product_cubit/product_cubit.dart';
 import 'package:sandc_pos/cubits/sales_cubit/sales_cubit.dart';
+import 'package:sandc_pos/cubits/sales_returns_cubit/sales_returns_cubit.dart';
 
 import '../../../core/style/dark/dark.dart';
 import '../../core/style/light/light.dart';
@@ -35,6 +36,7 @@ class AppRoot extends StatelessWidget {
         BlocProvider(create: (BuildContext context) => ProductCubit()),
         BlocProvider(create: (BuildContext context) => SalesCubit()),
         BlocProvider(create: (BuildContext context) => SalesReportCubit()),
+        BlocProvider(create: (BuildContext context) => SalesReturnsCubit()),
         BlocProvider(create: (BuildContext context) => DataCubit()..db),
       ],
       child: BlocConsumer<MainCubit, MainStates>(
@@ -64,7 +66,8 @@ class AppRoot extends StatelessWidget {
                 Locale('en', ''),
                 Locale('ar', ''),
               ],
-              locale: Locale.fromSubtags(languageCode: cubit.language),
+              //todo change language remove this comment
+              // locale: Locale.fromSubtags(languageCode: cubit.language),
               theme: lightMode,
               darkTheme: darkMode,
               themeMode: ThemeMode.light,

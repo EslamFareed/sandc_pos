@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart' as getx;
-import 'package:sandc_pos/online_models/order_response_model.dart';
 
-import '../../cubits/sales_report_cubit/sales_report_cubit.dart';
+import '../../../cubits/sales_report_cubit/sales_report_cubit.dart';
+import '../../../online_models/order_response_model.dart';
 import 'order_details.dart';
 
 class SearchOrdersSalesReportScreen extends StatefulWidget {

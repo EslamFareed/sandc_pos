@@ -4,17 +4,15 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart' as getx;
-import 'package:sandc_pos/core/style/color/app_colors.dart';
-import 'package:sandc_pos/modules/reports/make_pdf_report_sales.dart';
-import 'package:sandc_pos/modules/reports/table_sales_report.dart';
-import 'package:sandc_pos/online_models/order_response_model.dart';
-import 'package:uuid/uuid.dart';
 
-import '../../core/style/text/app_text_style.dart';
+import '../../../core/style/color/app_colors.dart';
+import '../../../core/style/text/app_text_style.dart';
+import '../../../cubits/sales_report_cubit/sales_report_cubit.dart';
 
-import '../../cubits/sales_report_cubit/sales_report_cubit.dart';
+import 'make_pdf_report_sales.dart';
 import 'scan_code_report_sales.dart';
 import 'search_orders_sales_report.dart';
+import 'table_sales_report.dart';
 
 class SalesReport extends StatefulWidget {
   const SalesReport({Key? key}) : super(key: key);
