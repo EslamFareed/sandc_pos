@@ -37,14 +37,24 @@ dependencies:
   flutter_svg: ^1.1.5
   sqflite: ^2.1.0
   uuid: ^3.0.6
-  pdf:
-  printing:
   custom_pop_up_menu: ^1.2.4
   group_radio_button: ^1.2.0
   screenshot: ^1.2.3
   conditional_builder_null_safety: ^0.0.6
   path_provider: ^2.0.11
   flutter_scan_bluetooth: ^2.1.2
+  # printing: ^5.9.3
+  qr_flutter: 
+    git:
+      url: https://github.com/theyakka/qr.flutter.git
+  # barcode: any
+  # qr: any
+  printing: ^5.9.3
+  pdf: ^3.8.4
+  
+# dependency_overrides:
+#   barcode: ^2.2.0
+#   qr: ^3.0.1
 
 dev_dependencies:
   flutter_test:

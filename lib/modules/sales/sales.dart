@@ -1,19 +1,29 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' as getx;
 import 'package:group_radio_button/group_radio_button.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:uuid/uuid.dart';
+
 import 'package:sandc_pos/core/style/color/app_colors.dart';
+import 'package:sandc_pos/core/utils/printer_manager.dart';
 import 'package:sandc_pos/layouts/main_screen/main_screen.dart';
 import 'package:sandc_pos/modules/home/widgets/item_setting_data.dart';
-import 'package:sandc_pos/modules/sales/search_sales/categories_screen.dart';
 import 'package:sandc_pos/modules/sales/print_screen.dart';
+import 'package:sandc_pos/modules/sales/search_sales/categories_screen.dart';
 import 'package:sandc_pos/modules/sales/search_sales/scan_code.dart';
 import 'package:sandc_pos/modules/sales/search_sales/search_products.dart';
 import 'package:sandc_pos/modules/sales/widgets/item_view_finish_order.dart';
 import 'package:sandc_pos/online_models/order_response_model.dart';
-import 'package:uuid/uuid.dart';
+import 'package:sandc_pos/reposetories/shared_pref/cache_keys.dart';
 
 import '../../core/components/build_popup.dart';
 import '../../core/components/default_buttons.dart';
@@ -36,6 +46,7 @@ class _SalesScreenState extends State<SalesScreen> {
   TextEditingController? totalController;
   TextEditingController? paidController;
   TextEditingController? restController;
+  ScreenshotController screenshotController = ScreenshotController();
 
   @override
   void initState() {
@@ -572,14 +583,17 @@ class _SalesScreenState extends State<SalesScreen> {
                         .maxLimtDebitRecietCount! -
                     1;
                 await DataCubit.get(context).finishCurrentOrder();
-                getx.Get.back(closeOverlays: true);
+                getx.Get.back();
                 getx.Get.showSnackbar(const getx.GetSnackBar(
                   message: "Order Saved Successfully",
                   duration: Duration(seconds: 2),
                   animationDuration: Duration(milliseconds: 200),
                 ));
+                _clearEveryThing();
+
                 //Todo
                 //! Printer receit
+                _printReciept();
               },
               buttonText: "yes",
               buttonWidth: 70.w,
@@ -617,6 +631,7 @@ class _SalesScreenState extends State<SalesScreen> {
 
         //Todo
         //! Printer receit
+        _printReciept();
       } else {
         getx.Get.showSnackbar(const getx.GetSnackBar(
           message: "you choose paying cash",
@@ -624,6 +639,262 @@ class _SalesScreenState extends State<SalesScreen> {
           animationDuration: Duration(milliseconds: 200),
         ));
       }
+    }
+  }
+
+  _printReciept() {
+    Uint8List _bytesImage = const Base64Decoder().convert(DataCubit.get(context)
+        .companyModels[0]
+        .logo!
+        .split("data:image/png;base64,")
+        .last);
+    getx.Get.dialog(Dialog(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Screenshot(
+              controller: screenshotController,
+              child: Container(
+                  width: 140,
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: MemoryImage(_bytesImage),
+                        radius: 50.r,
+                      ),
+                      Text(
+                        DataCubit.get(context).companyModels[0].companyName!,
+                        style: const TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        DataCubit.get(context).companyModels[0].compAddress!,
+                        style: const TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        DataCubit.get(context).companyModels[0].compPhone!,
+                        style: const TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                      const Divider(),
+                      const Text(
+                        "reciet",
+                        style: TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                      // const SizedBox(
+                      //   height: 20,
+                      //   child: Text(
+                      //       "--------------------------------------------------------------------"),
+                      // ),
+                      const Divider(),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Expanded(
+                            flex: 2,
+                            child: Center(
+                              child: Text(
+                                "Qty ",
+                                style: TextStyle(
+                                    fontSize: 10, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 6,
+                            child: Center(
+                              child: Text(
+                                "Item",
+                                style: TextStyle(
+                                    fontSize: 10, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Center(
+                              child: Text(
+                                "Price",
+                                style: TextStyle(
+                                    fontSize: 10, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Center(
+                              child: Text(
+                                "Total",
+                                style: TextStyle(
+                                    fontSize: 10, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        physics: const ScrollPhysics(),
+                        itemCount:
+                            DataCubit.get(context).itemsCurrentOrder.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Center(
+                                    child: Text(
+                                      DataCubit.get(context)
+                                          .itemsCurrentOrder[index]
+                                          .quantity!
+                                          .toString(),
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 6,
+                                  child: Center(
+                                    child: Text(
+                                      DataCubit.get(context)
+                                          .productModels
+                                          .firstWhere((element) =>
+                                              element.prodId ==
+                                              DataCubit.get(context)
+                                                  .itemsCurrentOrder[index]
+                                                  .prodId)
+                                          .name!,
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Center(
+                                    child: Text(
+                                      DataCubit.get(context)
+                                          .itemsCurrentOrder[index]
+                                          .unitPrice!
+                                          .toString(),
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Center(
+                                    child: Text(
+                                      DataCubit.get(context)
+                                          .itemsCurrentOrder[index]
+                                          .totalCost!
+                                          .toString(),
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      const Divider(),
+                      Text(
+                        "Total : ${DataCubit.get(context).currentOrder!.totalCost}",
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      const Divider(),
+                      Text(
+                        "pay : ${DataCubit.get(context).currentOrder!.payAmount}",
+                        style: const TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                      const Divider(),
+                      Text(
+                        "debit : ${DataCubit.get(context).currentOrder!.debitPay}",
+                        style: const TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                      const Divider(),
+                      Text(
+                        "discount : ${DataCubit.get(context).currentOrder!.discount}",
+                        style: const TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                      const Divider(),
+                      Text(
+                        "taxes : ${DataCubit.get(context).currentOrder!.taxes}",
+                        style: const TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                      const Divider(),
+                      Text(
+                        "net cost : ${DataCubit.get(context).currentOrder!.costNet}",
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      const Divider(),
+                      const Text(
+                        "Thank You",
+                        style: TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                      Divider(height: 2.h),
+                      QrImageView(
+                        data: DataCubit.get(context).currentOrder!.id!,
+                        version: QrVersions.auto,
+                        size: 100.0,
+                      ),
+                    ],
+                  )),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      screenshotController
+                          .capture(delay: const Duration(milliseconds: 10))
+                          .then((capturedImage) async {
+                        _makeImg(capturedImage);
+                      }).catchError((onError) {
+                        print(onError);
+                      });
+                    },
+                    child: Text("Print")),
+                ElevatedButton(
+                    onPressed: () {
+                      DataCubit.get(context).clearCurrentOrder();
+
+                      getx.Get.back();
+                    },
+                    child: Text("Close")),
+              ],
+            )
+          ],
+        ),
+      ),
+    ));
+  }
+
+  _makeImg(Uint8List? capturedImage) async {
+    try {
+      String path = (await getTemporaryDirectory()).path;
+      File imgFile = File("$path/img.png");
+      imgFile.writeAsBytes(capturedImage!);
+      PrinterManager.printImg(
+          imgFile.path, CacheKeysManger.getPrinterWidthPaperFromCache());
+      DataCubit.get(context).clearCurrentOrder();
+    } catch (e) {
+      rethrow;
     }
   }
 

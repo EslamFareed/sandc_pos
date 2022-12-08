@@ -27,13 +27,14 @@ class _SettingsPrinterState extends State<SettingsPrinter> {
   bool isScanning = true;
 
   List<String> widthPapers = ["58", "80"];
-  String? _selectedWidth = "58";
+  String? _selectedWidth = "";
 
   @override
   void initState() {
     super.initState();
     _devices = [];
     _scanBluetooth = FlutterScanBluetooth();
+    _selectedWidth = CacheKeysManger.getPrinterWidthPaperFromCache();
     _startScan();
     // _initImg();
   }

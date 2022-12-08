@@ -1105,6 +1105,17 @@ class DataCubit extends Cubit<DataState> {
     await getAllInvoiceDetailsTable();
     await getAllOrderTable();
 
+    // itemsCurrentOrder = [];
+    // productsCurrentOrder = [];
+    // currentOrder = OrderResponseModel(id: Uuid().v4());
+    // total = 0;
+    // afterDiscount = 0;
+    // afterTaxes = 0;
+    // discount = 0;
+    emit(OrderFinishedState());
+  }
+
+  clearCurrentOrder() {
     itemsCurrentOrder = [];
     productsCurrentOrder = [];
     currentOrder = OrderResponseModel(id: Uuid().v4());

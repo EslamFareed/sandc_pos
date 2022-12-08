@@ -15,6 +15,7 @@ import 'package:sandc_pos/cubits/main_cubit/main_cubit.dart';
 import 'package:sandc_pos/reposetories/shared_pref/cache_keys.dart';
 import '../../core/style/color/app_colors.dart';
 
+import '../../cubits/main_cubit/main_states.dart';
 import '../../modules/about/about_us.dart';
 import '../../modules/about/contact_us.dart';
 import '../../modules/auth/login.dart';
@@ -180,41 +181,52 @@ class _MainScreenState extends State<MainScreen> {
   _buildBody() {
     return Container(
       padding: const EdgeInsets.all(10),
-      child: ResponsiveGridRow(children: [
-        _buildItemCard("assets/images/sales_pos_2.png", "Sales", () {
-          getx.Get.to(SalesScreen(), transition: getx.Transition.zoom);
-        }),
-        _buildItemCard("assets/images/customer_pos.png", "Clients", () {
-          getx.Get.to(const CustomersHome(), transition: getx.Transition.zoom);
-        }),
-        _buildItemCard("assets/images/stock_pos.png", "Stock", () {
-          getx.Get.to(const ProductsHome(), transition: getx.Transition.zoom);
-        }),
-        _buildItemCard("assets/images/reports_pos_2.png", "Reports", () {
-          getx.Get.to(const ReportsHome(), transition: getx.Transition.zoom);
-        }),
-        _buildItemCard("assets/images/sales_returns_pos.png", "Sales Returns",
-            () {
-          getx.Get.to(const SalesReturnsScreen(),
-              transition: getx.Transition.zoom);
-        }),
-        _buildItemCard("assets/images/settings_pos.png", "Settings", () {
-          getx.Get.to(const SettingsScreen(), transition: getx.Transition.zoom);
-        }),
-        _buildItemCard(
-            "assets/images/printer_pos.png",
-            MainCubit.get(context).isConnectedToPrinter!
-                ? MainCubit.get(context).selectedDevice!.name
-                : "No Printer Selected", () {
-          getx.Get.to(const SettingsPrinter(),
-              transition: getx.Transition.zoom);
-        }),
-        _buildItemCard("assets/images/cloud_pos.png", "Update With cloud",
-            () async {
-          _showDialog();
-          await DataOnlineCubit.get(context).checkIfDataUptodate(context);
-        }),
-      ]),
+      child: BlocConsumer<MainCubit, MainStates>(
+        listener: (context, state) {
+          // TODO: implement listener
+        },
+        builder: (context, state) {
+          return ResponsiveGridRow(children: [
+            _buildItemCard("assets/images/sales_pos_2.png", "Sales", () {
+              getx.Get.to(SalesScreen(), transition: getx.Transition.zoom);
+            }),
+            _buildItemCard("assets/images/customer_pos.png", "Clients", () {
+              getx.Get.to(const CustomersHome(),
+                  transition: getx.Transition.zoom);
+            }),
+            _buildItemCard("assets/images/stock_pos.png", "Stock", () {
+              getx.Get.to(const ProductsHome(),
+                  transition: getx.Transition.zoom);
+            }),
+            _buildItemCard("assets/images/reports_pos_2.png", "Reports", () {
+              getx.Get.to(const ReportsHome(),
+                  transition: getx.Transition.zoom);
+            }),
+            _buildItemCard(
+                "assets/images/sales_returns_pos.png", "Sales Returns", () {
+              getx.Get.to(const SalesReturnsScreen(),
+                  transition: getx.Transition.zoom);
+            }),
+            _buildItemCard("assets/images/settings_pos.png", "Settings", () {
+              getx.Get.to(const SettingsScreen(),
+                  transition: getx.Transition.zoom);
+            }),
+            _buildItemCard(
+                "assets/images/printer_pos.png",
+                MainCubit.get(context).isConnectedToPrinter!
+                    ? MainCubit.get(context).selectedDevice!.name
+                    : "No Printer Selected", () {
+              getx.Get.to(const SettingsPrinter(),
+                  transition: getx.Transition.zoom);
+            }),
+            _buildItemCard("assets/images/cloud_pos.png", "Update With cloud",
+                () async {
+              _showDialog();
+              await DataOnlineCubit.get(context).checkIfDataUptodate(context);
+            }),
+          ]);
+        },
+      ),
     );
   }
 
@@ -253,7 +265,9 @@ class _MainScreenState extends State<MainScreen> {
       elevation: 8,
       backgroundColor: AppColors.whitBackGroundColor,
       title: Text(
-        DataCubit.get(context).companyModels[0].companyName!,
+        DataCubit.get(context).companyModels.isNotEmpty
+            ? DataCubit.get(context).companyModels[0].companyName!
+            : "SANDC",
         style:
             AppTextStyle.appBarText().copyWith(color: AppColors.primaryColor),
       ),
