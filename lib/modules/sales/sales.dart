@@ -7,10 +7,10 @@ import 'package:group_radio_button/group_radio_button.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/layouts/main_screen/main_screen.dart';
 import 'package:sandc_pos/modules/home/widgets/item_setting_data.dart';
-import 'package:sandc_pos/modules/sales/categories_screen.dart';
+import 'package:sandc_pos/modules/sales/search_sales/categories_screen.dart';
 import 'package:sandc_pos/modules/sales/print_screen.dart';
-import 'package:sandc_pos/modules/sales/scan_code.dart';
-import 'package:sandc_pos/modules/sales/search_products.dart';
+import 'package:sandc_pos/modules/sales/search_sales/scan_code.dart';
+import 'package:sandc_pos/modules/sales/search_sales/search_products.dart';
 import 'package:sandc_pos/modules/sales/widgets/item_view_finish_order.dart';
 import 'package:sandc_pos/online_models/order_response_model.dart';
 import 'package:uuid/uuid.dart';
@@ -22,7 +22,7 @@ import '../../cubits/data_cubit/data_cubit.dart';
 import '../../cubits/sales_cubit/sales_cubit.dart';
 import '../../online_models/client_response_model.dart';
 import '../customers/add_customer.dart';
-import 'table_sales.dart';
+import 'widgets/table_sales.dart';
 
 class SalesScreen extends StatefulWidget {
   SalesScreen({Key? key}) : super(key: key);

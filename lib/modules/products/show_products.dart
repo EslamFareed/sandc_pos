@@ -7,8 +7,8 @@ import 'package:sandc_pos/modules/products/search_products_details.dart';
 import 'package:sandc_pos/modules/products/table_product.dart';
 
 import '../../core/style/color/app_colors.dart';
-import '../sales/scan_code.dart';
-import '../sales/search_products.dart';
+import '../sales/search_sales/scan_code.dart';
+import '../sales/search_sales/search_products.dart';
 import 'make_pdf_products.dart';
 
 class ShowProducts extends StatelessWidget {
