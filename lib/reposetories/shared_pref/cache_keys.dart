@@ -4,6 +4,12 @@ class CacheKeysManger {
   static String getLanguageFromCache() =>
       CacheHelper.getData(key: 'lang') ?? 'en';
 
+  static String getPrinterFromCache() =>
+      CacheHelper.getData(key: 'printer') ?? 'NO';
+
+  static String getPrinterWidthPaperFromCache() =>
+      CacheHelper.getData(key: 'printerWidthPaper') ?? '80';
+
   static String getCurrencyFromCache() =>
       CacheHelper.getData(key: 'currency') ?? 'USD';
 

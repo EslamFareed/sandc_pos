@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,8 +11,7 @@ import 'package:responsive_grid/responsive_grid.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/cubits/data_online_cubit/data_online_cubit.dart';
 import 'package:sandc_pos/cubits/main_cubit/main_cubit.dart';
-import 'package:sandc_pos/layouts/main_screen/widgets/home_item.dart';
-import 'package:sandc_pos/reposetories/remote/dio/dio_helper.dart';
+
 import 'package:sandc_pos/reposetories/shared_pref/cache_keys.dart';
 import '../../core/style/color/app_colors.dart';
 
@@ -183,30 +181,36 @@ class _MainScreenState extends State<MainScreen> {
     return Container(
       padding: const EdgeInsets.all(10),
       child: ResponsiveGridRow(children: [
-        _buildItemCard("assets/images/logo.png", "Sales", () {
+        _buildItemCard("assets/images/sales_pos_2.png", "Sales", () {
           getx.Get.to(SalesScreen(), transition: getx.Transition.zoom);
         }),
-        _buildItemCard("assets/images/logo.png", "Clients", () {
+        _buildItemCard("assets/images/customer_pos.png", "Clients", () {
           getx.Get.to(const CustomersHome(), transition: getx.Transition.zoom);
         }),
-        _buildItemCard("assets/images/logo.png", "Stock", () {
+        _buildItemCard("assets/images/stock_pos.png", "Stock", () {
           getx.Get.to(const ProductsHome(), transition: getx.Transition.zoom);
         }),
-        _buildItemCard("assets/images/logo.png", "Reports", () {
+        _buildItemCard("assets/images/reports_pos_2.png", "Reports", () {
           getx.Get.to(const ReportsHome(), transition: getx.Transition.zoom);
         }),
-        _buildItemCard("assets/images/logo.png", "Sales Returns", () {
+        _buildItemCard("assets/images/sales_returns_pos.png", "Sales Returns",
+            () {
           getx.Get.to(const SalesReturnsScreen(),
               transition: getx.Transition.zoom);
         }),
-        _buildItemCard("assets/images/logo.png", "Settings", () {
+        _buildItemCard("assets/images/settings_pos.png", "Settings", () {
           getx.Get.to(const SettingsScreen(), transition: getx.Transition.zoom);
         }),
-        _buildItemCard("assets/images/logo.png", "Printer", () {
+        _buildItemCard(
+            "assets/images/printer_pos.png",
+            MainCubit.get(context).isConnectedToPrinter!
+                ? MainCubit.get(context).selectedDevice!.name
+                : "No Printer Selected", () {
           getx.Get.to(const SettingsPrinter(),
               transition: getx.Transition.zoom);
         }),
-        _buildItemCard("assets/images/logo.png", "Update With cloud", () async {
+        _buildItemCard("assets/images/cloud_pos.png", "Update With cloud",
+            () async {
           _showDialog();
           await DataOnlineCubit.get(context).checkIfDataUptodate(context);
         }),
@@ -230,11 +234,13 @@ class _MainScreenState extends State<MainScreen> {
                 Image.asset(
                   image,
                   fit: BoxFit.fill,
+                  width: 75.w,
+                  height: 75.h,
                 ),
                 Text(
                   title,
                   style: AppTextStyle.bodyText()
-                      .copyWith(fontWeight: FontWeight.bold),
+                      .copyWith(fontWeight: FontWeight.w700, fontSize: 15.sp),
                 )
               ],
             )),
@@ -246,12 +252,13 @@ class _MainScreenState extends State<MainScreen> {
     return AppBar(
       elevation: 8,
       backgroundColor: AppColors.whitBackGroundColor,
-      title: Image.asset(
-        "assets/images/logo.png",
-        width: 50.w,
+      title: Text(
+        DataCubit.get(context).companyModels[0].companyName!,
+        style:
+            AppTextStyle.appBarText().copyWith(color: AppColors.primaryColor),
       ),
       centerTitle: true,
-      iconTheme: IconThemeData(color: AppColors.primaryColor),
+      iconTheme: const IconThemeData(color: AppColors.primaryColor),
     );
   }
 
