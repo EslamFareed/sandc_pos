@@ -848,11 +848,22 @@ class _SalesScreenState extends State<SalesScreen> {
                             fontSize: 10, fontWeight: FontWeight.bold),
                       ),
                       Divider(height: 2.h),
-                      QrImageView(
-                        data: DataCubit.get(context).currentOrder!.id!,
-                        version: QrVersions.auto,
-                        size: 100.0,
-                      ),
+                      Center(
+                        child: RepaintBoundary(
+                          child: QrImageView(
+                            data: DataCubit.get(context).currentOrder!.id!,
+                            version: QrVersions.auto,
+                            gapless: true,
+                            size: 100,
+                            errorCorrectionLevel: QrErrorCorrectLevel.L,
+                          ),
+                        ),
+                      )
+                      // QrImageView(
+                      //   data: DataCubit.get(context).currentOrder!.id!,
+                      //   version: QrVersions.auto,
+                      //   size: 100.0,
+                      // ),
                     ],
                   )),
             ),
@@ -860,14 +871,30 @@ class _SalesScreenState extends State<SalesScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
-                    onPressed: () {
-                      screenshotController
+                    onPressed: () async {
+                      await screenshotController
                           .capture(delay: const Duration(milliseconds: 10))
-                          .then((capturedImage) async {
-                        _makeImg(capturedImage);
-                      }).catchError((onError) {
-                        print(onError);
+                          .then((Uint8List? image) async {
+                        if (image != null) {
+                          final directory =
+                              await getApplicationDocumentsDirectory();
+                          final imagePath = await File(
+                                  '${directory.path}/${DataCubit.get(context).currentOrder!.id}.png')
+                              .create();
+                          await imagePath.writeAsBytes(image);
+                          _makeImg(imagePath);
+                        }
                       });
+//                       final directory = (await getApplicationDocumentsDirectory ()).path; //from path_provide package
+// String fileName = DataCubit.get(context).currentOrder!.id!;
+// path = '$directory';
+                      // screenshotController
+                      //     .captureAndSave(delay: const Duration(milliseconds: 10))
+                      //     .then((capturedImage) async {
+                      //   _makeImg(capturedImage);
+                      // }).catchError((onError) {
+                      //   print(onError);
+                      // });
                     },
                     child: Text("Print")),
                 ElevatedButton(
@@ -885,13 +912,20 @@ class _SalesScreenState extends State<SalesScreen> {
     ));
   }
 
-  _makeImg(Uint8List? capturedImage) async {
+  _makeImg(File? capturedImage) async {
     try {
-      String path = (await getTemporaryDirectory()).path;
-      File imgFile = File("$path/img.png");
-      imgFile.writeAsBytes(capturedImage!);
+      // ByteData byteData = await rootBundle.load("images/flutter.png");
+      // Uint8List buffer = byteData.buffer.asUint8List();
+      // String path = (await getTemporaryDirectory()).path;
+      // imgFile = File("$path/img.png");
+      // imgFile.writeAsBytes(buffer);
+      // String path = (await getTemporaryDirectory()).path;
+      // File imgFile =
+      //     File("$path/${DataCubit.get(context).currentOrder!.id}.png");
+      // imgFile.writeAsBytes(capturedImage!);
+      print(capturedImage!.path);
       PrinterManager.printImg(
-          imgFile.path, CacheKeysManger.getPrinterWidthPaperFromCache());
+          capturedImage.path, CacheKeysManger.getPrinterWidthPaperFromCache());
       DataCubit.get(context).clearCurrentOrder();
     } catch (e) {
       rethrow;
