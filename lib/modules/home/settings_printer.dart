@@ -26,7 +26,7 @@ class _SettingsPrinterState extends State<SettingsPrinter> {
   // late File imgFile;
   bool isScanning = true;
 
-  List<String> widthPapers = ["58", "80"];
+  List<String> widthPapers = ["57", "80"];
   String? _selectedWidth = "";
 
   @override

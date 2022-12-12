@@ -1,25 +1,43 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import '../../../cubits/data_cubit/data_cubit.dart';
 import '../../../reposetories/shared_pref/cache_keys.dart';
 import '../../categories/pdf_generator_categories.dart';
+import 'pdf_cronvertor.dart';
 
-// class CreatePdf {
-Future<Uint8List> makePdf(DataCubit cubit) async {
-  final pdf = pw.Document();
+class PdfGenerator {
+  Future<Uint8List> createPdf(DataCubit cubit) async {
+    pw.Font? arFont =
+        pw.Font.ttf((await rootBundle.load("assets/fonts/Cairo-Bold.ttf")));
 
-  pw.Font? arFont =
-      pw.Font.ttf((await rootBundle.load("assets/fonts/Cairo-Bold.ttf")));
+    Uint8List bytesImage = const Base64Decoder().convert(
+        cubit.companyModels[0].logo!.split("data:image/png;base64,").last);
 
-  Uint8List _bytesImage = const Base64Decoder().convert(
-      cubit.companyModels[0].logo!.split("data:image/png;base64,").last);
+    String path = (await getApplicationDocumentsDirectory()).path;
+    File file = File("$path/${cubit.currentOrder!.id}.pdf");
 
-  pdf.addPage(
-    pw.Page(
+    pw.Document pdf = pw.Document();
+    pdf.addPage(_createPage(cubit, arFont, bytesImage));
+
+    Uint8List bytes = await pdf.save();
+    await file.writeAsBytes(bytes);
+    Uint8List imageFile = await createImg(file.path, cubit);
+    return imageFile;
+  }
+
+  Future<Uint8List> createImg(String path, DataCubit cubit) {
+    return PdfConverter().convertToImage(path, cubit);
+  }
+
+  static pw.Page _createPage(
+      DataCubit cubit, pw.Font? arFont, Uint8List _bytesImage) {
+    return pw.Page(
       textDirection: pw.TextDirection.rtl,
       theme: pw.ThemeData.withFont(
         base: arFont,
@@ -113,28 +131,28 @@ Future<Uint8List> makePdf(DataCubit cubit) async {
                         ],
                       ),
                       pw.Divider(),
+                      // pw.Text(
+                      //   "Total : ${cubit.currentOrder!.totalCost}",
+                      // ),
+                      // pw.Divider(),
+                      // pw.Text(
+                      //   "pay : ${cubit.currentOrder!.payAmount}",
+                      // ),
+                      // pw.Divider(),
+                      // pw.Text(
+                      //   "debit : ${cubit.currentOrder!.debitPay}",
+                      // ),
+                      // pw.Divider(),
+                      // pw.Text(
+                      //   "discount : ${cubit.currentOrder!.discount}",
+                      // ),
+                      // pw.Divider(),
+                      // pw.Text(
+                      //   "taxes : ${cubit.currentOrder!.taxes}",
+                      // ),
+                      // pw.Divider(),
                       pw.Text(
-                        "Total : ${cubit.currentOrder!.totalCost}",
-                      ),
-                      pw.Divider(),
-                      pw.Text(
-                        "pay : ${cubit.currentOrder!.payAmount}",
-                      ),
-                      pw.Divider(),
-                      pw.Text(
-                        "debit : ${cubit.currentOrder!.debitPay}",
-                      ),
-                      pw.Divider(),
-                      pw.Text(
-                        "discount : ${cubit.currentOrder!.discount}",
-                      ),
-                      pw.Divider(),
-                      pw.Text(
-                        "taxes : ${cubit.currentOrder!.taxes}",
-                      ),
-                      pw.Divider(),
-                      pw.Text(
-                        "net cost : ${cubit.currentOrder!.costNet}",
+                        "cost : ${cubit.currentOrder!.costNet}",
                       ),
                       pw.Divider(),
                       pw.Text(
@@ -142,10 +160,11 @@ Future<Uint8List> makePdf(DataCubit cubit) async {
                       ),
                       pw.Divider(),
                       pw.BarcodeWidget(
-                          height: 50,
-                          width: 50,
-                          data: cubit.currentOrder!.id!,
-                          barcode: pw.Barcode.qrCode()),
+                        height: 50,
+                        width: 50,
+                        data: cubit.currentOrder!.id!,
+                        barcode: pw.Barcode.qrCode(),
+                      ),
                     ],
                   ),
                 ),
@@ -154,7 +173,6 @@ Future<Uint8List> makePdf(DataCubit cubit) async {
           ],
         );
       },
-    ),
-  );
-  return pdf.save();
+    );
+  }
 }
