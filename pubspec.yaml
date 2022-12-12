@@ -43,18 +43,14 @@ dependencies:
   conditional_builder_null_safety: ^0.0.6
   path_provider: ^2.0.11
   flutter_scan_bluetooth: ^2.1.2
-  # printing: ^5.9.3
+  permission_handler: ^10.2.0
   qr_flutter: 
     git:
       url: https://github.com/theyakka/qr.flutter.git
-  # barcode: any
-  # qr: any
   printing: ^5.9.3
   pdf: ^3.8.4
-  
-# dependency_overrides:
-#   barcode: ^2.2.0
-#   qr: ^3.0.1
+  open_file: ^3.2.1
+  native_pdf_renderer: ^5.0.0+1 
 
 dev_dependencies:
   flutter_test:
@@ -83,3 +79,6 @@ flutter:
     - family: Jannah
       fonts:
         - asset: assets/fonts/Jannah.ttf
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Bold.ttf

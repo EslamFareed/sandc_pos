@@ -9,6 +9,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' as getx;
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:printing/printing.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:uuid/uuid.dart';
@@ -32,6 +35,7 @@ import '../../cubits/data_cubit/data_cubit.dart';
 import '../../cubits/sales_cubit/sales_cubit.dart';
 import '../../online_models/client_response_model.dart';
 import '../customers/add_customer.dart';
+import 'components/pdf_generator_order.dart';
 import 'widgets/table_sales.dart';
 
 class SalesScreen extends StatefulWidget {
@@ -643,290 +647,278 @@ class _SalesScreenState extends State<SalesScreen> {
   }
 
   _printReciept() {
-    Uint8List _bytesImage = const Base64Decoder().convert(DataCubit.get(context)
-        .companyModels[0]
-        .logo!
-        .split("data:image/png;base64,")
-        .last);
+    // CreatePdf().init();
+    // Uint8List _bytesImage = const Base64Decoder().convert(DataCubit.get(context)
+    //     .companyModels[0]
+    //     .logo!
+    //     .split("data:image/png;base64,")
+    //     .last);
     getx.Get.dialog(Dialog(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Screenshot(
-              controller: screenshotController,
-              child: Container(
-                  width: 140,
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: MemoryImage(_bytesImage),
-                        radius: 50.r,
-                      ),
-                      Text(
-                        DataCubit.get(context).companyModels[0].companyName!,
-                        style: const TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        DataCubit.get(context).companyModels[0].compAddress!,
-                        style: const TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        DataCubit.get(context).companyModels[0].compPhone!,
-                        style: const TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.bold),
-                      ),
-                      const Divider(),
-                      const Text(
-                        "reciet",
-                        style: TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.bold),
-                      ),
-                      // const SizedBox(
-                      //   height: 20,
-                      //   child: Text(
-                      //       "--------------------------------------------------------------------"),
-                      // ),
-                      const Divider(),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Expanded(
-                            flex: 2,
-                            child: Center(
-                              child: Text(
-                                "Qty ",
-                                style: TextStyle(
-                                    fontSize: 10, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 6,
-                            child: Center(
-                              child: Text(
-                                "Item",
-                                style: TextStyle(
-                                    fontSize: 10, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Center(
-                              child: Text(
-                                "Price",
-                                style: TextStyle(
-                                    fontSize: 10, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Center(
-                              child: Text(
-                                "Total",
-                                style: TextStyle(
-                                    fontSize: 10, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        physics: const ScrollPhysics(),
-                        itemCount:
-                            DataCubit.get(context).itemsCurrentOrder.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Center(
-                                    child: Text(
-                                      DataCubit.get(context)
-                                          .itemsCurrentOrder[index]
-                                          .quantity!
-                                          .toString(),
-                                      style: const TextStyle(fontSize: 10),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 6,
-                                  child: Center(
-                                    child: Text(
-                                      DataCubit.get(context)
-                                          .productModels
-                                          .firstWhere((element) =>
-                                              element.prodId ==
-                                              DataCubit.get(context)
-                                                  .itemsCurrentOrder[index]
-                                                  .prodId)
-                                          .name!,
-                                      style: const TextStyle(fontSize: 10),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Center(
-                                    child: Text(
-                                      DataCubit.get(context)
-                                          .itemsCurrentOrder[index]
-                                          .unitPrice!
-                                          .toString(),
-                                      style: const TextStyle(fontSize: 10),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Center(
-                                    child: Text(
-                                      DataCubit.get(context)
-                                          .itemsCurrentOrder[index]
-                                          .totalCost!
-                                          .toString(),
-                                      style: const TextStyle(fontSize: 10),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                      const Divider(),
-                      Text(
-                        "Total : ${DataCubit.get(context).currentOrder!.totalCost}",
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      const Divider(),
-                      Text(
-                        "pay : ${DataCubit.get(context).currentOrder!.payAmount}",
-                        style: const TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.bold),
-                      ),
-                      const Divider(),
-                      Text(
-                        "debit : ${DataCubit.get(context).currentOrder!.debitPay}",
-                        style: const TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.bold),
-                      ),
-                      const Divider(),
-                      Text(
-                        "discount : ${DataCubit.get(context).currentOrder!.discount}",
-                        style: const TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.bold),
-                      ),
-                      const Divider(),
-                      Text(
-                        "taxes : ${DataCubit.get(context).currentOrder!.taxes}",
-                        style: const TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.bold),
-                      ),
-                      const Divider(),
-                      Text(
-                        "net cost : ${DataCubit.get(context).currentOrder!.costNet}",
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      const Divider(),
-                      const Text(
-                        "Thank You",
-                        style: TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.bold),
-                      ),
-                      Divider(height: 2.h),
-                      Center(
-                        child: RepaintBoundary(
-                          child: QrImageView(
-                            data: DataCubit.get(context).currentOrder!.id!,
-                            version: QrVersions.auto,
-                            gapless: true,
-                            size: 100,
-                            errorCorrectionLevel: QrErrorCorrectLevel.L,
-                          ),
-                        ),
-                      )
-                      // QrImageView(
-                      //   data: DataCubit.get(context).currentOrder!.id!,
-                      //   version: QrVersions.auto,
-                      //   size: 100.0,
-                      // ),
-                    ],
-                  )),
+      child: Column(
+        children: [
+          Expanded(
+            child: PdfPreview(
+              useActions: false,
+              allowPrinting: false,
+              allowSharing: false,
+              canChangeOrientation: false,
+              canChangePageFormat: false,
+              canDebug: false,
+              dynamicLayout: false,
+              loadingWidget: CircularProgressIndicator(),
+              initialPageFormat:
+                  CacheKeysManger.getPrinterWidthPaperFromCache() == "80"
+                      ? PdfPageFormat.roll80
+                      : PdfPageFormat.roll57,
+              build: (ctx) => makePdf(DataCubit.get(context)),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                    onPressed: () async {
-                      await screenshotController
-                          .capture(delay: const Duration(milliseconds: 10))
-                          .then((Uint8List? image) async {
-                        if (image != null) {
-                          final directory =
-                              await getApplicationDocumentsDirectory();
-                          final imagePath = await File(
-                                  '${directory.path}/${DataCubit.get(context).currentOrder!.id}.png')
-                              .create();
-                          await imagePath.writeAsBytes(image);
-                          _makeImg(imagePath);
-                        }
-                      });
-//                       final directory = (await getApplicationDocumentsDirectory ()).path; //from path_provide package
-// String fileName = DataCubit.get(context).currentOrder!.id!;
-// path = '$directory';
-                      // screenshotController
-                      //     .captureAndSave(delay: const Duration(milliseconds: 10))
-                      //     .then((capturedImage) async {
-                      //   _makeImg(capturedImage);
-                      // }).catchError((onError) {
-                      //   print(onError);
-                      // });
-                    },
-                    child: Text("Print")),
-                ElevatedButton(
-                    onPressed: () {
-                      DataCubit.get(context).clearCurrentOrder();
+          ),
+          // Screenshot(
+          //   controller: screenshotController,
+          //   child: Container(
+          //       width: 140,
+          // child: Column(
+          //   children: [
+          //     CircleAvatar(
+          //       backgroundImage: MemoryImage(_bytesImage),
+          //       radius: 50.r,
+          //     ),
+          //     Text(
+          //       DataCubit.get(context).companyModels[0].companyName!,
+          //       style: const TextStyle(
+          //           fontSize: 10, fontWeight: FontWeight.bold),
+          //     ),
+          //     Text(
+          //       DataCubit.get(context).companyModels[0].compAddress!,
+          //       style: const TextStyle(
+          //           fontSize: 10, fontWeight: FontWeight.bold),
+          //     ),
+          //     Text(
+          //       DataCubit.get(context).companyModels[0].compPhone!,
+          //       style: const TextStyle(
+          //           fontSize: 10, fontWeight: FontWeight.bold),
+          //     ),
+          //     const Divider(),
+          //     const Text(
+          //       "reciet",
+          //       style: TextStyle(
+          //           fontSize: 10, fontWeight: FontWeight.bold),
+          //     ),
+          //     // const SizedBox(
+          //     //   height: 20,
+          //     //   child: Text(
+          //     //       "--------------------------------------------------------------------"),
+          //     // ),
+          //     const Divider(),
 
-                      getx.Get.back();
-                    },
-                    child: Text("Close")),
-              ],
-            )
-          ],
-        ),
+          //           Row(
+          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //             crossAxisAlignment: CrossAxisAlignment.start,
+          //             children: const [
+          //               Expanded(
+          //                 flex: 2,
+          //                 child: Center(
+          //                   child: Text(
+          //                     "Qty ",
+          //                     style: TextStyle(
+          //                         fontSize: 10, fontWeight: FontWeight.bold),
+          //                   ),
+          //                 ),
+          //               ),
+          //               Expanded(
+          //                 flex: 6,
+          //                 child: Center(
+          //                   child: Text(
+          //                     "Item",
+          //                     style: TextStyle(
+          //                         fontSize: 10, fontWeight: FontWeight.bold),
+          //                   ),
+          //                 ),
+          //               ),
+          //               Expanded(
+          //                 flex: 3,
+          //                 child: Center(
+          //                   child: Text(
+          //                     "Price",
+          //                     style: TextStyle(
+          //                         fontSize: 10, fontWeight: FontWeight.bold),
+          //                   ),
+          //                 ),
+          //               ),
+          //               Expanded(
+          //                 flex: 3,
+          //                 child: Center(
+          //                   child: Text(
+          //                     "Total",
+          //                     style: TextStyle(
+          //                         fontSize: 10, fontWeight: FontWeight.bold),
+          //                   ),
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
+          //           ListView.builder(
+          //             scrollDirection: Axis.vertical,
+          //             shrinkWrap: true,
+          //             physics: const ScrollPhysics(),
+          //             itemCount:
+          //                 DataCubit.get(context).itemsCurrentOrder.length,
+          //             itemBuilder: (context, index) {
+          //               return Card(
+          //                 child: Row(
+          //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //                   crossAxisAlignment: CrossAxisAlignment.start,
+          //                   children: [
+          //                     Expanded(
+          //                       flex: 2,
+          //                       child: Center(
+          //                         child: Text(
+          //                           DataCubit.get(context)
+          //                               .itemsCurrentOrder[index]
+          //                               .quantity!
+          //                               .toString(),
+          //                           style: const TextStyle(fontSize: 10),
+          //                         ),
+          //                       ),
+          //                     ),
+          //                     Expanded(
+          //                       flex: 6,
+          //                       child: Center(
+          //                         child: Text(
+          // DataCubit.get(context)
+          //     .productModels
+          //     .firstWhere((element) =>
+          //         element.prodId ==
+          //         DataCubit.get(context)
+          //             .itemsCurrentOrder[index]
+          //             .prodId)
+          //     .name!,
+          //                           style: const TextStyle(fontSize: 10),
+          //                         ),
+          //                       ),
+          //                     ),
+          //                     Expanded(
+          //                       flex: 3,
+          //                       child: Center(
+          //                         child: Text(
+          //                           DataCubit.get(context)
+          //                               .itemsCurrentOrder[index]
+          //                               .unitPrice!
+          //                               .toString(),
+          //                           style: const TextStyle(fontSize: 10),
+          //                         ),
+          //                       ),
+          //                     ),
+          //                     Expanded(
+          //                       flex: 3,
+          //                       child: Center(
+          //                         child: Text(
+          // DataCubit.get(context)
+          //     .itemsCurrentOrder[index]
+          //     .totalCost!
+          //     .toString(),
+          //                           style: const TextStyle(fontSize: 10),
+          //                         ),
+          //                       ),
+          //                     ),
+          //                   ],
+          //                 ),
+          //               );
+          //             },
+          //           ),
+          // const Divider(),
+          // Text(
+          //   "Total : ${DataCubit.get(context).currentOrder!.totalCost}",
+          //   style: const TextStyle(
+          //       fontSize: 15, fontWeight: FontWeight.bold),
+          // ),
+          // const Divider(),
+          // Text(
+          //   "pay : ${DataCubit.get(context).currentOrder!.payAmount}",
+          //   style: const TextStyle(
+          //       fontSize: 10, fontWeight: FontWeight.bold),
+          // ),
+          // const Divider(),
+          // Text(
+          //   "debit : ${DataCubit.get(context).currentOrder!.debitPay}",
+          //   style: const TextStyle(
+          //       fontSize: 10, fontWeight: FontWeight.bold),
+          // ),
+          // const Divider(),
+          // Text(
+          //   "discount : ${DataCubit.get(context).currentOrder!.discount}",
+          //   style: const TextStyle(
+          //       fontSize: 10, fontWeight: FontWeight.bold),
+          // ),
+          // const Divider(),
+          // Text(
+          //   "taxes : ${DataCubit.get(context).currentOrder!.taxes}",
+          //   style: const TextStyle(
+          //       fontSize: 10, fontWeight: FontWeight.bold),
+          // ),
+          // const Divider(),
+          // Text(
+          //   "net cost : ${DataCubit.get(context).currentOrder!.costNet}",
+          //   style: const TextStyle(
+          //       fontSize: 15, fontWeight: FontWeight.bold),
+          // ),
+          // const Divider(),
+          // const Text(
+          //   "Thank You",
+          //   style: TextStyle(
+          //       fontSize: 10, fontWeight: FontWeight.bold),
+          // ),
+          // Divider(height: 2.h),
+          //           Center(
+          //             child: RepaintBoundary(
+          //               child: QrImageView(
+          //                 data: DataCubit.get(context).currentOrder!.id!,
+          //                 version: QrVersions.auto,
+          //                 gapless: true,
+          //                 size: 100,
+          //                 errorCorrectionLevel: QrErrorCorrectLevel.L,
+          //               ),
+          //             ),
+          //           )
+          //           // QrImageView(
+          //           //   data: DataCubit.get(context).currentOrder!.id!,
+          //           //   version: QrVersions.auto,
+          //           //   size: 100.0,
+          //           // ),
+          //         ],
+          //       )),
+          // ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                  onPressed: () async {
+                    await screenshotController
+                        .capture(delay: const Duration(milliseconds: 10))
+                        .then((Uint8List? image) async {});
+                  },
+                  child: Text("Print")),
+              ElevatedButton(
+                  onPressed: () {
+                    DataCubit.get(context).clearCurrentOrder();
+
+                    getx.Get.back();
+                  },
+                  child: Text("Close")),
+            ],
+          )
+        ],
       ),
     ));
   }
 
   _makeImg(File? capturedImage) async {
     try {
-      // ByteData byteData = await rootBundle.load("images/flutter.png");
-      // Uint8List buffer = byteData.buffer.asUint8List();
-      // String path = (await getTemporaryDirectory()).path;
-      // imgFile = File("$path/img.png");
-      // imgFile.writeAsBytes(buffer);
-      // String path = (await getTemporaryDirectory()).path;
-      // File imgFile =
-      //     File("$path/${DataCubit.get(context).currentOrder!.id}.png");
-      // imgFile.writeAsBytes(capturedImage!);
-      print(capturedImage!.path);
-      PrinterManager.printImg(
-          capturedImage.path, CacheKeysManger.getPrinterWidthPaperFromCache());
-      DataCubit.get(context).clearCurrentOrder();
+      // print(capturedImage!.path);
+      // PrinterManager.printImg(
+      //     capturedImage.path, CacheKeysManger.getPrinterWidthPaperFromCache());
+      // DataCubit.get(context).clearCurrentOrder();
     } catch (e) {
       rethrow;
     }
