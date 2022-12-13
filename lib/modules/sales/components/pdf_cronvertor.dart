@@ -14,9 +14,7 @@ class PdfConverter {
     PdfPage page = await doc.getPage(1);
 
     final PdfPageImage? pageImg = await page.render(
-        width: (page.height + 200) / 2,
-        height: page.height + 200,
-        backgroundColor: "#ffffff");
+        width: 575, height: page.height + 500, backgroundColor: "#ffffff");
 
     if (pageImg != null) {
       // String path = (await getApplicationDocumentsDirectory()).path;
