@@ -267,10 +267,12 @@ class PdfGenerator {
                       ),
                       pw.Divider(),
                       pw.Text("معلومات الدفع : "),
-                      pw.Row(children: [
-                        pw.Text("كاش"),
-                        pw.Text(cubit.currentOrder!.costNet.toString()),
-                      ]),
+                      pw.Row(
+                          mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+                          children: [
+                            pw.Text(cubit.currentOrder!.costNet.toString()),
+                            pw.Text("كاش"),
+                          ]),
                       pw.Table(
                           border: const pw.TableBorder(
                               top: pw.BorderSide(width: 1),
