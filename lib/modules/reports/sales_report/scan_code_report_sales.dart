@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -76,11 +77,15 @@ class _ScanCodeReportSalesScreenState extends State<ScanCodeReportSalesScreen> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-      Get.off(OrderDetailsScreen(
-        item: DataCubit.get(context)
-            .orderModels
-            .firstWhere((element) => element.id == scanData.code),
-      ));
+      print(scanData.code);
+      String decoded = utf8.decode(base64Url.decode(scanData.code!));
+      print(decoded);
+
+      // Get.off(OrderDetailsScreen(
+      //   item: DataCubit.get(context)
+      //       .orderModels
+      //       .firstWhere((element) => element.id == scanData.code),
+      // ));
 
       controller.stopCamera();
     });

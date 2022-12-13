@@ -2,25 +2,19 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' as getx;
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:printing/printing.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+
 import 'package:screenshot/screenshot.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/core/utils/printer_manager.dart';
-import 'package:sandc_pos/layouts/main_screen/main_screen.dart';
-import 'package:sandc_pos/modules/home/widgets/item_setting_data.dart';
-import 'package:sandc_pos/modules/sales/print_screen.dart';
+
 import 'package:sandc_pos/modules/sales/search_sales/categories_screen.dart';
 import 'package:sandc_pos/modules/sales/search_sales/scan_code.dart';
 import 'package:sandc_pos/modules/sales/search_sales/search_products.dart';
@@ -32,7 +26,6 @@ import '../../core/components/build_popup.dart';
 import '../../core/components/default_buttons.dart';
 import '../../core/style/text/app_text_style.dart';
 import '../../cubits/data_cubit/data_cubit.dart';
-import '../../cubits/sales_cubit/sales_cubit.dart';
 import '../../online_models/client_response_model.dart';
 import '../customers/add_customer.dart';
 import 'components/pdf_generator_order.dart';
@@ -191,14 +184,22 @@ class _SalesScreenState extends State<SalesScreen> {
                       SizedBox(height: 5.h),
                       ItemViewFinishOrder(
                         title: "After Discount",
-                        data:
-                            "${DataCubit.get(context).afterDiscount.toStringAsFixed(2)}",
+                        data: DataCubit.get(context)
+                            .afterDiscount
+                            .toStringAsFixed(2),
                       ),
                       SizedBox(height: 5.h),
                       ItemViewFinishOrder(
                         title: "After Added Taxes",
-                        data:
-                            "${DataCubit.get(context).afterTaxes.toStringAsFixed(2)}",
+                        data: DataCubit.get(context)
+                                .companyModels[0]
+                                .isPriceIncludeTaxes!
+                            ? DataCubit.get(context)
+                                .afterDiscount
+                                .toStringAsFixed(2)
+                            : DataCubit.get(context)
+                                .afterTaxes
+                                .toStringAsFixed(2),
                       ),
                     ],
                   ))
@@ -224,7 +225,9 @@ class _SalesScreenState extends State<SalesScreen> {
       DataCubit.get(context).payingType =
           DataCubit.get(context).payTypeModels[0].name;
       totalController!.text =
-          DataCubit.get(context).afterTaxes.toStringAsFixed(2);
+          DataCubit.get(context).companyModels[0].isPriceIncludeTaxes!
+              ? DataCubit.get(context).afterDiscount.toStringAsFixed(2)
+              : DataCubit.get(context).afterTaxes.toStringAsFixed(2);
       paidController!.text = "";
       restController!.text = "";
       DataCubit.get(context).chosenClient = null;
@@ -485,7 +488,9 @@ class _SalesScreenState extends State<SalesScreen> {
             : DataCubit.get(context).discount;
     //? ///////////////////////////////////////////////////////
     DataCubit.get(context).currentOrder!.costNet =
-        DataCubit.get(context).afterTaxes;
+        DataCubit.get(context).companyModels[0].isPriceIncludeTaxes!
+            ? DataCubit.get(context).afterDiscount
+            : DataCubit.get(context).afterTaxes;
     //? ///////////////////////////////////////////////////////
     DataCubit.get(context).currentOrder!.taxes =
         (double.parse(DataCubit.get(context).companyModels[0].compTaxAmount!) *

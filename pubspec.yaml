@@ -51,7 +51,8 @@ dependencies:
   pdf: ^3.8.4
   open_file: ^3.2.1
   native_pdf_renderer: ^5.0.0+1 
-
+  intl: ^0.17.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -101,13 +101,17 @@ class _TableSalesState extends State<TableSales> {
     return Row(
       children: [
         Container(
-          width: Get.width * .20,
-          height: 52.h,
-          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          child: Text(
-              "${DataCubit.get(context).productsCurrentOrder.where((element) => element.prodId == DataCubit.get(context).itemsCurrentOrder[index].prodId).first.priceOne!}"),
-        ),
+            width: Get.width * .20,
+            height: 52.h,
+            padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+            alignment: Alignment.centerLeft,
+            child: Text(DataCubit.get(context)
+                    .companyModels[0]
+                    .isPriceIncludeTaxes!
+                ? "${DataCubit.get(context).itemsCurrentOrder[index].unitPrice! - (DataCubit.get(context).itemsCurrentOrder[index].unitPrice! * (double.parse(DataCubit.get(context).companyModels[0].taxAmount!) * .01))}"
+                : "${DataCubit.get(context).itemsCurrentOrder[index].unitPrice}")
+            // "${DataCubit.get(context).productsCurrentOrder.where((element) => element.prodId == DataCubit.get(context).itemsCurrentOrder[index].prodId).first.priceOne!}"),
+            ),
         GestureDetector(
           onTapDown: (details) {
             showMenu(
@@ -207,13 +211,17 @@ class _TableSalesState extends State<TableSales> {
           ),
         ),
         Container(
-          width: Get.width * .20,
-          height: 52.h,
-          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          child: Text(
-              "${DataCubit.get(context).itemsCurrentOrder[index].totalCost}"),
-        ),
+            width: Get.width * .20,
+            height: 52.h,
+            padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+            alignment: Alignment.centerLeft,
+            child: Text(DataCubit.get(context)
+                    .companyModels[0]
+                    .isPriceIncludeTaxes!
+                ? "${DataCubit.get(context).itemsCurrentOrder[index].totalCost}"
+                : "${DataCubit.get(context).itemsCurrentOrder[index].totalCost! - (DataCubit.get(context).itemsCurrentOrder[index].totalCost! * (double.parse(DataCubit.get(context).companyModels[0].taxAmount!) * .01))}")
+            // "${DataCubit.get(context).itemsCurrentOrder[index].totalCost!}"),
+            ),
       ],
     );
   }

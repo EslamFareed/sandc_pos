@@ -263,17 +263,17 @@ class _SalesReportState extends State<SalesReport> {
             ),
           ),
           //open camera scanner
-          IconButton(
-            icon: const Icon(
-              Icons.qr_code_scanner,
-              color: Colors.white,
-              size: 30,
-            ),
-            onPressed: () {
-              getx.Get.to(const ScanCodeReportSalesScreen(),
-                  transition: getx.Transition.zoom);
-            },
-          ),
+          // IconButton(
+          //   icon: const Icon(
+          //     Icons.qr_code_scanner,
+          //     color: Colors.white,
+          //     size: 30,
+          //   ),
+          //   onPressed: () {
+          //     getx.Get.to(const ScanCodeReportSalesScreen(),
+          //         transition: getx.Transition.zoom);
+          //   },
+          // ),
         ],
       ),
     );

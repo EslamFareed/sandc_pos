@@ -1095,7 +1095,7 @@ class DataCubit extends Cubit<DataState> {
     currentOrder!.returnDesc = "no";
     currentOrder!.qrcode = "no";
     currentOrder!.updateDate = "no";
-    currentOrder!.createDate = "no";
+    currentOrder!.createDate = DateTime.now().toString();
 
     await insertOrderTable(currentOrder!);
     await insertInvoiceDetailsByList(itemsCurrentOrder);
@@ -1249,6 +1249,9 @@ class DataCubit extends Cubit<DataState> {
 
     currentItem.quantity = currentItem.quantity! - 1;
     currentItem.totalCost = currentItem.quantity! * currentItem.unitPrice!;
+    // (currentItem.unitPrice! +
+    //     (currentItem.unitPrice! *
+    //         (double.parse(companyModels[0].taxAmount!) / 100)));
 
     itemsCurrentOrder[itemsCurrentOrder.indexWhere(
         (element) => element.prodId == product.prodId)] = currentItem;
@@ -1272,6 +1275,9 @@ class DataCubit extends Cubit<DataState> {
 
     currentItem.quantity = currentItem.quantity! + 1;
     currentItem.totalCost = currentItem.quantity! * currentItem.unitPrice!;
+    // (currentItem.unitPrice! +
+    //     (currentItem.unitPrice! *
+    //         (double.parse(companyModels[0].taxAmount!) / 100)));
 
     itemsCurrentOrder[itemsCurrentOrder.indexWhere(
         (element) => element.prodId == product.prodId)] = currentItem;
@@ -1299,6 +1305,9 @@ class DataCubit extends Cubit<DataState> {
 
     currentItem.quantity = currentItem.quantity! + 1;
     currentItem.totalCost = currentItem.quantity! * currentItem.unitPrice!;
+    // (currentItem.unitPrice! +
+    //     (currentItem.unitPrice! *
+    //         (double.parse(companyModels[0].taxAmount!) / 100)));
 
     product.stockQuantity = product.stockQuantity! - 1;
 
@@ -1334,7 +1343,9 @@ class DataCubit extends Cubit<DataState> {
           quantity: 1,
           quantReturns: 0,
           reasonForReturn: "no",
-          totalCost: product.priceOne,
+          totalCost: product.priceOne!,
+          // (product.priceOne! *
+          //     (double.parse(companyModels[0].taxAmount!) / 100)),
           unitPrice: product.priceOne,
           updateDate: "no",
           offlineDatabase: false,
