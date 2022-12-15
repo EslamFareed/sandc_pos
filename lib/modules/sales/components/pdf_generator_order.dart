@@ -248,13 +248,15 @@ class PdfGenerator {
                                 ),
                                 pw.Expanded(
                                   child: pw.Text(
-                                    (e.totalCost! +
-                                            (e.totalCost! *
-                                                (double.parse(cubit
-                                                        .companyModels[0]
-                                                        .taxAmount!) *
-                                                    .01)))
-                                        .toStringAsFixed(2),
+                                    cubit.companyModels[0].isPriceIncludeTaxes!
+                                        ? e.totalCost!.toStringAsFixed(2)
+                                        : (e.totalCost! +
+                                                (e.totalCost! *
+                                                    (double.parse(cubit
+                                                            .companyModels[0]
+                                                            .taxAmount!) *
+                                                        .01)))
+                                            .toStringAsFixed(2),
                                     textAlign: pw.TextAlign.center,
                                     style: const pw.TextStyle(fontSize: 8),
                                   ),
@@ -292,7 +294,8 @@ class PdfGenerator {
                                     ),
                                     pw.Row(children: [
                                       pw.Text(
-                                        cubit.currentOrder!.totalCost!
+                                        (cubit.currentOrder!.totalCost! -
+                                                cubit.currentOrder!.taxes!)
                                             .toStringAsFixed(2),
                                         textAlign: pw.TextAlign.center,
                                         style: const pw.TextStyle(fontSize: 8),
