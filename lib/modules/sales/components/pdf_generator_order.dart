@@ -142,7 +142,7 @@ class PdfGenerator {
                     mainAxisAlignment: pw.MainAxisAlignment.center,
                     children: [
                       pw.Text(
-                        cubit.currentOrder!.countID!.toString(),
+                        cubit.currentOrder!.id!.toString(),
                         style: const pw.TextStyle(fontSize: 8),
                       ),
                       pw.Text(
