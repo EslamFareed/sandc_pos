@@ -22,6 +22,7 @@ class CompanyInfoResponseModel {
   String? branchName;
   int? compId;
   String? empId;
+  bool? addClient;
 
   CompanyInfoResponseModel(
       {this.companyName,
@@ -36,6 +37,7 @@ class CompanyInfoResponseModel {
       this.isTaxes,
       this.isMustChoosePayCash,
       this.language,
+      this.addClient,
       this.isPriceIncludeTaxes,
       this.taxAmount,
       this.empName,
@@ -57,6 +59,7 @@ class CompanyInfoResponseModel {
   static const String columnCompTaxAmount = 'compTaxAmount';
   static const String columnTaxAmount = 'taxAmount';
   static const String columnIsTaxes = 'isTaxes';
+  static const String columnAddClient = 'addClient';
   static const String columnIsMustChoosePayCash = 'isMustChoosePayCash';
   static const String columnIsPriceIncludeTaxes = 'isPriceIncludeTaxes';
   static const String columnCurrencyName = 'compCurrency_Name';
@@ -90,6 +93,7 @@ class CompanyInfoResponseModel {
     branchName = json['branchName'];
     compId = json['comp_Id'];
     empId = json['emp_id'];
+    addClient = json['addClient'];
   }
 
   CompanyInfoResponseModel.fromJsonEdit(Map<String, dynamic> json) {
@@ -114,6 +118,7 @@ class CompanyInfoResponseModel {
     branchName = json['branchName'];
     compId = json['comp_Id'];
     empId = json['emp_id'];
+    addClient = json['addClient'] == 1 ? true : false;
   }
 
   Map<String, dynamic> toJson() {
@@ -139,6 +144,7 @@ class CompanyInfoResponseModel {
     data['branchName'] = this.branchName;
     data['comp_Id'] = this.compId;
     data['emp_id'] = this.empId;
+    data['addClient'] = this.addClient;
     return data;
   }
 }

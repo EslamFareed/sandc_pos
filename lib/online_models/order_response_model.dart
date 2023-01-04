@@ -4,6 +4,7 @@ class OrderResponseModel {
   String? id;
   String? clientID;
   int? payTypeID;
+  int? countID;
   String? empID;
   String? createDate;
   String? updateDate;
@@ -37,6 +38,7 @@ class OrderResponseModel {
       this.debitPay,
       this.payAmount,
       this.qrcode,
+      this.countID,
       this.isReturn,
       this.returnDesc,
       this.updateDataBase,
@@ -48,6 +50,7 @@ class OrderResponseModel {
   static const String columnClientID = 'client_ID';
   static const String columnPayTypeID = 'payType_ID';
   static const String columnEmpID = 'emp_ID';
+  static const String columnCountID = 'countID';
   static const String columnCreateDate = 'createDate';
   static const String columnUpdateDate = 'updateDate';
   static const String columnIsPayCash = 'isPayCash';
@@ -68,6 +71,7 @@ class OrderResponseModel {
     clientID = json['client_ID'];
     payTypeID = json['payType_ID'];
     empID = json['emp_ID'];
+    countID = json['countID'];
     createDate = json['createDate'];
     updateDate = json['updateDate'];
     isPayCash = json['isPayCash'];
@@ -101,6 +105,7 @@ class OrderResponseModel {
     clientID = json['client_ID'];
     payTypeID = json['payType_ID'];
     empID = json['emp_ID'];
+    countID = json['countID'];
     createDate = json['createDate'];
     updateDate = json['updateDate'];
     isPayCash = json['isPayCash'] == 1 ? true : false;
@@ -123,6 +128,7 @@ class OrderResponseModel {
     data['client_ID'] = this.clientID;
     data['payType_ID'] = this.payTypeID;
     data['emp_ID'] = this.empID;
+    data['countID'] = this.countID;
     data['createDate'] = this.createDate;
     data['updateDate'] = this.updateDate;
     data['isPayCash'] = this.isPayCash;
@@ -154,6 +160,7 @@ class OrderResponseModel {
     data['client_ID'] = this.clientID;
     data['payType_ID'] = this.payTypeID;
     data['emp_ID'] = this.empID;
+    data['countID'] = this.countID;
     data['createDate'] = this.createDate;
     data['updateDate'] = this.updateDate;
     data['isPayCash'] = this.isPayCash! ? 1 : 0;

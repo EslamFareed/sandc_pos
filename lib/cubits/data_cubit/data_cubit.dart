@@ -598,6 +598,7 @@ class DataCubit extends Cubit<DataState> {
       "${OrderResponseModel.columnPayTypeID}" INTEGER ,
       "${OrderResponseModel.columnEmpID}" TEXT ,
       "${OrderResponseModel.columnIsPayCash}" INTEGER ,
+      "${OrderResponseModel.columnCountID}" INTEGER ,
       "${OrderResponseModel.columnCreateDate}" TEXT ,
       "${OrderResponseModel.columnUpdateDate}" TEXT ,
       "${OrderResponseModel.columnDiscount}" REAL ,
@@ -636,6 +637,7 @@ class DataCubit extends Cubit<DataState> {
           ('${OrderResponseModel.columnId}',
           '${OrderResponseModel.columnClientID}',
           '${OrderResponseModel.columnPayTypeID}',
+          '${OrderResponseModel.columnCountID}',
           '${OrderResponseModel.columnEmpID}',
           '${OrderResponseModel.columnIsPayCash}',
           '${OrderResponseModel.columnCreateDate}',
@@ -655,6 +657,7 @@ class DataCubit extends Cubit<DataState> {
             '${item.id}',
           '${item.clientID}',
           '${item.payTypeID}',
+          '${item.countID}',
           '${item.empID}',
           '${item.isPayCash! ? 1 : 0}',
           '${item.createDate}',
@@ -975,6 +978,7 @@ class DataCubit extends Cubit<DataState> {
       "${CompanyInfoResponseModel.columnIsMustChoosePayCash}" INTEGER ,
       "${CompanyInfoResponseModel.columnIsPriceIncludeTaxes}" INTEGER ,
       "${CompanyInfoResponseModel.columnIsTaxes}" INTEGER ,
+      "${CompanyInfoResponseModel.columnAddClient}" INTEGER ,
       "${CompanyInfoResponseModel.columnBranchId}" INTEGER ,
       "${CompanyInfoResponseModel.columnBranchName}" TEXT ,
       "${CompanyInfoResponseModel.columnCompanyName}" TEXT ,
@@ -1005,6 +1009,7 @@ class DataCubit extends Cubit<DataState> {
       "${CompanyInfoResponseModel.columnIsMustChoosePayCash}",
       "${CompanyInfoResponseModel.columnIsPriceIncludeTaxes}",
       "${CompanyInfoResponseModel.columnIsTaxes}",
+      "${CompanyInfoResponseModel.columnAddClient}",
       "${CompanyInfoResponseModel.columnBranchId}",
       "${CompanyInfoResponseModel.columnBranchName}",
       "${CompanyInfoResponseModel.columnCompanyName}",
@@ -1027,6 +1032,7 @@ class DataCubit extends Cubit<DataState> {
           '${item.isMustChoosePayCash! ? 1 : 0}',
           '${item.isPriceIncludeTaxes! ? 1 : 0}',
           '${item.isTaxes! ? 1 : 0}',
+          '${item.addClient! ? 1 : 0}',
           '${item.branchId}',
           '${item.branchName}',
           '${item.companyName}',
@@ -1096,6 +1102,14 @@ class DataCubit extends Cubit<DataState> {
     currentOrder!.qrcode = "no";
     currentOrder!.updateDate = "no";
     currentOrder!.createDate = DateTime.now().toString();
+    currentOrder!.countID = orderModels[0].countID;
+
+    orderModels.forEach((element) {
+      if (element.countID! > currentOrder!.countID!) {
+        currentOrder!.countID = element.countID!;
+      }
+    });
+    currentOrder!.countID = currentOrder!.countID! + 1;
 
     await insertOrderTable(currentOrder!);
     await insertInvoiceDetailsByList(itemsCurrentOrder);
