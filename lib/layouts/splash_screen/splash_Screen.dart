@@ -6,6 +6,7 @@ import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/layouts/main_screen/main_screen.dart';
 import 'package:sandc_pos/modules/auth/login.dart';
 
+import '../../core/components/app_language.dart';
 import '../../cubits/auth_cubit/auth_cubit.dart';
 import '../../reposetories/shared_pref/cache_keys.dart';
 
@@ -23,19 +24,19 @@ class _SplashScreenState extends State<SplashScreen> {
       builder: (context, state) => Scaffold(body: _buildBody()),
       listener: (context, state) {
         if (state is LoginSuccessState) {
-          getx.Get.off(MainScreen(),
+          getx.Get.off(const MainScreen(),
               transition: getx.Transition.fade,
               duration: const Duration(seconds: 1));
-          getx.Get.showSnackbar(const getx.GetSnackBar(
-            message: "update login data successfuly",
-            duration: Duration(seconds: 4),
+          getx.Get.showSnackbar(getx.GetSnackBar(
+            message: getLang(context).updatelogindatasuccessfuly,
+            duration: const Duration(seconds: 4),
           ));
         }
 
         if (state is LoginErrorState) {
-          getx.Get.showSnackbar(const getx.GetSnackBar(
-            message: "Error please try again",
-            duration: Duration(seconds: 4),
+          getx.Get.showSnackbar(getx.GetSnackBar(
+            message: getLang(context).errorpleasetryagain,
+            duration: const Duration(seconds: 4),
           ));
         }
       },

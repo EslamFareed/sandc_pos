@@ -7,6 +7,7 @@ import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart' as tran;
+import '../../core/components/app_language.dart';
 import 'view_customer_details.dart';
 
 class TableCustomer extends StatefulWidget {
@@ -44,9 +45,9 @@ class _TableCustomerState extends State<TableCustomer> {
 
   List<Widget> _getTitleWidget() {
     return [
-      _getTitleItemWidget('Customer', Get.width * .5),
-      _getTitleItemWidget('Amount Rest', Get.width * .25),
-      _getTitleItemWidget('Max Depit', Get.width * .25),
+      _getTitleItemWidget(getLang(context).fullName, Get.width * .5),
+      _getTitleItemWidget(getLang(context).debitamount, Get.width * .25),
+      _getTitleItemWidget(getLang(context).maxdebit, Get.width * .25),
     ];
   }
 

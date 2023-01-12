@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sandc_pos/modules/home/widgets/item_setting_data.dart';
 import 'package:sandc_pos/online_models/client_response_model.dart';
 
+import '../../core/components/app_language.dart';
+
 class ViewCustomerDetails extends StatelessWidget {
   ViewCustomerDetails({super.key, this.item});
 
@@ -21,19 +23,25 @@ class ViewCustomerDetails extends StatelessWidget {
           margin: const EdgeInsets.all(20),
           child: Column(
             children: [
-              ItemSettingData(title: "Name", data: item!.name!),
-              ItemSettingData(title: "Phone", data: item!.phone!),
-              ItemSettingData(title: "Address", data: item!.address!),
-              ItemSettingData(title: "Note", data: item!.comment!),
               ItemSettingData(
-                  title: "Debit Amount", data: "${item!.ammountTobePaid!}"),
+                  title: getLang(context).fullName, data: item!.name!),
               ItemSettingData(
-                  title: "Max Debit Limit Amount",
+                  title: getLang(context).phone, data: item!.phone!),
+              ItemSettingData(
+                  title: getLang(context).address, data: item!.address!),
+              ItemSettingData(
+                  title: getLang(context).notes, data: item!.comment!),
+              ItemSettingData(
+                  title: getLang(context).debitamount,
+                  data: "${item!.ammountTobePaid!}"),
+              ItemSettingData(
+                  title: getLang(context).maximumindebtedness,
                   data: "${item!.maxDebitLimit!}"),
               ItemSettingData(
-                  title: "Max Debit Limit Reciets",
+                  title: getLang(context).maximumindebtednessbills,
                   data: "${item!.maxLimtDebitRecietCount!}"),
-              ItemSettingData(title: "Tax Number", data: item!.taxNumber!),
+              ItemSettingData(
+                  title: getLang(context).taxnumber, data: item!.taxNumber!),
             ],
           ),
         ),

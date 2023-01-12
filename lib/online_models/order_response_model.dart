@@ -105,7 +105,7 @@ class OrderResponseModel {
     clientID = json['client_ID'];
     payTypeID = json['payType_ID'];
     empID = json['emp_ID'];
-    countID = json['countID'];
+    countID = json['countID'] == "null" ? 0 : json['countID'];
     createDate = json['createDate'];
     updateDate = json['updateDate'];
     isPayCash = json['isPayCash'] == 1 ? true : false;

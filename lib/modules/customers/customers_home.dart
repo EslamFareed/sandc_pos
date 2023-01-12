@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 
 import '../../core/components/default_buttons.dart';
 import '../../core/style/color/app_colors.dart';
@@ -16,7 +17,7 @@ class CustomersHome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Clients"),
+        title: Text(getLang(context).clients),
       ),
       body: Stack(
         children: [
@@ -54,7 +55,7 @@ class CustomersHome extends StatelessWidget {
                       Get.to(const ShowCustomers(),
                           transition: Transition.zoom);
                     },
-                    buttonText: "Show Clients",
+                    buttonText: getLang(context).showclients,
                     buttonBorderCircular: 16.r,
                     buttonHeight: 35.h,
                   ),
@@ -62,7 +63,7 @@ class CustomersHome extends StatelessWidget {
                     onPress: () {
                       Get.to(AddCustomer(), transition: Transition.zoom);
                     },
-                    buttonText: "Add New Client",
+                    buttonText: getLang(context).addMewCustomer,
                     buttonBorderCircular: 16.r,
                     buttonHeight: 35.h,
                   ),

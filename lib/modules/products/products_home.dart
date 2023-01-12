@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 import 'package:sandc_pos/modules/products/show_products.dart';
 
 import '../../core/components/default_buttons.dart';
@@ -16,7 +17,7 @@ class ProductsHome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Products"),
+        title: Text(getLang(context).products),
       ),
       body: Stack(
         children: [
@@ -49,7 +50,7 @@ class ProductsHome extends StatelessWidget {
                     onPress: () {
                       Get.to(const ShowProducts(), transition: Transition.zoom);
                     },
-                    buttonText: "Show Prodcuts",
+                    buttonText: getLang(context).showProdcuts,
                     buttonBorderCircular: 16.r,
                     buttonHeight: 35.h,
                   ),
@@ -58,7 +59,7 @@ class ProductsHome extends StatelessWidget {
                       Get.to(const ShowCategories(),
                           transition: Transition.zoom);
                     },
-                    buttonText: "Show Categories",
+                    buttonText: getLang(context).showCategories,
                     buttonBorderCircular: 16.r,
                     buttonHeight: 35.h,
                   ),

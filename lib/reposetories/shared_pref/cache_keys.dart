@@ -2,7 +2,7 @@ import 'cache_helper.dart';
 
 class CacheKeysManger {
   static String getLanguageFromCache() =>
-      CacheHelper.getData(key: 'lang') ?? 'en';
+      CacheHelper.getData(key: 'lang') ?? 'ar';
 
   static String getPrinterFromCache() =>
       CacheHelper.getData(key: 'printer') ?? 'NO';

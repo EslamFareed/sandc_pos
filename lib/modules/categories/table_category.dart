@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 
@@ -27,7 +28,7 @@ class _TableCategoryState extends State<TableCategory> {
             leftHandSideColumnWidth: Get.width * .5,
             rightHandSideColumnWidth: Get.width * .5,
             isFixedHeader: true,
-            headerWidgets: _getTitleWidget(),
+            headerWidgets: _getTitleWidget(context),
             // refreshIndicator: RefreshProgressIndicator(),
             // htdRefreshController: HDTRefreshController(),
             // onRefresh: () {},
@@ -46,10 +47,10 @@ class _TableCategoryState extends State<TableCategory> {
         });
   }
 
-  List<Widget> _getTitleWidget() {
+  List<Widget> _getTitleWidget(BuildContext context) {
     return [
-      _getTitleItemWidget('Category', Get.width * .5),
-      _getTitleItemWidget('desc', Get.width * .5),
+      _getTitleItemWidget(getLang(context).category, Get.width * .5),
+      _getTitleItemWidget(getLang(context).desc, Get.width * .5),
     ];
   }
 

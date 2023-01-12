@@ -6,6 +6,7 @@ import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/online_models/client_response_model.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../core/components/app_language.dart';
 import '../../core/components/default_buttons.dart';
 import '../../core/components/text_form_field.dart';
 import '../../core/style/color/app_colors.dart';
@@ -29,7 +30,7 @@ class AddCustomer extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Add Mew Customer"),
+        title: Text(getLang(context).addMewCustomer),
       ),
       body: Form(
         key: _keyForm,
@@ -69,7 +70,7 @@ class AddCustomer extends StatelessWidget {
       children: [
         Image.asset("assets/icons/add_customer.png"),
         DefaultTextField(
-          labelText: "Full Name",
+          labelText: getLang(context).fullName,
           lines: 1,
           controller: fullnameController,
           onChanged: (value) {
@@ -81,13 +82,13 @@ class AddCustomer extends StatelessWidget {
           },
           validator: (value) {
             if (value!.isEmpty) {
-              return "Full name must be not empty";
+              return getLang(context).fullnamemustbenotempty;
             }
           },
         ),
         SizedBox(height: 10.h),
         DefaultTextField(
-          labelText: "Address",
+          labelText: getLang(context).address,
           lines: 1,
           controller: addressController,
           onChanged: (value) {
@@ -99,13 +100,13 @@ class AddCustomer extends StatelessWidget {
           },
           validator: (value) {
             if (value!.isEmpty) {
-              return "Address must be not empty";
+              return getLang(context).addressmustbenotempty;
             }
           },
         ),
         SizedBox(height: 10.h),
         DefaultTextField(
-          labelText: "Phone",
+          labelText: getLang(context).phone,
           lines: 1,
           controller: phoneController,
           keyboardType: TextInputType.phone,
@@ -118,20 +119,20 @@ class AddCustomer extends StatelessWidget {
           },
           validator: (value) {
             if (value!.isEmpty) {
-              return "Phone must be not empty";
+              return getLang(context).phonemustbenotempty;
             }
           },
         ),
         SizedBox(height: 10.h),
         DefaultTextField(
-          labelText: "Amount on him",
+          labelText: getLang(context).amountonhim,
           lines: 1,
           controller: amountOnHimController,
           keyboardType: TextInputType.number,
         ),
         SizedBox(height: 10.h),
         DefaultTextField(
-          labelText: "Maximum indebtedness",
+          labelText: getLang(context).maximumindebtedness,
           lines: 1,
           controller: maxDebitController,
           keyboardType: TextInputType.number,
@@ -144,13 +145,13 @@ class AddCustomer extends StatelessWidget {
           },
           validator: (value) {
             if (value!.isEmpty) {
-              return "Maximum indebtedness must be not empty";
+              return getLang(context).maximumindebtednessmustbenotempty;
             }
           },
         ),
         SizedBox(height: 10.h),
         DefaultTextField(
-          labelText: "Maximum indebtedness bills",
+          labelText: getLang(context).maximumindebtednessbills,
           keyboardType: TextInputType.number,
           lines: 1,
           controller: maxDebitBillsController,
@@ -163,15 +164,16 @@ class AddCustomer extends StatelessWidget {
           },
           validator: (value) {
             if (value!.isEmpty) {
-              return "Maximum indebtedness bills must be not empty";
+              return getLang(context).maximumindebtednessbillsmustbenotempty;
             }
           },
         ),
         SizedBox(height: 10.h),
         DefaultTextField(
-          labelText: "Tax Number",
+          labelText: getLang(context).taxnumber,
           lines: 1,
           controller: taxNumberController,
+          keyboardType: TextInputType.number,
         ),
         SizedBox(height: 10.h),
         // Column(
@@ -183,7 +185,7 @@ class AddCustomer extends StatelessWidget {
         //   ],
         // ),
         DefaultTextField(
-          labelText: "Notes",
+          labelText: getLang(context).notes,
           lines: 3,
           controller: notesController,
         ),
@@ -196,19 +198,19 @@ class AddCustomer extends StatelessWidget {
                   int.parse(maxDebitBillsController.text) > 0) {
                 _saveOffline(context);
               } else {
-                Get.showSnackbar(const GetSnackBar(
-                  message: "Create Error",
-                  duration: Duration(seconds: 2),
+                Get.showSnackbar(GetSnackBar(
+                  message: getLang(context).createError,
+                  duration: const Duration(seconds: 2),
                 ));
               }
             } else {
-              Get.showSnackbar(const GetSnackBar(
-                message: "Create Error",
-                duration: Duration(seconds: 2),
+              Get.showSnackbar(GetSnackBar(
+                message: getLang(context).createError,
+                duration: const Duration(seconds: 2),
               ));
             }
           },
-          buttonText: "Save Customer Data",
+          buttonText: getLang(context).saveCustomerData,
           buttonBorderCircular: 16,
           buttonHeight: 35.h,
         ),

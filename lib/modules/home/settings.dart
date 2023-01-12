@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 import 'package:sandc_pos/core/style/text/app_text_style.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 
@@ -19,7 +20,7 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Settings"),
+        title: Text(getLang(context).settings),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -58,44 +59,44 @@ class SettingsScreen extends StatelessWidget {
         .last);
     return Column(
       children: [
-        const Text("Company Logo"),
+        Text(getLang(context).company_logo),
         CircleAvatar(
           backgroundImage: MemoryImage(_bytesImage),
           radius: 50.r,
         ),
         ItemSettingData(
-            title: "Company Name That shown in sales bill",
+            title: getLang(context).company_name_that_shown_in_sales_bill,
             data: DataCubit.get(context).companyModels[0].companyName),
         ItemSettingData(
-            title: "Phone",
+            title: getLang(context).phone,
             data: DataCubit.get(context).companyModels[0].compPhone),
         ItemSettingData(
-            title: "Address",
+            title: getLang(context).address,
             data: DataCubit.get(context).companyModels[0].compAddress),
         ItemSettingData(
-            title: "Notes Writen in the last of bill",
+            title: getLang(context).notes_writen_in_the_last_of_bill,
             data: DataCubit.get(context).companyModels[0].companyDescription),
+        // ItemSettingData(
+        //     title: "Language",
+        //     data: DataCubit.get(context).companyModels[0].compLanguage),
         ItemSettingData(
-            title: "Language",
-            data: DataCubit.get(context).companyModels[0].compLanguage),
-        ItemSettingData(
-            title: "Currency",
+            title: getLang(context).currency,
             data: DataCubit.get(context).companyModels[0].compCurrencyName),
         CheckboxListTile(
           enabled: false,
           value: DataCubit.get(context).companyModels[0].isTaxes,
           onChanged: (val) {},
-          title: Text("Cancel Taxes"),
+          title: Text(getLang(context).cancel_taxes),
         ),
         SizedBox(height: 5.h),
         Row(
           children: [
-            const Text("value added tax"),
+            Text(getLang(context).value_added_tax),
             SizedBox(width: 10.w),
             Expanded(
               child: Container(
                   width: Get.width,
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       color: const Color.fromARGB(255, 221, 221, 221)),
@@ -104,7 +105,7 @@ class SettingsScreen extends StatelessWidget {
                       style: AppTextStyle.bodyText())),
             ),
             SizedBox(width: 10.w),
-            Text(
+            const Text(
               "%",
               style: TextStyle(color: AppColors.primaryColor),
             )
@@ -113,12 +114,12 @@ class SettingsScreen extends StatelessWidget {
         SizedBox(height: 5.h),
         Row(
           children: [
-            const Text("Taxes Number"),
+            Text(getLang(context).taxes_number),
             SizedBox(width: 10.w),
             Expanded(
               child: Container(
                   width: Get.width,
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       color: const Color.fromARGB(255, 221, 221, 221)),
@@ -133,16 +134,18 @@ class SettingsScreen extends StatelessWidget {
           enabled: false,
           value: DataCubit.get(context).companyModels[0].isPriceIncludeTaxes,
           onChanged: (val) {},
-          title: Text("Price includes Taxes"),
+          title: Text(getLang(context).price_includes_taxes),
         ),
         SizedBox(height: 10.h),
         CheckboxListTile(
           enabled: false,
           value: DataCubit.get(context).companyModels[0].isMustChoosePayCash,
           onChanged: (val) {},
-          title: Text("must choose customer when pay cash"),
+          title: Text(getLang(context).must_choose_customer_when_pay_cash),
         ),
         SizedBox(height: 50.h),
+        Text(getLang(context).change_language),
+        LangSwitch(isExpanded: true, width: 200.w),
       ],
     );
   }

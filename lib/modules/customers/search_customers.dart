@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 import 'package:sandc_pos/cubits/client_cubit/client_cubit.dart';
 import 'package:sandc_pos/cubits/client_cubit/client_states.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
@@ -33,7 +34,7 @@ class _SearchCustomersScreenState extends State<SearchCustomersScreen> {
         return Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: Text("Search By name"),
+              title: Text(getLang(context).searchByname),
             ),
             body: _buildBody(cubit));
       },
@@ -53,7 +54,7 @@ class _SearchCustomersScreenState extends State<SearchCustomersScreen> {
             },
             decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search),
-                hintText: "Clients Name",
+                hintText: getLang(context).clientsname,
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: const BorderSide(color: Colors.black))),
@@ -76,9 +77,10 @@ class _SearchCustomersScreenState extends State<SearchCustomersScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text("phone : ${client.phone!}"),
-            Text("max debit : ${client.maxDebitLimit!}"),
-            Text("debit amount : ${client.ammountTobePaid!}"),
+            Text("${getLang(context).phone} : ${client.phone!}"),
+            Text("${getLang(context).maxdebit} : ${client.maxDebitLimit!}"),
+            Text(
+                "${getLang(context).debitamount} : ${client.ammountTobePaid!}"),
           ],
         ),
       ),

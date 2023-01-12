@@ -5,15 +5,16 @@ import 'package:get/get.dart';
 
 import 'package:sandc_pos/modules/customers/table_customer.dart';
 
+import '../../core/components/app_language.dart';
 import 'make_pdf_customer.dart';
 import 'search_customers.dart';
 
 class ShowCustomers extends StatelessWidget {
   const ShowCustomers({super.key});
 
-  _buildAppBar() {
+  _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text("Clients"),
+      title: Text(getLang(context).clients),
       centerTitle: true,
       actions: [
         //open printer page
@@ -30,12 +31,12 @@ class ShowCustomers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(),
+      appBar: _buildAppBar(context),
+      body: _buildBody(context),
     );
   }
 
-  _buildSearchBar() {
+  _buildSearchBar(BuildContext context) {
     return Container(
         width: Get.width,
         height: 50.h,
@@ -57,15 +58,15 @@ class ShowCustomers extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
-                    "Search Customer Name - Phone",
-                    style: TextStyle(
+                    getLang(context).searchByname,
+                    style: const TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Icon(
+                  const Icon(
                     Icons.search,
                     color: Colors.grey,
                   )
@@ -76,10 +77,10 @@ class ShowCustomers extends StatelessWidget {
         ));
   }
 
-  _buildBody() {
+  _buildBody(BuildContext context) {
     return Column(
       children: [
-        _buildSearchBar(),
+        _buildSearchBar(context),
         Expanded(child: TableCustomer()),
       ],
     );

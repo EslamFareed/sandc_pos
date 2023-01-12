@@ -83,3 +83,9 @@ flutter:
     - family: Cairo
       fonts:
         - asset: assets/fonts/Cairo-Bold.ttf
+    - family: Hind
+      fonts:
+        - asset: assets/fonts/Hind-Regular.ttf
+    - family: hasen
+      fonts:
+        - asset: assets/fonts/Hacen-Tunisia.ttf

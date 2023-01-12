@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_scan_bluetooth/flutter_scan_bluetooth.dart';
+import 'package:get/get.dart' as getx;
 
 import '../../reposetories/shared_pref/cache_helper.dart';
 import '../../reposetories/shared_pref/cache_keys.dart';
@@ -20,6 +21,7 @@ class MainCubit extends Cubit<MainStates> {
       language = lang;
       emit(ChangeAppLanguageState());
     });
+    getx.Get.updateLocale(Locale(CacheKeysManger.getLanguageFromCache()));
   }
 
   String currency = CacheKeysManger.getCurrencyFromCache();

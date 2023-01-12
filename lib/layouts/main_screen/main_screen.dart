@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' as getx;
 import 'package:responsive_grid/responsive_grid.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/cubits/data_online_cubit/data_online_cubit.dart';
 import 'package:sandc_pos/cubits/main_cubit/main_cubit.dart';
@@ -78,31 +79,31 @@ class _MainScreenState extends State<MainScreen> {
 
   _getData() async {
     await DataOnlineCubit.get(context).getAllOfflineData(context);
-    await CacheHelper.saveData(
-        key: "lang",
-        value: DataCubit.get(context).companyModels[0].compLanguage == "عربي"
-            ? "ar"
-            : "en");
-    MainCubit.get(context).changeAppLanguage(context,
-        lang: CacheKeysManger.getLanguageFromCache());
+    // await CacheHelper.saveData(
+    //     key: "lang",
+    //     value: DataCubit.get(context).companyModels[0].compLanguage == "عربي"
+    //         ? "ar"
+    //         : "en");
+    // MainCubit.get(context).changeAppLanguage(context,
+    //     lang: CacheKeysManger.getLanguageFromCache());
   }
 
   _getDataFirstTime() async {
     await DataOnlineCubit.get(context).getAllDataForFirstTime(context);
-    await CacheHelper.saveData(
-        key: "lang",
-        value: DataCubit.get(context).companyModels[0].compLanguage == "عربي"
-            ? "ar"
-            : "en");
-    MainCubit.get(context).changeAppLanguage(context,
-        lang: CacheKeysManger.getLanguageFromCache());
+    // await CacheHelper.saveData(
+    //     key: "lang",
+    //     value: DataCubit.get(context).companyModels[0].compLanguage == "عربي"
+    //         ? "ar"
+    //         : "en");
+    // MainCubit.get(context).changeAppLanguage(context,
+    //     lang: CacheKeysManger.getLanguageFromCache());
   }
 
   _onWillPop() {
     return buildPopUpMessage(
       context: context,
       content: Text(
-        "Want To Exit",
+        getLang(context).wanttoexit,
         style: AppTextStyle.bodyText(),
       ),
       title: Image.asset("assets/images/logo.png"),
@@ -111,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
           onPress: () {
             exit(0);
           },
-          buttonText: "yes",
+          buttonText: getLang(context).yes,
           buttonWidth: 70.w,
           buttonHeight: 30.h,
         ),
@@ -121,7 +122,7 @@ class _MainScreenState extends State<MainScreen> {
               context: context,
             );
           },
-          buttonText: "No",
+          buttonText: getLang(context).no,
           buttonWidth: 70.w,
           buttonHeight: 30.h,
         ),
@@ -146,32 +147,32 @@ class _MainScreenState extends State<MainScreen> {
       listener: (context, state) {
         if (state is GetDataOnlineSuccessState) {
           getx.Get.back(closeOverlays: true);
-          getx.Get.showSnackbar(const getx.GetSnackBar(
-            message: "Data updated successfuly",
-            duration: Duration(seconds: 4),
+          getx.Get.showSnackbar(getx.GetSnackBar(
+            message: getLang(context).dataupdatedsuccessfuly,
+            duration: const Duration(seconds: 4),
           ));
         }
 
         if (state is GetDataOnlineErrorState) {
           getx.Get.back();
-          getx.Get.showSnackbar(const getx.GetSnackBar(
-            message: "Error please try again",
-            duration: Duration(seconds: 4),
+          getx.Get.showSnackbar(getx.GetSnackBar(
+            message: getLang(context).errorpleasetryagain,
+            duration: const Duration(seconds: 4),
           ));
         }
         if (state is GetAllDataOfflineSuccess) {
           getx.Get.back(closeOverlays: true);
-          getx.Get.showSnackbar(const getx.GetSnackBar(
-            message: "Data updated successfuly",
-            duration: Duration(seconds: 4),
+          getx.Get.showSnackbar(getx.GetSnackBar(
+            message: getLang(context).dataupdatedsuccessfuly,
+            duration: const Duration(seconds: 4),
           ));
         }
 
         if (state is GetAllDataOfflineError) {
           getx.Get.back(closeOverlays: true);
-          getx.Get.showSnackbar(const getx.GetSnackBar(
-            message: "Error please try again",
-            duration: Duration(seconds: 4),
+          getx.Get.showSnackbar(getx.GetSnackBar(
+            message: getLang(context).errorpleasetryagain,
+            duration: const Duration(seconds: 4),
           ));
         }
       },
@@ -187,27 +188,34 @@ class _MainScreenState extends State<MainScreen> {
         },
         builder: (context, state) {
           return ResponsiveGridRow(children: [
-            _buildItemCard("assets/images/sales_pos_2.png", "Sales", () {
+            _buildItemCard(
+                "assets/images/sales_pos_2.png", getLang(context).sales, () {
               getx.Get.to(SalesScreen(), transition: getx.Transition.zoom);
             }),
-            _buildItemCard("assets/images/customer_pos.png", "Clients", () {
+            _buildItemCard(
+                "assets/images/customer_pos.png", getLang(context).clients, () {
               getx.Get.to(const CustomersHome(),
                   transition: getx.Transition.zoom);
             }),
-            _buildItemCard("assets/images/stock_pos.png", "Stock", () {
+            _buildItemCard(
+                "assets/images/stock_pos.png", getLang(context).stock, () {
               getx.Get.to(const ProductsHome(),
                   transition: getx.Transition.zoom);
             }),
-            _buildItemCard("assets/images/reports_pos_2.png", "Reports", () {
+            _buildItemCard(
+                "assets/images/reports_pos_2.png", getLang(context).reports,
+                () {
               getx.Get.to(const ReportsHome(),
                   transition: getx.Transition.zoom);
             }),
-            _buildItemCard(
-                "assets/images/sales_returns_pos.png", "Sales Returns", () {
+            _buildItemCard("assets/images/sales_returns_pos.png",
+                getLang(context).salesreturns, () {
               getx.Get.to(const SalesReturnsScreen(),
                   transition: getx.Transition.zoom);
             }),
-            _buildItemCard("assets/images/settings_pos.png", "Settings", () {
+            _buildItemCard(
+                "assets/images/settings_pos.png", getLang(context).settings,
+                () {
               getx.Get.to(const SettingsScreen(),
                   transition: getx.Transition.zoom);
             }),
@@ -215,11 +223,12 @@ class _MainScreenState extends State<MainScreen> {
                 "assets/images/printer_pos.png",
                 MainCubit.get(context).isConnectedToPrinter!
                     ? MainCubit.get(context).selectedDevice!.name
-                    : "No Printer Selected", () {
+                    : getLang(context).noprinterselected, () {
               getx.Get.to(const SettingsPrinter(),
                   transition: getx.Transition.zoom);
             }),
-            _buildItemCard("assets/images/cloud_pos.png", "Update With cloud",
+            _buildItemCard(
+                "assets/images/cloud_pos.png", getLang(context).updatewithcloud,
                 () async {
               _showDialog();
               await DataOnlineCubit.get(context).checkIfDataUptodate(context);
@@ -348,7 +357,7 @@ class _MainScreenState extends State<MainScreen> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 25.w, vertical: 2.h),
                               child: Text(
-                                "Test Version",
+                                getLang(context).testversion,
                                 style: AppTextStyle.caption().copyWith(
                                     color: const Color.fromARGB(
                                         255, 155, 155, 155)),
@@ -361,7 +370,7 @@ class _MainScreenState extends State<MainScreen> {
                           getx.Get.to(const AboutScreen(),
                               transition: getx.Transition.zoom);
                         },
-                        title: const Text("More Information"),
+                        title: Text(getLang(context).moreinformation),
                         trailing: const Icon(Icons.info),
                       ),
                       ListTile(
@@ -369,7 +378,7 @@ class _MainScreenState extends State<MainScreen> {
                           getx.Get.to(ContactUsScreen(),
                               transition: getx.Transition.zoom);
                         },
-                        title: const Text("Contact with us"),
+                        title: Text(getLang(context).contactwithus),
                         trailing: const Icon(Icons.contact_support),
                       ),
                       ListTile(
@@ -379,7 +388,7 @@ class _MainScreenState extends State<MainScreen> {
                           getx.Get.offAll(LoginScreen(),
                               transition: getx.Transition.zoom);
                         },
-                        title: const Text("Logout"),
+                        title: Text(getLang(context).logout),
                         trailing: const Icon(Icons.exit_to_app),
                       ),
                     ],
@@ -395,7 +404,7 @@ class _MainScreenState extends State<MainScreen> {
                           padding: EdgeInsets.symmetric(
                               horizontal: 25.w, vertical: 2.h),
                           child: Text(
-                            "All Rights Reserved Sandc",
+                            getLang(context).allrightsreservedsandc,
                             style: AppTextStyle.caption().copyWith(
                                 color: const Color.fromARGB(255, 155, 155, 155),
                                 fontSize: 12.sp),

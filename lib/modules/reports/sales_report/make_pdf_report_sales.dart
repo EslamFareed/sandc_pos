@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:sandc_pos/online_models/order_response_model.dart';
 
+import '../../../cubits/data_cubit/data_cubit.dart';
 import 'pdf_generator_report_sales.dart';
 
 class MakePdfReportSales extends StatelessWidget {
@@ -11,11 +12,10 @@ class MakePdfReportSales extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('PDF Preview'),
-      ),
+      appBar: AppBar(),
       body: PdfPreview(
-        build: (ctx) => makePdf(list!, total!),
+        build: (ctx) =>
+            makePdf(list!, total!, DataCubit.get(context).companyModels[0]),
       ),
     );
   }

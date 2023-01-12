@@ -10,11 +10,10 @@ class MakePdfCategories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('PDF Preview'),
-      ),
+      appBar: AppBar(),
       body: PdfPreview(
-        build: (ctx) => makePdf(DataCubit.get(context).categoryModels),
+        build: (ctx) => makePdf(DataCubit.get(context).categoryModels,
+            DataCubit.get(context).companyModels[0]),
       ),
     );
   }

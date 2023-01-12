@@ -4,11 +4,13 @@ import 'dart:io';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_scan_bluetooth/flutter_scan_bluetooth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sandc_pos/cubits/main_cubit/main_cubit.dart';
 import 'package:sandc_pos/reposetories/shared_pref/cache_helper.dart';
 import 'package:sandc_pos/reposetories/shared_pref/cache_keys.dart';
 
+import '../../core/components/app_language.dart';
 import '../../core/utils/printer_manager.dart';
 
 class SettingsPrinter extends StatefulWidget {
@@ -59,7 +61,13 @@ class _SettingsPrinterState extends State<SettingsPrinter> {
         MainCubit.get(context).isConnectedToPrinter = true;
         MainCubit.get(context).selectedDevice = _selectedDevice;
         CacheHelper.saveData(key: "printer", value: _selectedDevice!.address);
-
+        FToast fToast = FToast();
+        fToast.init(context);
+        fToast.showToast(
+            child: Container(
+          padding: const EdgeInsets.all(20),
+          child: Text(getLang(context).selected),
+        ));
         _stopScan();
       } else if (CacheKeysManger.getPrinterFromCache() == dev.address) {
         setState(() {
@@ -68,6 +76,13 @@ class _SettingsPrinterState extends State<SettingsPrinter> {
         PrinterManager.connect(_selectedDevice!.address);
         MainCubit.get(context).isConnectedToPrinter = true;
         MainCubit.get(context).selectedDevice = _selectedDevice;
+        FToast fToast = FToast();
+        fToast.init(context);
+        fToast.showToast(
+            child: Container(
+          padding: const EdgeInsets.all(20),
+          child: Text(getLang(context).selected),
+        ));
       }
     });
 
@@ -115,8 +130,8 @@ class _SettingsPrinterState extends State<SettingsPrinter> {
         centerTitle: true,
         title: Text(
           _selectedDevice != null
-              ? "${_selectedDevice!.name} selected"
-              : "No printer Selected",
+              ? "${_selectedDevice!.name} ${getLang(context).selected}"
+              : getLang(context).noprinterselected,
         ),
       ),
       body: Column(
@@ -126,7 +141,7 @@ class _SettingsPrinterState extends State<SettingsPrinter> {
           ),
           ConditionalBuilder(
               condition: isScanning,
-              builder: (context) => CircularProgressIndicator(),
+              builder: (context) => const CircularProgressIndicator(),
               fallback: (context) => Container()),
           const SizedBox(
             height: 15,
@@ -145,10 +160,17 @@ class _SettingsPrinterState extends State<SettingsPrinter> {
                               _selectedDevice;
                           CacheHelper.saveData(
                               key: "printer", value: _selectedDevice!.address);
+                          FToast fToast = FToast();
+                          fToast.init(context);
+                          fToast.showToast(
+                              child: Container(
+                            padding: const EdgeInsets.all(20),
+                            child: Text(getLang(context).selected),
+                          ));
                         },
                         color: Colors.lightBlue,
-                        child: const Text(
-                          "Connect",
+                        child: Text(
+                          getLang(context).connect,
                           style: TextStyle(color: Colors.white),
                         ),
                       ),

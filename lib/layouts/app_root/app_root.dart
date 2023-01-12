@@ -66,7 +66,6 @@ class AppRoot extends StatelessWidget {
                 Locale('en', ''),
                 Locale('ar', ''),
               ],
-              //todo change language remove this comment
               locale: Locale.fromSubtags(languageCode: cubit.language),
               theme: lightMode,
               darkTheme: darkMode,

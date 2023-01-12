@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/modules/products/scan_code.dart';
 import 'package:sandc_pos/modules/products/search_products_details.dart';
@@ -21,8 +23,8 @@ class ShowProducts extends StatelessWidget {
       actions: [
         //open printer page
         IconButton(
-          onPressed: () {
-            Get.to(const MakePdfProducts(), transition: Transition.zoom);
+          onPressed: () async {
+            Get.to(MakePdfProducts(), transition: Transition.zoom);
           },
           icon: const Icon(Icons.print_rounded),
         )

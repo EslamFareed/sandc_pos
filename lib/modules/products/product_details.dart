@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 import 'package:sandc_pos/modules/home/widgets/item_setting_data.dart';
 import 'package:sandc_pos/online_models/client_response_model.dart';
 import 'package:sandc_pos/online_models/product_response_model.dart';
@@ -34,20 +35,27 @@ class ProductDetails extends StatelessWidget {
               SizedBox(
                 height: 10.h,
               ),
-              ItemSettingData(title: "Name", data: item!.name!),
+              ItemSettingData(title: getLang(context).name, data: item!.name!),
               ItemSettingData(
-                  title: "Price 1", data: item!.priceOne!.toString()),
+                  title: getLang(context).priceone,
+                  data: item!.priceOne!.toString()),
               ItemSettingData(
-                  title: "Price 2", data: item!.priceTwo!.toString()),
+                  title: getLang(context).pricetwo,
+                  data: item!.priceTwo!.toString()),
               ItemSettingData(
-                  title: "Price 3", data: item!.priceThree!.toString()),
+                  title: getLang(context).pricethree,
+                  data: item!.priceThree!.toString()),
               ItemSettingData(
-                  title: "Category Name", data: "${item!.categoryName}"),
+                  title: getLang(context).category,
+                  data: "${item!.categoryName}"),
               ItemSettingData(
-                  title: "Description", data: "${item!.description}"),
-              ItemSettingData(title: "stock", data: "${item!.stockQuantity}"),
+                  title: getLang(context).desc, data: "${item!.description}"),
               ItemSettingData(
-                  title: "Discount", data: item!.discount!.toString()),
+                  title: getLang(context).stock,
+                  data: "${item!.stockQuantity}"),
+              ItemSettingData(
+                  title: getLang(context).discount,
+                  data: item!.discount!.toString()),
             ],
           ),
         ),

@@ -159,7 +159,8 @@ class DataCubit extends Cubit<DataState> {
           '${item.address}'
           ) 
           ''');
-      print("insert client-----------------------------------------------");
+      print(
+          "insert client----------------------------------------------- ${item.toJson()}");
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -210,7 +211,7 @@ class DataCubit extends Cubit<DataState> {
           ) 
           ''');
       print(
-          "insert client in sale screen-----------------------------------------------");
+          "insert client in sale screen----------------------------------------------- ${item.toJson()}");
 
       emit(InsertClientInSaleScreenState());
     } catch (e) {
@@ -377,7 +378,8 @@ class DataCubit extends Cubit<DataState> {
           '${item.topPackaging!}'
           )
           ''');
-      print("insert product-----------------------------------------------");
+      print(
+          "insert product----------------------------------------------- ${item.toJson()}");
     } catch (e) {
       print(e);
     }
@@ -428,7 +430,8 @@ class DataCubit extends Cubit<DataState> {
             ProductResponseModel.ProductModelName, element.toJsonEdit(),
             where: '${ProductResponseModel.columnId} = ?',
             whereArgs: [element.prodId]);
-        print("update product-----------------------------------------------");
+        print(
+            "update product-----------------------------------------------${element.toJson()}");
       }
     } catch (e) {
       print(e);
@@ -596,9 +599,9 @@ class DataCubit extends Cubit<DataState> {
       "${OrderResponseModel.columnId}" TEXT NOT NULL PRIMARY KEY ,
       "${OrderResponseModel.columnClientID}" TEXT ,
       "${OrderResponseModel.columnPayTypeID}" INTEGER ,
+      "${OrderResponseModel.columnCountID}" INTEGER ,
       "${OrderResponseModel.columnEmpID}" TEXT ,
       "${OrderResponseModel.columnIsPayCash}" INTEGER ,
-      "${OrderResponseModel.columnCountID}" INTEGER ,
       "${OrderResponseModel.columnCreateDate}" TEXT ,
       "${OrderResponseModel.columnUpdateDate}" TEXT ,
       "${OrderResponseModel.columnDiscount}" REAL ,
@@ -675,9 +678,10 @@ class DataCubit extends Cubit<DataState> {
           '${item.returnDesc}'
           )
           ''');
-      print("insert order-----------------------------------------------");
+      print(
+          "insert order-----------------------------------------------${item.toJsonEdit()}");
     } catch (e) {
-      print(e);
+      print(e.toString());
     }
   }
 
@@ -723,7 +727,7 @@ class DataCubit extends Cubit<DataState> {
           .update(OrderResponseModel.OrderModelName, item.toJson(),
               where: '${OrderResponseModel.columnId} = ?', whereArgs: [item.id])
           .then((value) => print(
-              "updateOrderResponseModel-----------------------------------------------"))
+              "updateOrderResponseModel----------------------------------------------- ${item.toJson()}"))
           .catchError((onError) {
             print(onError);
           });
@@ -798,7 +802,8 @@ class DataCubit extends Cubit<DataState> {
           )
           ''');
 
-      // print(item.toJson());
+      print(
+          "invoice details -------------------------------------------------------------${item.toJson()}");
     } catch (e) {
       print(e);
     }
@@ -847,7 +852,7 @@ class DataCubit extends Cubit<DataState> {
           .update(GetInVoiceDetails.InvoiceDetailsModelName, item.toJsonEdit(),
               where: '${GetInVoiceDetails.columnId} = ?', whereArgs: [item.id])
           .then((value) => print(
-              "updateGetInVoiceDetails-----------------------------------------------"))
+              "updateGetInVoiceDetails----------------------------------------------- ${item.toJson()}"))
           .catchError((onError) {
             print(onError);
           });
@@ -1102,14 +1107,14 @@ class DataCubit extends Cubit<DataState> {
     currentOrder!.qrcode = "no";
     currentOrder!.updateDate = "no";
     currentOrder!.createDate = DateTime.now().toString();
-    currentOrder!.countID = orderModels[0].countID;
+    currentOrder!.countID = 0;
 
-    orderModels.forEach((element) {
-      if (element.countID! > currentOrder!.countID!) {
-        currentOrder!.countID = element.countID!;
-      }
-    });
-    currentOrder!.countID = currentOrder!.countID! + 1;
+    // orderModels.forEach((element) {
+    //   if (element.countID! > currentOrder!.countID!) {
+    //     currentOrder!.countID = element.countID!;
+    //   }
+    // });
+    // currentOrder!.countID = currentOrder!.countID! + 1;
 
     await insertOrderTable(currentOrder!);
     await insertInvoiceDetailsByList(itemsCurrentOrder);
@@ -1126,6 +1131,8 @@ class DataCubit extends Cubit<DataState> {
     // afterDiscount = 0;
     // afterTaxes = 0;
     // discount = 0;
+    print(orderModels.length);
+
     emit(OrderFinishedState());
   }
 

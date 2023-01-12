@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 import 'package:sandc_pos/modules/categories/table_category.dart';
 
 import 'make_pdf_categories.dart';
@@ -8,15 +9,15 @@ import 'make_pdf_categories.dart';
 class ShowCategories extends StatelessWidget {
   const ShowCategories({super.key});
 
-  _buildAppBar() {
+  _buildAppBar(BuildContext context) {
     return AppBar(
-      title: Text("Categories"),
+      title: Text(getLang(context).categories),
       centerTitle: true,
       actions: [
         //open printer page
         IconButton(
           onPressed: () {
-            Get.to(MakePdfCategories(), transition: Transition.zoom);
+            Get.to(const MakePdfCategories(), transition: Transition.zoom);
           },
           icon: const Icon(Icons.print_rounded),
         )
@@ -27,7 +28,7 @@ class ShowCategories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: _buildBody(),
     );
   }

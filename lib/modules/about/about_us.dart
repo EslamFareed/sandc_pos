@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 
+import '../../core/components/app_language.dart';
+
 class AboutScreen extends StatelessWidget {
   const AboutScreen({Key? key}) : super(key: key);
 
@@ -10,7 +12,7 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("About us"),
+        title: Text(getLang(context).moreinformation),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

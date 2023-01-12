@@ -1,24 +1,38 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:sandc_pos/online_models/client_response_model.dart';
 
-Future<Uint8List> makePdf(List<ClientResponseModel> clients) async {
-  final pdf = Document();
+import '../../online_models/company_info_response_model.dart';
 
+Future<Uint8List> makePdf(
+    List<ClientResponseModel> clients, CompanyInfoResponseModel company) async {
+  final pdf = Document();
+  var font = Font.ttf(await rootBundle.load("assets/fonts/Hacen-Tunisia.ttf"));
+  Uint8List _bytesImage = const Base64Decoder()
+      .convert(company.logo!.split("data:image/png;base64,").last);
   pdf.addPage(
-    Page(
+    MultiPage(
+      textDirection: TextDirection.rtl,
+      theme: ThemeData.withFont(
+        base: font,
+      ),
       build: (context) {
-        return Column(
-          children: [
-            Container(height: 50),
-            Header(
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1),
-                ),
-                child: Column(children: [
-                  Row(children: [
+        return [
+          Text(company.companyName!),
+          Image(MemoryImage(_bytesImage), width: 100, height: 100),
+          Text(company.empName!),
+          Text(DateTime.now().toString()),
+          Container(height: 50),
+          Table(
+            border: TableBorder.all(color: PdfColors.black),
+            children: [
+              TableRow(
+                  decoration: BoxDecoration(color: PdfColor.fromHex("#999999")),
+                  children: [
                     Expanded(
                       child: PaddedText("name"),
                       flex: 1,
@@ -44,44 +58,39 @@ Future<Uint8List> makePdf(List<ClientResponseModel> clients) async {
                       flex: 1,
                     ),
                   ]),
-                  Table(
-                    border: TableBorder.all(color: PdfColors.black),
-                    children: [
-                      ...clients.map(
-                        (e) => TableRow(
-                          children: [
-                            Expanded(
-                              child: PaddedText(e.name!),
-                              flex: 1,
-                            ),
-                            Expanded(
-                              child: PaddedText("${e.phone}"),
-                              flex: 1,
-                            ),
-                            Expanded(
-                              child: PaddedText("${e.address}"),
-                              flex: 1,
-                            ),
-                            Expanded(
-                              child: PaddedText("${e.ammountTobePaid}"),
-                              flex: 1,
-                            ),
-                            Expanded(
-                              child: PaddedText("${e.maxDebitLimit}"),
-                              flex: 1,
-                            ),
-                            Expanded(
-                              child: PaddedText("${e.maxLimtDebitRecietCount}"),
-                              flex: 1,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ])),
-          ],
-        );
+              ...clients.map(
+                (e) => TableRow(
+                  children: [
+                    Expanded(
+                      child: PaddedText(e.name!),
+                      flex: 1,
+                    ),
+                    Expanded(
+                      child: PaddedText("${e.phone}"),
+                      flex: 1,
+                    ),
+                    Expanded(
+                      child: PaddedText("${e.address}"),
+                      flex: 1,
+                    ),
+                    Expanded(
+                      child: PaddedText("${e.ammountTobePaid}"),
+                      flex: 1,
+                    ),
+                    Expanded(
+                      child: PaddedText("${e.maxDebitLimit}"),
+                      flex: 1,
+                    ),
+                    Expanded(
+                      child: PaddedText("${e.maxLimtDebitRecietCount}"),
+                      flex: 1,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )
+        ];
       },
     ),
   );
