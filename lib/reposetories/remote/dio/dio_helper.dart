@@ -11,6 +11,9 @@ class DioHelper {
       BaseOptions(
         baseUrl: BASE_URL,
         receiveDataWhenStatusError: true,
+        validateStatus: (status) {
+          return status! < 500;
+        },
       ),
     );
   }

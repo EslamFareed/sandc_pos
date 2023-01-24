@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -78,12 +80,12 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
   insertOrdersDetails(List<GetInVoiceDetails> items) async {
     if (items.isNotEmpty) {
       try {
-        List<Map> data = [];
+        // List<Map> data = [];
 
         for (var element in items) {
           element.offlineDatabase = true;
           element.updateDataBase = true;
-          data.add(element.toJson());
+          // data.add(element.toJson());
         }
         await DioHelper.postListDataWithToken(
                 url: ADD_ORDER_DETAILS, data: items)
@@ -113,35 +115,54 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
 
   insertOrders(List<OrderResponseModel> items) async {
     if (items.isNotEmpty) {
-      try {
-        List<Map> data = [];
-        for (var element in items) {
-          element.offlineDatabase = true;
-          element.updateDataBase = true;
-          data.add(element.toJson());
-        }
-        await DioHelper.postListDataWithToken(url: ADD_ORDER, data: data)
-            .then((value) {
-          if (value.statusCode == 200) {
-            if (kDebugMode) {
-              print(
-                  "success adding ${items.length} items in orders ---------------------------------------");
-            }
-          } else {
-            if (kDebugMode) {
-              print(value.data);
-            }
-          }
-        }).catchError((onError) {
-          if (kDebugMode) {
-            print(onError.toString());
-          }
+      List<Map<String, dynamic>> data = [];
+      for (var element in items) {
+        // element.offlineDatabase = true;
+        // element.updateDataBase = true;
+        // element.payTypeID = element.payTypeID.toString();
+        // element.clientID == "null"
+        //     ? element.clientID = null
+        //     : element.clientID = element.clientID;
+        data.add({
+          "id": element.id,
+          "client_ID": element.clientID == "null" ? null : element.clientID,
+          "payType_ID": element.payTypeID.toString(),
+          "emp_ID": element.empID,
+          "countID": element.countID,
+          "createDate": element.createDate,
+          "updateDate": element.updateDate,
+          "isPayCash": element.isPayCash,
+          "totalCost": element.totalCost,
+          "discount": element.discount,
+          "taxes": element.taxes,
+          "cost_Net": element.costNet,
+          "debitPay": element.debitPay,
+          "payAmount": element.payAmount,
+          "qrcode": element.qrcode,
+          "isReturn": element.isReturn,
+          "returnDesc": element.returnDesc,
+          "updateDataBase": true,
+          "offlineDatabase": true
         });
-      } catch (e) {
-        if (kDebugMode) {
-          print(e.toString());
-        }
       }
+
+      await DioHelper.postListDataWithToken(url: ADD_ORDER, data: data)
+          .then((value) {
+        if (value.statusCode == 200) {
+          if (kDebugMode) {
+            print(
+                "success adding ${items.length} items in orders ---------------------------------------");
+          }
+        } else {
+          if (kDebugMode) {
+            print(value.data);
+          }
+        }
+      }).catchError((onError) {
+        if (kDebugMode) {
+          print(onError.toString());
+        }
+      });
     }
   }
 

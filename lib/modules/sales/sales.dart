@@ -49,13 +49,27 @@ class _SalesScreenState extends State<SalesScreen> {
   void initState() {
     DataCubit.get(context).itemsCurrentOrder = [];
     DataCubit.get(context).productsCurrentOrder = [];
-    DataCubit.get(context).currentOrder = OrderResponseModel(id: Uuid().v4());
+    _getCurrentId();
     DataCubit.get(context).total = 0;
     DataCubit.get(context).afterDiscount = 0;
     DataCubit.get(context).afterTaxes = 0;
     DataCubit.get(context).discount = 0;
     _clearEveryThing();
     super.initState();
+  }
+
+  _getCurrentId() {
+    int lastId = 0;
+    DataCubit.get(context).orderModels.forEach((element) {
+      if (element.countID! > lastId) {
+        lastId = element.countID!;
+      }
+    });
+    lastId++;
+    DataCubit.get(context).currentOrder = OrderResponseModel(
+        id: "${DataCubit.get(context).companyModels[0].branchId}${DataCubit.get(context).companyModels[0].empId}$lastId",
+        countID: lastId);
+    print(DataCubit.get(context).currentOrder!.countID);
   }
 
   _clearEveryThing() {

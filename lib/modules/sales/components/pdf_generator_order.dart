@@ -169,40 +169,36 @@ class PdfGenerator {
                     children: [
                       pw.Row(children: [
                         pw.Expanded(
-                          child: pw.FittedBox(
-                            child: pw.Text(
-                              "الكمية",
-                              textAlign: pw.TextAlign.center,
-                              style: const pw.TextStyle(fontSize: 6),
-                            ),
-                          ),
-                          flex: 1,
-                        ),
-                        pw.Expanded(
                           child: pw.Text(
-                            "الصنف",
+                            "المجموع\n شامل  الضريبة",
                             textAlign: pw.TextAlign.center,
-                            style: const pw.TextStyle(fontSize: 6),
+                            style: const pw.TextStyle(fontSize: 10),
                           ),
-                          flex: 5,
+                          flex: 4,
                         ),
                         pw.Expanded(
                           child: pw.Text(
                             "السعر",
                             textAlign: pw.TextAlign.center,
-                            style: const pw.TextStyle(fontSize: 6),
+                            style: const pw.TextStyle(fontSize: 10),
                           ),
                           flex: 2,
                         ),
                         pw.Expanded(
-                          child: pw.FittedBox(
-                            child: pw.Text(
-                              "المجموع شامل  الضريبة",
-                              textAlign: pw.TextAlign.center,
-                              style: const pw.TextStyle(fontSize: 6),
-                            ),
+                          child: pw.Text(
+                            "الكمية",
+                            textAlign: pw.TextAlign.center,
+                            style: const pw.TextStyle(fontSize: 10),
                           ),
                           flex: 2,
+                        ),
+                        pw.Expanded(
+                          child: pw.Text(
+                            "الصنف",
+                            textAlign: pw.TextAlign.center,
+                            style: const pw.TextStyle(fontSize: 10),
+                          ),
+                          flex: 5,
                         ),
                       ]),
                       pw.Divider(),
@@ -213,22 +209,19 @@ class PdfGenerator {
                               children: [
                                 pw.Expanded(
                                   child: pw.Text(
-                                    e.quantity!.toString(),
+                                    cubit.companyModels[0].isPriceIncludeTaxes!
+                                        ? e.totalCost!.toStringAsFixed(2)
+                                        : (e.totalCost! +
+                                                (e.totalCost! *
+                                                    (double.parse(cubit
+                                                            .companyModels[0]
+                                                            .taxAmount!) *
+                                                        .01)))
+                                            .toStringAsFixed(2),
                                     textAlign: pw.TextAlign.center,
                                     style: const pw.TextStyle(fontSize: 8),
                                   ),
-                                  flex: 1,
-                                ),
-                                pw.Expanded(
-                                  child: pw.Text(
-                                    cubit.productModels
-                                        .firstWhere((element) =>
-                                            element.prodId == e.prodId)
-                                        .name!,
-                                    textAlign: pw.TextAlign.center,
-                                    style: const pw.TextStyle(fontSize: 8),
-                                  ),
-                                  flex: 5,
+                                  flex: 4,
                                 ),
                                 pw.Expanded(
                                   child: pw.Text(
@@ -248,19 +241,22 @@ class PdfGenerator {
                                 ),
                                 pw.Expanded(
                                   child: pw.Text(
-                                    cubit.companyModels[0].isPriceIncludeTaxes!
-                                        ? e.totalCost!.toStringAsFixed(2)
-                                        : (e.totalCost! +
-                                                (e.totalCost! *
-                                                    (double.parse(cubit
-                                                            .companyModels[0]
-                                                            .taxAmount!) *
-                                                        .01)))
-                                            .toStringAsFixed(2),
+                                    e.quantity!.toString(),
                                     textAlign: pw.TextAlign.center,
                                     style: const pw.TextStyle(fontSize: 8),
                                   ),
                                   flex: 2,
+                                ),
+                                pw.Expanded(
+                                  child: pw.Text(
+                                    cubit.productModels
+                                        .firstWhere((element) =>
+                                            element.prodId == e.prodId)
+                                        .name!,
+                                    textAlign: pw.TextAlign.center,
+                                    style: const pw.TextStyle(fontSize: 8),
+                                  ),
+                                  flex: 5,
                                 ),
                               ],
                             ),
@@ -268,12 +264,12 @@ class PdfGenerator {
                         ],
                       ),
                       pw.Divider(),
-                      pw.Text("معلومات الدفع : "),
                       pw.Row(
                           mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                           children: [
-                            pw.Text(cubit.currentOrder!.costNet.toString()),
                             pw.Text("كاش"),
+                            pw.Text(cubit.currentOrder!.costNet.toString()),
+                            pw.Text("معلومات الدفع : "),
                           ]),
                       pw.Table(
                           border: const pw.TableBorder(
@@ -283,30 +279,56 @@ class PdfGenerator {
                               right: pw.BorderSide(width: 1)),
                           children: [
                             pw.TableRow(children: [
-                              pw.Row(
-                                  mainAxisAlignment:
-                                      pw.MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    pw.Text(
-                                      cubit.companyModels[0].compCurrencyName!,
-                                      textAlign: pw.TextAlign.center,
-                                      style: const pw.TextStyle(fontSize: 8),
-                                    ),
-                                    pw.Row(children: [
-                                      pw.Text(
-                                        (cubit.currentOrder!.totalCost! -
-                                                cubit.currentOrder!.taxes!)
-                                            .toStringAsFixed(2),
-                                        textAlign: pw.TextAlign.center,
-                                        style: const pw.TextStyle(fontSize: 8),
-                                      ),
-                                      pw.Text(
-                                        "الاجمالي الخاضع للضريبة : ",
-                                        textAlign: pw.TextAlign.center,
-                                        style: const pw.TextStyle(fontSize: 8),
-                                      ),
-                                    ]),
-                                  ]),
+                              pw.Expanded(
+                                child: pw.Text(
+                                  cubit.companyModels[0].compCurrencyName!,
+                                  textAlign: pw.TextAlign.center,
+                                  style: const pw.TextStyle(fontSize: 5),
+                                ),
+                                flex: 2,
+                              ),
+                              pw.Expanded(
+                                child: pw.Text(
+                                  (cubit.currentOrder!.totalCost! -
+                                          cubit.currentOrder!.taxes!)
+                                      .toStringAsFixed(2),
+                                  textAlign: pw.TextAlign.center,
+                                  style: const pw.TextStyle(fontSize: 10),
+                                ),
+                                flex: 1,
+                              ),
+                              pw.Expanded(
+                                child: pw.Text(
+                                  "الاجمالي الخاضع للضريبة : ",
+                                  textAlign: pw.TextAlign.center,
+                                  style: const pw.TextStyle(fontSize: 10),
+                                ),
+                                flex: 5,
+                              ),
+                              // pw.Row(
+                              //     mainAxisAlignment:
+                              //         pw.MainAxisAlignment.spaceBetween,
+                              //     children: [
+                              //       pw.Text(
+                              //         cubit.companyModels[0].compCurrencyName!,
+                              //         textAlign: pw.TextAlign.center,
+                              //         style: const pw.TextStyle(fontSize: 8),
+                              //       ),
+                              //       pw.Row(children: [
+                              // pw.Text(
+                              //   (cubit.currentOrder!.totalCost! -
+                              //           cubit.currentOrder!.taxes!)
+                              //       .toStringAsFixed(2),
+                              //   textAlign: pw.TextAlign.center,
+                              //   style: const pw.TextStyle(fontSize: 8),
+                              // ),
+                              // pw.Text(
+                              //   "الاجمالي الخاضع للضريبة : ",
+                              //   textAlign: pw.TextAlign.center,
+                              //   style: const pw.TextStyle(fontSize: 8),
+                              // ),
+                              //       ]),
+                              //     ]),
                             ])
                           ]),
                       pw.Table(
@@ -318,67 +340,123 @@ class PdfGenerator {
                           ),
                           children: [
                             pw.TableRow(children: [
-                              pw.Row(
-                                  mainAxisAlignment:
-                                      pw.MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    pw.Text(
-                                      cubit.companyModels[0].compCurrencyName!,
-                                      textAlign: pw.TextAlign.center,
-                                      style: const pw.TextStyle(fontSize: 8),
-                                    ),
-                                    pw.Row(children: [
-                                      pw.Text(
-                                        cubit.currentOrder!.discount!
-                                            .toStringAsFixed(2),
-                                        textAlign: pw.TextAlign.center,
-                                        style: const pw.TextStyle(fontSize: 8),
-                                      ),
-                                      pw.Text(
-                                        "الخصم : ",
-                                        textAlign: pw.TextAlign.center,
-                                        style: const pw.TextStyle(fontSize: 8),
-                                      ),
-                                    ]),
-                                  ]),
+                              pw.Expanded(
+                                child: pw.Text(
+                                  cubit.companyModels[0].compCurrencyName!,
+                                  textAlign: pw.TextAlign.center,
+                                  style: const pw.TextStyle(fontSize: 5),
+                                ),
+                                flex: 2,
+                              ),
+                              pw.Expanded(
+                                child: pw.Text(
+                                  cubit.currentOrder!.discount!
+                                      .toStringAsFixed(2),
+                                  textAlign: pw.TextAlign.center,
+                                  style: const pw.TextStyle(fontSize: 10),
+                                ),
+                                flex: 1,
+                              ),
+                              pw.Expanded(
+                                child: pw.Text(
+                                  "الخصم : ",
+                                  textAlign: pw.TextAlign.center,
+                                  style: const pw.TextStyle(fontSize: 10),
+                                ),
+                                flex: 5,
+                              ),
+                              // pw.Row(
+                              //     mainAxisAlignment:
+                              //         pw.MainAxisAlignment.spaceBetween,
+                              //     children: [
+                              //       pw.Text(
+                              //         cubit.companyModels[0].compCurrencyName!,
+                              //         textAlign: pw.TextAlign.center,
+                              //         style: const pw.TextStyle(fontSize: 8),
+                              //       ),
+                              //       pw.Row(children: [
+                              // pw.Text(
+                              //   cubit.currentOrder!.discount!
+                              //       .toStringAsFixed(2),
+                              //   textAlign: pw.TextAlign.center,
+                              //   style: const pw.TextStyle(fontSize: 8),
+                              // ),
+                              // pw.Text(
+                              //   "الخصم : ",
+                              //   textAlign: pw.TextAlign.center,
+                              //   style: const pw.TextStyle(fontSize: 8),
+                              // ),
+                              //       ]),
+                              //     ]),
                             ])
                           ]),
                       pw.Table(
                           border: const pw.TableBorder(
-                              // top: pw.BorderSide(width: 1),
-                              // bottom: pw.BorderSide(width: 1),
                               left: pw.BorderSide(width: 1),
                               right: pw.BorderSide(width: 1)),
                           children: [
                             pw.TableRow(children: [
-                              pw.Row(
-                                  mainAxisAlignment:
-                                      pw.MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    pw.Text(
-                                      cubit.companyModels[0].compCurrencyName!,
-                                      textAlign: pw.TextAlign.center,
-                                      style: const pw.TextStyle(fontSize: 8),
-                                    ),
-                                    pw.Text(
-                                      "${cubit.companyModels[0].taxAmount!}%",
-                                      textAlign: pw.TextAlign.center,
-                                      style: const pw.TextStyle(fontSize: 8),
-                                    ),
-                                    pw.Row(children: [
-                                      pw.Text(
-                                        cubit.currentOrder!.taxes!
-                                            .toStringAsFixed(2),
-                                        textAlign: pw.TextAlign.center,
-                                        style: const pw.TextStyle(fontSize: 8),
-                                      ),
-                                      pw.Text(
-                                        "ضريبة القيمة المضافة : ",
-                                        textAlign: pw.TextAlign.center,
-                                        style: const pw.TextStyle(fontSize: 8),
-                                      ),
-                                    ]),
-                                  ]),
+                              pw.Expanded(
+                                child: pw.Text(
+                                  cubit.companyModels[0].compCurrencyName!,
+                                  textAlign: pw.TextAlign.center,
+                                  style: const pw.TextStyle(fontSize: 5),
+                                ),
+                                flex: 2,
+                              ),
+                              pw.Expanded(
+                                child: pw.Text(
+                                  "${cubit.companyModels[0].taxAmount!}%",
+                                  textAlign: pw.TextAlign.center,
+                                  style: const pw.TextStyle(fontSize: 10),
+                                ),
+                                flex: 1,
+                              ),
+                              pw.Expanded(
+                                child: pw.Text(
+                                  cubit.currentOrder!.taxes!.toStringAsFixed(2),
+                                  textAlign: pw.TextAlign.center,
+                                  style: const pw.TextStyle(fontSize: 10),
+                                ),
+                                flex: 1,
+                              ),
+                              pw.Expanded(
+                                child: pw.Text(
+                                  "ضريبة القيمة المضافة : ",
+                                  textAlign: pw.TextAlign.center,
+                                  style: const pw.TextStyle(fontSize: 10),
+                                ),
+                                flex: 5,
+                              ),
+
+                              // pw.Row(
+                              //     mainAxisAlignment:
+                              //         pw.MainAxisAlignment.spaceBetween,
+                              //     children: [
+                              // pw.Text(
+                              //   cubit.companyModels[0].compCurrencyName!,
+                              //   textAlign: pw.TextAlign.center,
+                              //   style: const pw.TextStyle(fontSize: 8),
+                              // ),
+                              // pw.Text(
+                              //   "${cubit.companyModels[0].taxAmount!}%",
+                              //   textAlign: pw.TextAlign.center,
+                              //   style: const pw.TextStyle(fontSize: 8),
+                              // ),
+                              //       pw.Row(children: [
+                              // pw.Text(
+                              //   cubit.currentOrder!.taxes!
+                              //       .toStringAsFixed(2),
+                              //   textAlign: pw.TextAlign.center,
+                              //   style: const pw.TextStyle(fontSize: 8),
+                              // ),
+                              // pw.Text(
+                              //   "ضريبة القيمة المضافة : ",
+                              //   textAlign: pw.TextAlign.center,
+                              //   style: const pw.TextStyle(fontSize: 8),
+                              // ),
+                              //       ]),
+                              //     ]),
                             ])
                           ]),
                       pw.Table(
@@ -391,28 +469,54 @@ class PdfGenerator {
                           // ),
                           children: [
                             pw.TableRow(children: [
-                              pw.Row(
-                                  mainAxisAlignment:
-                                      pw.MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    pw.Text(
-                                      cubit.companyModels[0].compCurrencyName!,
-                                      textAlign: pw.TextAlign.center,
-                                      style: const pw.TextStyle(fontSize: 8),
-                                    ),
-                                    pw.Row(children: [
-                                      pw.Text(
-                                        cubit.currentOrder!.costNet.toString(),
-                                        textAlign: pw.TextAlign.center,
-                                        style: const pw.TextStyle(fontSize: 8),
-                                      ),
-                                      pw.Text(
-                                        "اجمالي المبلغ المستحق: ",
-                                        textAlign: pw.TextAlign.center,
-                                        style: const pw.TextStyle(fontSize: 8),
-                                      ),
-                                    ]),
-                                  ]),
+                              pw.Expanded(
+                                child: pw.Text(
+                                  cubit.companyModels[0].compCurrencyName!,
+                                  textAlign: pw.TextAlign.center,
+                                  style: const pw.TextStyle(fontSize: 5),
+                                ),
+                                flex: 2,
+                              ),
+                              pw.Expanded(
+                                child: pw.Text(
+                                  cubit.currentOrder!.costNet.toString(),
+                                  textAlign: pw.TextAlign.center,
+                                  style: const pw.TextStyle(fontSize: 10),
+                                ),
+                                flex: 1,
+                              ),
+
+                              pw.Expanded(
+                                child: pw.Text(
+                                  "اجمالي المبلغ المستحق: ",
+                                  textAlign: pw.TextAlign.center,
+                                  style: const pw.TextStyle(fontSize: 8),
+                                ),
+                                flex: 5,
+                              ),
+
+                              // pw.Row(
+                              //     mainAxisAlignment:
+                              //         pw.MainAxisAlignment.spaceBetween,
+                              //     children: [
+                              // pw.Text(
+                              //   cubit.companyModels[0].compCurrencyName!,
+                              //   textAlign: pw.TextAlign.center,
+                              //   style: const pw.TextStyle(fontSize: 8),
+                              // ),
+                              //       pw.Row(children: [
+                              // pw.Text(
+                              //   cubit.currentOrder!.costNet.toString(),
+                              //   textAlign: pw.TextAlign.center,
+                              //   style: const pw.TextStyle(fontSize: 8),
+                              // ),
+                              // pw.Text(
+                              //   "اجمالي المبلغ المستحق: ",
+                              //   textAlign: pw.TextAlign.center,
+                              //   style: const pw.TextStyle(fontSize: 8),
+                              // ),
+                              //       ]),
+                              //     ]),
                             ])
                           ]),
                       pw.SizedBox(height: 10),

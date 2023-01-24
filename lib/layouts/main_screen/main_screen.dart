@@ -295,126 +295,129 @@ class _MainScreenState extends State<MainScreen> {
               .last);
 
       return Drawer(
-        child: Column(
-          children: [
-            Container(
-                color: AppColors.primaryColor,
-                height: getx.Get.height * .25,
-                width: getx.Get.width,
-                child: Row(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(20),
-                      child: CircleAvatar(
-                        backgroundImage: MemoryImage(_bytesImage),
-                        radius: 50.r,
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          DataCubit.get(context).companyModels[0].empName!,
-                          style: AppTextStyle.appBarText()
-                              .copyWith(color: Colors.white),
-                        ),
-                        Text(
-                          DataCubit.get(context).companyModels[0].empPhone!,
-                          style: AppTextStyle.caption()
-                              .copyWith(color: Colors.white),
-                        ),
-                        Text(
-                          DataCubit.get(context).companyModels[0].empEmail!,
-                          style: AppTextStyle.caption()
-                              .copyWith(color: Colors.white),
-                        ),
-                        Text(
-                          DataCubit.get(context).companyModels[0].branchName!,
-                          style: AppTextStyle.caption()
-                              .copyWith(color: Colors.white),
-                        ),
-                      ],
-                    )
-                  ],
-                )),
-            SizedBox(
-              height: getx.Get.height * .75,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: SafeArea(
+          child: ListView(
+            children: [
+              Container(
+                  color: AppColors.primaryColor,
+                  height: getx.Get.height * .25,
+                  width: getx.Get.width,
+                  child: Row(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(top: 10.h),
-                        child: Card(
-                          color: const Color.fromARGB(255, 215, 215, 215),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0.r),
-                          ),
-                          child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 25.w, vertical: 2.h),
-                              child: Text(
-                                getLang(context).testversion,
-                                style: AppTextStyle.caption().copyWith(
-                                    color: const Color.fromARGB(
-                                        255, 155, 155, 155)),
-                              )),
+                        margin: const EdgeInsets.all(20),
+                        child: CircleAvatar(
+                          backgroundImage: MemoryImage(_bytesImage),
+                          radius: 50.r,
                         ),
                       ),
-                      SizedBox(height: 10.h),
-                      ListTile(
-                        onTap: () {
-                          getx.Get.to(const AboutScreen(),
-                              transition: getx.Transition.zoom);
-                        },
-                        title: Text(getLang(context).moreinformation),
-                        trailing: const Icon(Icons.info),
-                      ),
-                      ListTile(
-                        onTap: () {
-                          getx.Get.to(ContactUsScreen(),
-                              transition: getx.Transition.zoom);
-                        },
-                        title: Text(getLang(context).contactwithus),
-                        trailing: const Icon(Icons.contact_support),
-                      ),
-                      ListTile(
-                        onTap: () async {
-                          await CacheHelper.saveData(
-                              key: "userToken", value: "NO");
-                          getx.Get.offAll(LoginScreen(),
-                              transition: getx.Transition.zoom);
-                        },
-                        title: Text(getLang(context).logout),
-                        trailing: const Icon(Icons.exit_to_app),
-                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            DataCubit.get(context).companyModels[0].empName!,
+                            style: AppTextStyle.appBarText()
+                                .copyWith(color: Colors.white),
+                          ),
+                          Text(
+                            DataCubit.get(context).companyModels[0].empPhone!,
+                            style: AppTextStyle.caption()
+                                .copyWith(color: Colors.white),
+                          ),
+                          Text(
+                            DataCubit.get(context).companyModels[0].empEmail!,
+                            style: AppTextStyle.caption()
+                                .copyWith(color: Colors.white),
+                          ),
+                          Text(
+                            DataCubit.get(context).companyModels[0].branchName!,
+                            style: AppTextStyle.caption()
+                                .copyWith(color: Colors.white),
+                          ),
+                        ],
+                      )
                     ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 10.h),
-                    child: Card(
-                      color: const Color.fromARGB(255, 215, 215, 215),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0.r),
-                      ),
-                      child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 25.w, vertical: 2.h),
-                          child: Text(
-                            getLang(context).allrightsreservedsandc,
-                            style: AppTextStyle.caption().copyWith(
-                                color: const Color.fromARGB(255, 155, 155, 155),
-                                fontSize: 12.sp),
-                          )),
+                  )),
+              SizedBox(
+                height: getx.Get.height * .75,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 10.h),
+                          child: Card(
+                            color: const Color.fromARGB(255, 215, 215, 215),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0.r),
+                            ),
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 25.w, vertical: 2.h),
+                                child: Text(
+                                  getLang(context).testversion,
+                                  style: AppTextStyle.caption().copyWith(
+                                      color: const Color.fromARGB(
+                                          255, 155, 155, 155)),
+                                )),
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        ListTile(
+                          onTap: () {
+                            getx.Get.to(const AboutScreen(),
+                                transition: getx.Transition.zoom);
+                          },
+                          title: Text(getLang(context).moreinformation),
+                          trailing: const Icon(Icons.info),
+                        ),
+                        ListTile(
+                          onTap: () {
+                            getx.Get.to(ContactUsScreen(),
+                                transition: getx.Transition.zoom);
+                          },
+                          title: Text(getLang(context).contactwithus),
+                          trailing: const Icon(Icons.contact_support),
+                        ),
+                        ListTile(
+                          onTap: () async {
+                            await CacheHelper.saveData(
+                                key: "userToken", value: "NO");
+                            getx.Get.offAll(LoginScreen(),
+                                transition: getx.Transition.zoom);
+                          },
+                          title: Text(getLang(context).logout),
+                          trailing: const Icon(Icons.exit_to_app),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10.h),
+                      child: Card(
+                        color: const Color.fromARGB(255, 215, 215, 215),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0.r),
+                        ),
+                        child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 25.w, vertical: 2.h),
+                            child: Text(
+                              getLang(context).allrightsreservedsandc,
+                              style: AppTextStyle.caption().copyWith(
+                                  color:
+                                      const Color.fromARGB(255, 155, 155, 155),
+                                  fontSize: 12.sp),
+                            )),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       );
     } else {

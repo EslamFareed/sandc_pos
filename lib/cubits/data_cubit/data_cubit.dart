@@ -1107,14 +1107,9 @@ class DataCubit extends Cubit<DataState> {
     currentOrder!.qrcode = "no";
     currentOrder!.updateDate = "no";
     currentOrder!.createDate = DateTime.now().toString();
-    currentOrder!.countID = 0;
-
-    // orderModels.forEach((element) {
-    //   if (element.countID! > currentOrder!.countID!) {
-    //     currentOrder!.countID = element.countID!;
-    //   }
-    // });
-    // currentOrder!.countID = currentOrder!.countID! + 1;
+    if (!companyModels[0].isMustChoosePayCash! && chosenClient == null) {
+      currentOrder!.clientID = null;
+    }
 
     await insertOrderTable(currentOrder!);
     await insertInvoiceDetailsByList(itemsCurrentOrder);
