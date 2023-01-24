@@ -107,6 +107,8 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/modules/sales_returns/sales_return_details.dart';
 
+import '../../core/components/app_language.dart';
+
 class ScanCodeSalesReturnsScreen extends StatefulWidget {
   const ScanCodeSalesReturnsScreen({Key? key}) : super(key: key);
 
@@ -141,7 +143,7 @@ class _ScanCodeSalesReturnsScreenState
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Scan Code"),
+        title: Text(getLang(context).scanCode),
       ),
       body: Column(
         children: <Widget>[

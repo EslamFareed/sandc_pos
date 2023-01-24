@@ -8,6 +8,7 @@ import 'package:horizontal_data_table/horizontal_data_table.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 import 'package:sandc_pos/core/components/default_buttons.dart';
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
@@ -52,8 +53,8 @@ class _TableSalesState extends State<TableSales> {
                 leftHandSideColBackgroundColor: const Color(0xFFFFFFFF),
                 rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
               )
-            : const Scaffold(
-                body: Center(child: Text("No items")),
+            : Scaffold(
+                body: Center(child: Text(getLang(context).noitems)),
               );
       },
     );
@@ -61,10 +62,10 @@ class _TableSalesState extends State<TableSales> {
 
   List<Widget> _getTitleWidget() {
     return [
-      _getTitleItemWidget('Product', Get.width * .40),
-      _getTitleItemWidget('Price', Get.width * .20),
-      _getTitleItemWidget('Quantity', Get.width * .20),
-      _getTitleItemWidget('Total', Get.width * .20),
+      _getTitleItemWidget(getLang(context).prodcut, Get.width * .40),
+      _getTitleItemWidget(getLang(context).price, Get.width * .20),
+      _getTitleItemWidget(getLang(context).quantity, Get.width * .20),
+      _getTitleItemWidget(getLang(context).total, Get.width * .20),
     ];
   }
 
@@ -168,7 +169,7 @@ class _TableSalesState extends State<TableSales> {
                                                 context);
                                         Get.back();
                                       },
-                                      buttonText: "Yes"),
+                                      buttonText: getLang(context).yes),
                                 ),
                                 Expanded(
                                   child: DefaultButton(
@@ -176,13 +177,13 @@ class _TableSalesState extends State<TableSales> {
                                       onPress: () {
                                         Get.back();
                                       },
-                                      buttonText: "No"),
+                                      buttonText: getLang(context).no),
                                 ),
                               ],
                             )
                           ],
                           title: Text(
-                              "want to delete this product from cart ${DataCubit.get(context).productsCurrentOrder.where((element) => element.prodId == DataCubit.get(context).itemsCurrentOrder[index].prodId).first.name!}"),
+                              "${getLang(context).wanttodeletethisproductfromcart} ${DataCubit.get(context).productsCurrentOrder.where((element) => element.prodId == DataCubit.get(context).itemsCurrentOrder[index].prodId).first.name!}"),
                         ),
                         barrierDismissible: false);
                   } else {

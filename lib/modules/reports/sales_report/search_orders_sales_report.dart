@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart' as getx;
 
+import '../../../core/components/app_language.dart';
 import '../../../cubits/sales_report_cubit/sales_report_cubit.dart';
 import '../../../online_models/order_response_model.dart';
 import 'order_details.dart';
@@ -35,7 +36,7 @@ class _SearchOrdersSalesReportScreenState
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text("Search By reciet no"),
+            title: Text(getLang(context).searchOrders),
           ),
           body: Column(
             children: [
@@ -48,7 +49,7 @@ class _SearchOrdersSalesReportScreenState
                   },
                   decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.search),
-                      hintText: "reciet no",
+                      hintText: getLang(context).id,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                           borderSide: const BorderSide(color: Colors.black))),
@@ -78,8 +79,8 @@ class _SearchOrdersSalesReportScreenState
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text("total cost : ${order.totalCost!}"),
-            Text("date : ${order.createDate!}"),
+            Text("${getLang(context).total} : ${order.totalCost!}"),
+            Text("${getLang(context).date} : ${order.createDate!}"),
           ],
         ),
       ),

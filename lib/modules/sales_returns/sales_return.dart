@@ -221,6 +221,7 @@ import 'package:sandc_pos/cubits/sales_returns_cubit/sales_returns_cubit.dart';
 import 'package:sandc_pos/modules/sales_returns/scan_code_sales_return.dart';
 import 'package:sandc_pos/modules/sales_returns/table_sales_returns.dart';
 
+import '../../core/components/app_language.dart';
 import '../../core/style/text/app_text_style.dart';
 
 import 'search_orders_sales_return.dart';
@@ -250,7 +251,7 @@ class _SalesReturnsScreenState extends State<SalesReturnsScreen> {
 
   _buildAppBar(SalesReturnsCubit cubit) {
     return AppBar(
-      title: Text("Sales Returns"),
+      title: Text(getLang(context).salesreturns),
       centerTitle: true,
       actions: [
         IconButton(
@@ -265,13 +266,13 @@ class _SalesReturnsScreenState extends State<SalesReturnsScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      "Choose Date Start and end",
+                      getLang(context).chooseDateStartandend,
                       style: AppTextStyle.appBarText().copyWith(fontSize: 16),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("From"),
+                        Text(getLang(context).from),
                         GestureDetector(
                           onTap: () {
                             DatePicker.showDatePicker(context,
@@ -297,7 +298,7 @@ class _SalesReturnsScreenState extends State<SalesReturnsScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("To"),
+                        Text(getLang(context).to),
                         GestureDetector(
                           onTap: () {
                             DatePicker.showDatePicker(context,
@@ -328,14 +329,14 @@ class _SalesReturnsScreenState extends State<SalesReturnsScreen> {
                                   cubit.filterOrdersByDate();
                                   getx.Get.back();
                                 },
-                                child: Text("Save"))),
+                                child: Text(getLang(context).save))),
                         const Spacer(),
                         Expanded(
                             child: ElevatedButton(
                                 onPressed: () {
                                   getx.Get.back();
                                 },
-                                child: Text("Cancel"))),
+                                child: Text(getLang(context).cancel))),
                       ],
                     )
                   ],
@@ -369,61 +370,61 @@ class _SalesReturnsScreenState extends State<SalesReturnsScreen> {
         return Scaffold(
           appBar: _buildAppBar(cubit),
           body: _buildBody(cubit),
-          floatingActionButton: _buildFAB(context, cubit),
+          // floatingActionButton: _buildFAB(context, cubit),
         );
       },
     );
   }
 
-  _buildFAB(BuildContext context, SalesReturnsCubit cubit) {
-    return FloatingActionButton(
-      child: const Icon(
-        Icons.arrow_circle_up,
-        size: 50,
-      ),
-      onPressed: () {
-        _buildBottom(context, cubit);
-      },
-    );
-  }
+  // _buildFAB(BuildContext context, SalesReturnsCubit cubit) {
+  //   return FloatingActionButton(
+  //     child: const Icon(
+  //       Icons.arrow_circle_up,
+  //       size: 50,
+  //     ),
+  //     onPressed: () {
+  //       _buildBottom(context, cubit);
+  //     },
+  //   );
+  // }
 
-  _buildBottom(BuildContext context, SalesReturnsCubit cubit) {
-    getx.Get.dialog(
-      Dialog(
-        insetAnimationDuration: const Duration(milliseconds: 100),
-        alignment: Alignment.bottomCenter,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        child: SizedBox(
-          width: getx.Get.width * .8,
-          height: getx.Get.height * .25,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  onPressed: () {
-                    getx.Get.back();
-                  },
-                  icon: const Icon(
-                    Icons.exit_to_app,
-                    size: 30,
-                  ),
-                ),
-              ),
-              Text(
-                "Total = ${cubit.total}",
-                style: AppTextStyle.headLine(),
-              ),
-            ],
-          ),
-        ),
-      ),
-      barrierDismissible: false,
-    );
-  }
+  // _buildBottom(BuildContext context, SalesReturnsCubit cubit) {
+  //   getx.Get.dialog(
+  //     Dialog(
+  //       insetAnimationDuration: const Duration(milliseconds: 100),
+  //       alignment: Alignment.bottomCenter,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(18.0),
+  //       ),
+  //       child: SizedBox(
+  //         width: getx.Get.width * .8,
+  //         height: getx.Get.height * .25,
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //           children: [
+  //             Container(
+  //               alignment: Alignment.topRight,
+  //               child: IconButton(
+  //                 onPressed: () {
+  //                   getx.Get.back();
+  //                 },
+  //                 icon: const Icon(
+  //                   Icons.exit_to_app,
+  //                   size: 30,
+  //                 ),
+  //               ),
+  //             ),
+  //             Text(
+  //               "Total = ${cubit.total}",
+  //               style: AppTextStyle.headLine(),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //     barrierDismissible: false,
+  //   );
+  // }
 
   _buildSearchBar(SalesReturnsCubit cubit) {
     return Container(
@@ -455,9 +456,9 @@ class _SalesReturnsScreenState extends State<SalesReturnsScreen> {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text(
-                        "Search Orders",
+                        getLang(context).searchOrders,
                         style: TextStyle(
                           color: Colors.grey,
                           fontWeight: FontWeight.bold,

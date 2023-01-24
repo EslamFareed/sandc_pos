@@ -101,6 +101,7 @@ import 'package:get/get.dart' as getx;
 import 'package:sandc_pos/modules/sales_returns/sales_return_details.dart';
 import 'package:sandc_pos/online_models/order_response_model.dart';
 
+import '../../core/components/app_language.dart';
 import '../../cubits/sales_report_cubit/sales_report_cubit.dart';
 import '../../cubits/sales_returns_cubit/sales_returns_cubit.dart';
 
@@ -133,7 +134,7 @@ class _SearchSalesReturnsReportScreenState
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text("Search By reciet no"),
+            title: Text(getLang(context).searchOrders),
           ),
           body: Column(
             children: [
@@ -146,7 +147,7 @@ class _SearchSalesReturnsReportScreenState
                   },
                   decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.search),
-                      hintText: "reciet no",
+                      hintText: getLang(context).id,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                           borderSide: const BorderSide(color: Colors.black))),
@@ -176,8 +177,8 @@ class _SearchSalesReturnsReportScreenState
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text("total cost : ${order.totalCost!}"),
-            Text("date : ${order.createDate!}"),
+            Text("${getLang(context).total} : ${order.totalCost!}"),
+            Text("${getLang(context).date} : ${order.createDate!}"),
           ],
         ),
       ),

@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 
+import '../../../core/components/app_language.dart';
+
 class ScanCodeScreen extends StatefulWidget {
   const ScanCodeScreen({Key? key}) : super(key: key);
 
@@ -40,7 +42,7 @@ class _ScanCodeScreenState extends State<ScanCodeScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Scan Code"),
+        title: Text(getLang(context).scanCode),
       ),
       body: Column(
         children: <Widget>[

@@ -10,6 +10,8 @@ import 'package:sandc_pos/modules/products/product_details.dart';
 import 'package:sandc_pos/online_models/product_response_model.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../core/components/app_language.dart';
+
 class SearchProductsDetailsScreen extends StatefulWidget {
   SearchProductsDetailsScreen({Key? key}) : super(key: key);
 
@@ -37,7 +39,7 @@ class _SearchProductsDetailsScreenState
           return Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: Text("Search By name"),
+              title: Text(getLang(context).searchByname),
             ),
             body: Column(
               children: [
@@ -50,7 +52,7 @@ class _SearchProductsDetailsScreenState
                     },
                     decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.search),
-                        hintText: "Product Name",
+                        hintText: getLang(context).prodcut,
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                             borderSide: const BorderSide(color: Colors.black))),
@@ -89,8 +91,8 @@ class _SearchProductsDetailsScreenState
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text("price : ${product.priceOne!}"),
-            Text("quantity : ${product.stockQuantity!}"),
+            Text("${getLang(context).price} : ${product.priceOne!}"),
+            Text("${getLang(context).quantity} : ${product.stockQuantity!}"),
           ],
         ),
       ),

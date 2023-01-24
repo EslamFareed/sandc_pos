@@ -5,10 +5,11 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:sandc_pos/online_models/product_response_model.dart';
 
+import '../../core/components/app_language.dart';
 import '../../online_models/company_info_response_model.dart';
 
 Future<Uint8List> makePdf(List<ProductResponseModel> products,
-    CompanyInfoResponseModel company) async {
+    CompanyInfoResponseModel company, ctx) async {
   final pdf = Document();
   var font = Font.ttf(await rootBundle.load("assets/fonts/Hacen-Tunisia.ttf"));
   Uint8List _bytesImage = const Base64Decoder()
@@ -32,19 +33,19 @@ Future<Uint8List> makePdf(List<ProductResponseModel> products,
                   decoration: BoxDecoration(color: PdfColor.fromHex("#999999")),
                   children: [
                     Expanded(
-                      child: PaddedText("name"),
+                      child: PaddedText(getLang(ctx).prodcut),
                       flex: 2,
                     ),
                     Expanded(
-                      child: PaddedText("price 1"),
+                      child: PaddedText(getLang(ctx).priceone),
                       flex: 1,
                     ),
                     Expanded(
-                      child: PaddedText("price 2"),
+                      child: PaddedText(getLang(ctx).pricetwo),
                       flex: 1,
                     ),
                     Expanded(
-                      child: PaddedText("price 3"),
+                      child: PaddedText(getLang(ctx).pricethree),
                       flex: 1,
                     ),
                   ]),

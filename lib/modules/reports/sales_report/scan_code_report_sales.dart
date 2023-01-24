@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import '../../../core/components/app_language.dart';
 import '../../../cubits/data_cubit/data_cubit.dart';
 import 'order_details.dart';
 
@@ -42,7 +43,7 @@ class _ScanCodeReportSalesScreenState extends State<ScanCodeReportSalesScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Scan Code"),
+        title: Text(getLang(context).scanCode),
       ),
       body: Column(
         children: <Widget>[

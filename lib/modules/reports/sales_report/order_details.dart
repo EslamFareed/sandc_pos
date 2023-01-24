@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 
 import '../../../cubits/sales_report_cubit/sales_report_cubit.dart';
 import '../../../online_models/order_response_model.dart';
@@ -32,14 +33,22 @@ class OrderDetailsScreen extends StatelessWidget {
                   SizedBox(
                     height: 10.h,
                   ),
-                  ItemSettingData(title: "Total", data: "${item!.totalCost}"),
-                  ItemSettingData(title: "paid", data: "${item!.payAmount}"),
-                  ItemSettingData(title: "debit", data: "${item!.debitPay}"),
-                  ItemSettingData(title: "date", data: "${item!.createDate}"),
-                  ItemSettingData(title: "taxes", data: "${item!.taxes}"),
                   ItemSettingData(
-                      title: "return desc", data: "${item!.returnDesc}"),
-                  Text("Products"),
+                      title: getLang(context).total,
+                      data: "${item!.totalCost}"),
+                  ItemSettingData(
+                      title: getLang(context).paid, data: "${item!.payAmount}"),
+                  ItemSettingData(
+                      title: getLang(context).debit, data: "${item!.debitPay}"),
+                  ItemSettingData(
+                      title: getLang(context).date,
+                      data: "${item!.createDate}"),
+                  ItemSettingData(
+                      title: getLang(context).taxes, data: "${item!.taxes}"),
+                  ItemSettingData(
+                      title: getLang(context).returndesc,
+                      data: "${item!.returnDesc}"),
+                  Text(getLang(context).products),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -52,7 +61,7 @@ class OrderDetailsScreen extends StatelessWidget {
                                       cubit.orderProducts[index].prodId ==
                                       element.prodId)
                                   .isReturn!
-                              ? "Returned"
+                              ? getLang(context).returned
                               : "",
                           style: TextStyle(color: Colors.red),
                         ),

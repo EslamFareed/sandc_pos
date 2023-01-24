@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/modules/products/product_details.dart';
 
@@ -35,7 +36,7 @@ class _ScanCodeProductDetailsScreenState
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Scan Code"),
+        title: Text(getLang(context).scanCode),
       ),
       body: Column(
         children: <Widget>[

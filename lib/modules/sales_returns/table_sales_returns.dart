@@ -140,6 +140,7 @@ import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/modules/sales_returns/sales_return_details.dart';
 
+import '../../core/components/app_language.dart';
 import '../../cubits/sales_report_cubit/sales_report_cubit.dart';
 import '../../cubits/sales_returns_cubit/sales_returns_cubit.dart';
 
@@ -181,10 +182,10 @@ class _TableSalesReturnsState extends State<TableSalesReturns> {
 
   List<Widget> _getTitleWidget() {
     return [
-      _getTitleItemWidget('Reciet No', getx.Get.width * .30),
-      _getTitleItemWidget('Client Name', getx.Get.width * .30),
-      _getTitleItemWidget('date', getx.Get.width * .20),
-      _getTitleItemWidget('Total', getx.Get.width * .20),
+      _getTitleItemWidget(getLang(context).id, getx.Get.width * .30),
+      _getTitleItemWidget(getLang(context).clientsname, getx.Get.width * .30),
+      _getTitleItemWidget(getLang(context).date, getx.Get.width * .20),
+      _getTitleItemWidget(getLang(context).total, getx.Get.width * .20),
     ];
   }
 

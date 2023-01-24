@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' as getx;
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 
 import 'package:screenshot/screenshot.dart';
 import 'package:uuid/uuid.dart';
@@ -81,7 +82,7 @@ class _SalesScreenState extends State<SalesScreen> {
 
   _buildAppBar() {
     return AppBar(
-      title: Text("Sales"),
+      title: Text(getLang(context).sales),
       centerTitle: true,
     );
   }
@@ -90,7 +91,7 @@ class _SalesScreenState extends State<SalesScreen> {
     buildPopUpMessage(
       context: context,
       content: Text(
-        "Want To Exit",
+        getLang(context).wantToExit,
         style: AppTextStyle.bodyText(),
       ),
       title: Image.asset("assets/images/logo.png"),
@@ -100,7 +101,7 @@ class _SalesScreenState extends State<SalesScreen> {
             getx.Get.back(closeOverlays: true);
             getx.Get.back();
           },
-          buttonText: "yes",
+          buttonText: getLang(context).yes,
           buttonWidth: 70.w,
           buttonHeight: 30.h,
         ),
@@ -108,7 +109,7 @@ class _SalesScreenState extends State<SalesScreen> {
           onPress: () {
             getx.Get.back();
           },
-          buttonText: "No",
+          buttonText: getLang(context).no,
           buttonWidth: 70.w,
           buttonHeight: 30.h,
         ),
@@ -148,20 +149,20 @@ class _SalesScreenState extends State<SalesScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ItemViewFinishOrder(
-                        title: "Total",
+                        title: getLang(context).total,
                         data: "${DataCubit.get(context).total}",
                       ),
-                      const Text("Sale Type"),
+                      Text(getLang(context).saleType),
                       DropdownButton(
                         value: DataCubit.get(context).chosenSale,
-                        items: const [
+                        items: [
                           DropdownMenuItem(
                             value: "precentage",
-                            child: Text("Sale %"),
+                            child: Text(getLang(context).sale),
                           ),
                           DropdownMenuItem(
                             value: "amount",
-                            child: Text("Sale Amount"),
+                            child: Text(getLang(context).saleAmount),
                           ),
                         ],
                         onChanged: (String? value) {
@@ -188,23 +189,23 @@ class _SalesScreenState extends State<SalesScreen> {
                         controller: discountController,
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                             floatingLabelAlignment:
                                 FloatingLabelAlignment.center,
-                            contentPadding: EdgeInsets.all(5),
-                            border: OutlineInputBorder(),
-                            label: Text("Discount")),
+                            contentPadding: const EdgeInsets.all(5),
+                            border: const OutlineInputBorder(),
+                            label: Text(getLang(context).discount)),
                       ),
                       SizedBox(height: 5.h),
                       ItemViewFinishOrder(
-                        title: "After Discount",
+                        title: getLang(context).afterDiscount,
                         data: DataCubit.get(context)
                             .afterDiscount
                             .toStringAsFixed(2),
                       ),
                       SizedBox(height: 5.h),
                       ItemViewFinishOrder(
-                        title: "After Added Taxes",
+                        title: getLang(context).afterAddedTaxes,
                         data: DataCubit.get(context)
                                 .companyModels[0]
                                 .isPriceIncludeTaxes!
@@ -223,7 +224,7 @@ class _SalesScreenState extends State<SalesScreen> {
                   onPressed: () {
                     _showDialogFinishOrder();
                   },
-                  child: Text("Finish Order"))
+                  child: Text(getLang(context).finishOrder))
             ],
           ),
         ),
@@ -250,177 +251,182 @@ class _SalesScreenState extends State<SalesScreen> {
           child: BlocConsumer<DataCubit, DataState>(
             listener: (context, state) {},
             builder: (context, state) {
-              return Form(
-                key: _keyFinishOrder,
-                child: Container(
-                  margin: const EdgeInsets.all(25),
-                  width: getx.Get.width * .95,
-                  height: getx.Get.height * .8,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Text(
-                          "Reciet Details",
-                          style: AppTextStyle.bodyText(),
-                        ),
-                        SizedBox(height: 25.h),
-                        FittedBox(
-                          child: RadioGroup<String>.builder(
-                            groupValue: DataCubit.get(context).isPayingCash!,
-                            direction: Axis.horizontal,
-                            onChanged: (value) {
-                              DataCubit.get(context).changeIsPayingCash(value);
-                            },
-                            items: ["Cash", "Deferred payment"],
-                            itemBuilder: (item) => RadioButtonBuilder(
-                              item,
-                            ),
+              return Directionality(
+                textDirection: TextDirection.ltr,
+                child: Form(
+                  key: _keyFinishOrder,
+                  child: Container(
+                    margin: const EdgeInsets.all(5),
+                    width: getx.Get.width,
+                    height: getx.Get.height * .8,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            getLang(context).recietDetails,
+                            style: AppTextStyle.bodyText(),
                           ),
-                        ),
-                        SizedBox(height: 25.h),
-                        FittedBox(
-                          child: RadioGroup<String>.builder(
-                            groupValue: DataCubit.get(context).payingType!,
-                            direction: Axis.horizontal,
-                            onChanged: (value) {
-                              DataCubit.get(context).changePayingType(value);
-                            },
-                            items: DataCubit.get(context)
-                                .payTypeModels
-                                .map((e) => e.name!)
-                                .toList(),
-                            itemBuilder: (item) => RadioButtonBuilder(
-                              item,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 25.h),
-                        Row(
-                          children: [
-                            Text(
-                              "Total",
-                              style: AppTextStyle.bodyText(),
-                            ),
-                            SizedBox(width: 10.w),
-                            Expanded(
-                              child: TextFormField(
-                                controller: totalController,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder()),
-                              ),
-                            )
-                          ],
-                        ),
-                        ElevatedButton(
-                            onPressed: () {
-                              paidController!.text = totalController!.text;
-                              restController!.text =
-                                  (double.parse(totalController!.text) -
-                                          double.parse(paidController!.text))
-                                      .toString();
-                            },
-                            child: Text("Pay All")),
-                        SizedBox(height: 25.h),
-                        Row(
-                          children: [
-                            Text(
-                              "Paid",
-                              style: AppTextStyle.bodyText(),
-                            ),
-                            SizedBox(width: 10.w),
-                            Expanded(
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: paidController,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "please enter paid amount";
-                                  }
-                                },
-                                onChanged: (value) {
-                                  restController!.text =
-                                      (double.parse(totalController!.text) -
-                                              double.parse(value))
-                                          .toString();
-                                },
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder()),
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 25.h),
-                        Row(
-                          children: [
-                            Text(
-                              "Rest",
-                              style: AppTextStyle.bodyText(),
-                            ),
-                            SizedBox(width: 10.w),
-                            Expanded(
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: restController,
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder()),
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 25.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text("Make reciet for customer"),
-                            GestureDetector(
-                                onTap: () {
-                                  DataCubit.get(context).chooseClient(null);
-                                  getx.Get.to(AddCustomer(),
-                                      transition: getx.Transition.zoom);
-                                },
-                                child: Text(
-                                  "New Customer",
-                                  style: AppTextStyle.caption(),
-                                )),
-                          ],
-                        ),
-                        DropdownButton<ClientResponseModel>(
-                          isExpanded: true,
-                          value: DataCubit.get(context).chosenClient,
-                          hint: const Text("Choose Customer"),
-                          items: DataCubit.get(context)
-                              .clientModels
-                              .map((e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text(e.name!),
-                                  ))
-                              .toList(),
-                          onChanged: (ClientResponseModel? value) {
-                            DataCubit.get(context).chooseClient(value);
-                          },
-                        ),
-                        SizedBox(height: 25.h),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: ElevatedButton(
-                              child: Text("Save Reciet"),
-                              onPressed: () async {
-                                await _validateAndFinishOrder();
+                          SizedBox(height: 15.h),
+                          FittedBox(
+                            child: RadioGroup<String>.builder(
+                              groupValue: DataCubit.get(context).isPayingCash!,
+                              direction: Axis.horizontal,
+                              onChanged: (value) {
+                                DataCubit.get(context)
+                                    .changeIsPayingCash(value);
                               },
-                            )),
-                            SizedBox(width: 10.w),
-                            Expanded(
-                                child: ElevatedButton(
-                              child: Text("Cancel"),
+                              items: ["Cash", "Deferred payment"],
+                              itemBuilder: (item) => RadioButtonBuilder(
+                                item,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 15.h),
+                          FittedBox(
+                            child: RadioGroup<String>.builder(
+                              groupValue: DataCubit.get(context).payingType!,
+                              direction: Axis.horizontal,
+                              onChanged: (value) {
+                                DataCubit.get(context).changePayingType(value);
+                              },
+                              items: DataCubit.get(context)
+                                  .payTypeModels
+                                  .map((e) => e.name!)
+                                  .toList(),
+                              itemBuilder: (item) => RadioButtonBuilder(
+                                item,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 15.h),
+                          Row(
+                            children: [
+                              Text(
+                                getLang(context).total,
+                                style: AppTextStyle.bodyText(),
+                              ),
+                              SizedBox(width: 10.w),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: totalController,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder()),
+                                ),
+                              )
+                            ],
+                          ),
+                          ElevatedButton(
                               onPressed: () {
-                                getx.Get.back();
+                                paidController!.text = totalController!.text;
+                                restController!.text =
+                                    (double.parse(totalController!.text) -
+                                            double.parse(paidController!.text))
+                                        .toString();
                               },
-                            ))
-                          ],
-                        )
-                      ],
+                              child: Text(getLang(context).payAll)),
+                          SizedBox(height: 25.h),
+                          Row(
+                            children: [
+                              Text(
+                                getLang(context).paid,
+                                style: AppTextStyle.bodyText(),
+                              ),
+                              SizedBox(width: 10.w),
+                              Expanded(
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  controller: paidController,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return getLang(context)
+                                          .pleaseenterpaidamount;
+                                    }
+                                  },
+                                  onChanged: (value) {
+                                    restController!.text =
+                                        (double.parse(totalController!.text) -
+                                                double.parse(value))
+                                            .toString();
+                                  },
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder()),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 25.h),
+                          Row(
+                            children: [
+                              Text(
+                                getLang(context).rest,
+                                style: AppTextStyle.bodyText(),
+                              ),
+                              SizedBox(width: 10.w),
+                              Expanded(
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  controller: restController,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder()),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 25.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(getLang(context).makerecietforcustomer),
+                              GestureDetector(
+                                  onTap: () {
+                                    DataCubit.get(context).chooseClient(null);
+                                    getx.Get.to(AddCustomer(),
+                                        transition: getx.Transition.zoom);
+                                  },
+                                  child: Text(
+                                    getLang(context).newCustomer,
+                                    style: AppTextStyle.caption(),
+                                  )),
+                            ],
+                          ),
+                          DropdownButton<ClientResponseModel>(
+                            isExpanded: true,
+                            value: DataCubit.get(context).chosenClient,
+                            hint: Text(getLang(context).chooseCustomer),
+                            items: DataCubit.get(context)
+                                .clientModels
+                                .map((e) => DropdownMenuItem(
+                                      value: e,
+                                      child: Text(e.name!),
+                                    ))
+                                .toList(),
+                            onChanged: (ClientResponseModel? value) {
+                              DataCubit.get(context).chooseClient(value);
+                            },
+                          ),
+                          SizedBox(height: 25.h),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: ElevatedButton(
+                                child: Text(getLang(context).saveReciet),
+                                onPressed: () async {
+                                  await _validateAndFinishOrder();
+                                },
+                              )),
+                              SizedBox(width: 10.w),
+                              Expanded(
+                                  child: ElevatedButton(
+                                child: Text(getLang(context).cancel),
+                                onPressed: () {
+                                  getx.Get.back();
+                                },
+                              ))
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -431,8 +437,8 @@ class _SalesScreenState extends State<SalesScreen> {
         barrierDismissible: false,
       );
     } else {
-      getx.Get.showSnackbar(const getx.GetSnackBar(
-        message: "Add Some Products",
+      getx.Get.showSnackbar(getx.GetSnackBar(
+        message: getLang(context).addSomeProducts,
         duration: Duration(seconds: 1),
         animationDuration: Duration(milliseconds: 200),
       ));
@@ -481,8 +487,8 @@ class _SalesScreenState extends State<SalesScreen> {
         //? ///////////////////////////////////////////////////////
         await _finishOrder();
       } else {
-        getx.Get.showSnackbar(const getx.GetSnackBar(
-          message: "must paid amount equal or less than total",
+        getx.Get.showSnackbar(getx.GetSnackBar(
+          message: getLang(context).mustpaidamountequalorlessthantotal,
           duration: Duration(seconds: 1),
           animationDuration: Duration(milliseconds: 200),
         ));
@@ -535,8 +541,8 @@ class _SalesScreenState extends State<SalesScreen> {
 
         _validateIfClientHasAmountinHisPocket();
       } else {
-        getx.Get.showSnackbar(const getx.GetSnackBar(
-          message: "must choose customer",
+        getx.Get.showSnackbar(getx.GetSnackBar(
+          message: getLang(context).must_choose_customer_when_pay_cash,
           duration: Duration(seconds: 1),
           animationDuration: Duration(milliseconds: 200),
         ));
@@ -554,10 +560,10 @@ class _SalesScreenState extends State<SalesScreen> {
         buildPopUpMessage(
           context: context,
           content: Text(
-            "Make Sure this reciet paying debit and not cash",
+            getLang(context).makeSurethisrecietpayingdebitandnotcash,
             style: AppTextStyle.bodyText(),
           ),
-          title: Text("Warning"),
+          title: Text(getLang(context).warning),
           actions: [
             DefaultButton(
               onPress: () async {
@@ -607,8 +613,8 @@ class _SalesScreenState extends State<SalesScreen> {
                     1;
                 await DataCubit.get(context).finishCurrentOrder();
                 getx.Get.back();
-                getx.Get.showSnackbar(const getx.GetSnackBar(
-                  message: "Order Saved Successfully",
+                getx.Get.showSnackbar(getx.GetSnackBar(
+                  message: getLang(context).orderSavedSuccessfully,
                   duration: Duration(seconds: 2),
                   animationDuration: Duration(milliseconds: 200),
                 ));
@@ -618,7 +624,7 @@ class _SalesScreenState extends State<SalesScreen> {
                 //! Printer receit
                 _printReciept();
               },
-              buttonText: "yes",
+              buttonText: getLang(context).yes,
               buttonWidth: 70.w,
               buttonHeight: 30.h,
             ),
@@ -626,15 +632,15 @@ class _SalesScreenState extends State<SalesScreen> {
               onPress: () {
                 getx.Get.back();
               },
-              buttonText: "No",
+              buttonText: getLang(context).no,
               buttonWidth: 70.w,
               buttonHeight: 30.h,
             ),
           ],
         );
       } else {
-        getx.Get.showSnackbar(const getx.GetSnackBar(
-          message: "no reciets rest for this client",
+        getx.Get.showSnackbar(getx.GetSnackBar(
+          message: getLang(context).norecietsrestforthisclient,
           duration: Duration(seconds: 2),
           animationDuration: Duration(milliseconds: 200),
         ));
@@ -644,8 +650,8 @@ class _SalesScreenState extends State<SalesScreen> {
         await DataCubit.get(context).finishCurrentOrder();
 
         getx.Get.back();
-        getx.Get.showSnackbar(const getx.GetSnackBar(
-          message: "Order Saved Successfully",
+        getx.Get.showSnackbar(getx.GetSnackBar(
+          message: getLang(context).orderSavedSuccessfully,
           duration: Duration(seconds: 2),
           animationDuration: Duration(milliseconds: 200),
         ));
@@ -656,8 +662,8 @@ class _SalesScreenState extends State<SalesScreen> {
         //! Printer receit
         _printReciept();
       } else {
-        getx.Get.showSnackbar(const getx.GetSnackBar(
-          message: "you choose paying cash",
+        getx.Get.showSnackbar(getx.GetSnackBar(
+          message: getLang(context).youchoosepayingcash,
           duration: Duration(seconds: 2),
           animationDuration: Duration(milliseconds: 200),
         ));
@@ -687,14 +693,14 @@ class _SalesScreenState extends State<SalesScreen> {
                         CacheKeysManger.getPrinterWidthPaperFromCache());
                     DataCubit.get(context).clearCurrentOrder();
                   },
-                  child: Text("Print")),
+                  child: Text(getLang(context).print)),
               ElevatedButton(
                   onPressed: () {
                     DataCubit.get(context).clearCurrentOrder();
 
                     getx.Get.back();
                   },
-                  child: Text("Close")),
+                  child: Text(getLang(context).cancel)),
             ],
           )
         ],
@@ -732,15 +738,15 @@ class _SalesScreenState extends State<SalesScreen> {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text(
-                        "Search Product",
-                        style: TextStyle(
+                        getLang(context).searchProduct,
+                        style: const TextStyle(
                           color: Colors.grey,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.search,
                         color: Colors.grey,
                       )

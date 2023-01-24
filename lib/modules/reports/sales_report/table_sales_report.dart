@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' as getx;
 import 'package:horizontal_data_table/horizontal_data_table.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
@@ -48,10 +49,10 @@ class _TableSalesReportState extends State<TableSalesReport> {
 
   List<Widget> _getTitleWidget() {
     return [
-      _getTitleItemWidget('Reciet No', getx.Get.width * .30),
-      _getTitleItemWidget('Client Name', getx.Get.width * .30),
-      _getTitleItemWidget('date', getx.Get.width * .20),
-      _getTitleItemWidget('Total', getx.Get.width * .20),
+      _getTitleItemWidget(getLang(context).id, getx.Get.width * .30),
+      _getTitleItemWidget(getLang(context).clientsname, getx.Get.width * .30),
+      _getTitleItemWidget(getLang(context).date, getx.Get.width * .20),
+      _getTitleItemWidget(getLang(context).total, getx.Get.width * .20),
     ];
   }
 

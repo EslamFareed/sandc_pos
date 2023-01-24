@@ -8,6 +8,8 @@ import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/online_models/product_response_model.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../core/components/app_language.dart';
+
 class SearchProductsScreen extends StatefulWidget {
   SearchProductsScreen({Key? key}) : super(key: key);
 
@@ -32,7 +34,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text("Search By name"),
+            title: Text(getLang(context).searchByname),
           ),
           body: Column(
             children: [
@@ -45,7 +47,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                   },
                   decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.search),
-                      hintText: "Product Name",
+                      hintText: getLang(context).prodcut,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                           borderSide: const BorderSide(color: Colors.black))),
@@ -75,10 +77,10 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
               DataCubit.get(context).addNewProduct(product, context);
             }
           } else {
-            getx.Get.showSnackbar(const getx.GetSnackBar(
-              message: "this product out of stock",
-              duration: Duration(seconds: 2),
-              animationDuration: Duration(milliseconds: 200),
+            getx.Get.showSnackbar(getx.GetSnackBar(
+              message: getLang(context).thisproductoutofstock,
+              duration: const Duration(seconds: 2),
+              animationDuration: const Duration(milliseconds: 200),
             ));
           }
         },
@@ -101,8 +103,8 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text("price : ${product.priceOne!}"),
-            Text("quantity : ${product.stockQuantity!}"),
+            Text("${getLang(context).price} : ${product.priceOne!}"),
+            Text("${getLang(context).quantity} : ${product.stockQuantity!}"),
           ],
         ),
       ),

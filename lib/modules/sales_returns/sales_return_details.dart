@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' as getx;
+import 'package:sandc_pos/core/components/app_language.dart';
 import 'package:sandc_pos/core/components/default_buttons.dart';
 import 'package:sandc_pos/core/components/text_form_field.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
@@ -52,7 +53,7 @@ class _SalesDetailsScreenState extends State<SalesDetailsScreen> {
               SizedBox(
                 height: 10.h,
               ),
-              Text("Products"),
+              Text(getLang(context).products),
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -80,7 +81,8 @@ class _SalesDetailsScreenState extends State<SalesDetailsScreen> {
                                 onPressed: () {
                                   _showDialog(context, cubit, index);
                                 },
-                                child: Text("Return This Product")),
+                                child:
+                                    Text(getLang(context).returnThisProduct)),
                       )),
                 ),
                 itemCount: cubit.orderProducts.length,
@@ -110,23 +112,23 @@ class _SalesDetailsScreenState extends State<SalesDetailsScreen> {
               children: [
                 DefaultTextField(
                   labelText:
-                      "enter quantity for returning product ${cubit.orderProducts[index].name}",
+                      "${getLang(context).enterquantityforreturningproduct} ${cubit.orderProducts[index].name}",
                   keyboardType: TextInputType.number,
                   controller: quantityReturnController,
                   validator: (p0) {
                     if (p0!.isEmpty) {
-                      return "cannot be empty";
+                      return getLang(context).cannotbeempty;
                     }
                   },
                 ),
                 DefaultTextField(
                   labelText:
-                      "reason for returning product ${cubit.orderProducts[index].name}",
+                      "${getLang(context).returndesc} ${cubit.orderProducts[index].name}",
                   keyboardType: TextInputType.text,
                   controller: reasonReturnController,
                   validator: (p0) {
                     if (p0!.isEmpty) {
-                      return "cannot be empty";
+                      return getLang(context).cannotbeempty;
                     }
                   },
                   lines: 3,
@@ -135,7 +137,7 @@ class _SalesDetailsScreenState extends State<SalesDetailsScreen> {
                   onPress: () {
                     _returnProduct(context, cubit, index);
                   },
-                  buttonText: "Return This Product",
+                  buttonText: getLang(context).returnThisProduct,
                   buttonHeight: 40.h,
                 )
               ],
@@ -257,7 +259,7 @@ class _SalesDetailsScreenState extends State<SalesDetailsScreen> {
         getx.Get.back();
       } else {
         getx.Get.showSnackbar(getx.GetSnackBar(
-          message: "enter valid quantity and reason",
+          message: getLang(context).entervalidquantityandreason,
           duration: Duration(seconds: 2),
         ));
       }

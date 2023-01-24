@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/online_models/product_response_model.dart';
 import 'package:uuid/uuid.dart';
@@ -34,7 +35,7 @@ class _CategoriesSearchProductsScreenState
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text("Search By name"),
+            title: Text(getLang(context).searchByname),
           ),
           body: Column(
             children: [
@@ -47,7 +48,7 @@ class _CategoriesSearchProductsScreenState
                   },
                   decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.search),
-                      hintText: "Category Name",
+                      hintText: getLang(context).category,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                           borderSide: const BorderSide(color: Colors.black))),
@@ -95,8 +96,8 @@ class _CategoriesSearchProductsScreenState
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text("price : ${product.priceOne!}"),
-            Text("quantity : ${product.stockQuantity!}"),
+            Text("${getLang(context).price} : ${product.priceOne!}"),
+            Text("${getLang(context).quantity} : ${product.stockQuantity!}"),
           ],
         ),
       ),

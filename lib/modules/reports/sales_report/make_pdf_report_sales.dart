@@ -14,8 +14,8 @@ class MakePdfReportSales extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: PdfPreview(
-        build: (ctx) =>
-            makePdf(list!, total!, DataCubit.get(context).companyModels[0]),
+        build: (ctx) => makePdf(
+            list!, total!, DataCubit.get(context).companyModels[0], context),
       ),
     );
   }

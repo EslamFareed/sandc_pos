@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:sandc_pos/core/components/app_language.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
 import 'package:sandc_pos/modules/products/scan_code.dart';
 import 'package:sandc_pos/modules/products/search_products_details.dart';
@@ -16,9 +17,9 @@ import 'make_pdf_products.dart';
 class ShowProducts extends StatelessWidget {
   const ShowProducts({super.key});
 
-  _buildAppBar() {
+  _buildAppBar(BuildContext context) {
     return AppBar(
-      title: Text("Products"),
+      title: Text(getLang(context).products),
       centerTitle: true,
       actions: [
         //open printer page
@@ -35,12 +36,12 @@ class ShowProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(),
+      appBar: _buildAppBar(context),
+      body: _buildBody(context),
     );
   }
 
-  _buildSearchBar() {
+  _buildSearchBar(BuildContext context) {
     return Container(
       width: Get.width,
       height: 50.h,
@@ -71,15 +72,15 @@ class ShowProducts extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text(
-                        "Search Product",
-                        style: TextStyle(
+                        getLang(context).searchProduct,
+                        style: const TextStyle(
                           color: Colors.grey,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.search,
                         color: Colors.grey,
                       )
@@ -107,10 +108,10 @@ class ShowProducts extends StatelessWidget {
     );
   }
 
-  _buildBody() {
+  _buildBody(BuildContext context) {
     return Column(
       children: [
-        _buildSearchBar(),
+        _buildSearchBar(context),
         Expanded(child: TableProduct()),
       ],
     );

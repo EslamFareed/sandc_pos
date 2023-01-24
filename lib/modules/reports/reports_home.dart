@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../core/components/app_language.dart';
 import '../../core/components/default_buttons.dart';
 import '../../core/style/color/app_colors.dart';
 import 'sales_report/sales_reports.dart';
@@ -15,7 +16,7 @@ class ReportsHome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Reports"),
+        title: Text(getLang(context).reports),
       ),
       body: Stack(
         children: [
@@ -48,7 +49,7 @@ class ReportsHome extends StatelessWidget {
                     onPress: () {
                       Get.to(const SalesReport(), transition: Transition.zoom);
                     },
-                    buttonText: "Sales Reports",
+                    buttonText: getLang(context).salesReport,
                     buttonBorderCircular: 16.r,
                     buttonHeight: 35.h,
                   ),

@@ -14,7 +14,7 @@ class MakePdfProducts extends StatelessWidget {
       appBar: AppBar(),
       body: PdfPreview(
         build: (ctx) => makePdf(DataCubit.get(context).productModels,
-            DataCubit.get(context).companyModels[0]),
+            DataCubit.get(context).companyModels[0], context),
       ),
     );
   }

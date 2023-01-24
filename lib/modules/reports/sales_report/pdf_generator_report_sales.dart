@@ -5,12 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 import 'package:sandc_pos/online_models/order_response_model.dart';
 
 import '../../../online_models/company_info_response_model.dart';
 
 Future<Uint8List> makePdf(List<OrderResponseModel> orders, double total,
-    CompanyInfoResponseModel company) async {
+    CompanyInfoResponseModel company, ctx) async {
   final pdf = Document();
   var font = Font.ttf(await rootBundle.load("assets/fonts/Hacen-Tunisia.ttf"));
   Uint8List _bytesImage = const Base64Decoder()
@@ -34,10 +35,10 @@ Future<Uint8List> makePdf(List<OrderResponseModel> orders, double total,
               TableRow(
                   decoration: BoxDecoration(color: PdfColor.fromHex("#999999")),
                   children: [
-                    Expanded(child: PaddedText("id")),
-                    Expanded(child: PaddedText("date")),
-                    Expanded(child: PaddedText("total cost")),
-                    Expanded(child: PaddedText("pay amount")),
+                    Expanded(child: PaddedText(getLang(ctx).id)),
+                    Expanded(child: PaddedText(getLang(ctx).date)),
+                    Expanded(child: PaddedText(getLang(ctx).total)),
+                    Expanded(child: PaddedText(getLang(ctx).paid)),
                   ]),
               ...orders.map(
                 (e) => TableRow(
@@ -59,7 +60,7 @@ Future<Uint8List> makePdf(List<OrderResponseModel> orders, double total,
               ),
             ],
           ),
-          Text("total : $total", style: TextStyle(fontSize: 25))
+          Text("${getLang(ctx).total} : $total", style: TextStyle(fontSize: 25))
         ];
       },
     ),

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' as getx;
 import 'package:horizontal_data_table/horizontal_data_table.dart';
+import 'package:sandc_pos/core/components/app_language.dart';
 
 import 'package:sandc_pos/core/style/color/app_colors.dart';
 import 'package:sandc_pos/modules/products/product_details.dart';
@@ -30,7 +31,7 @@ class _TableProductState extends State<TableProduct> {
             leftHandSideColumnWidth: getx.Get.width * .20,
             rightHandSideColumnWidth: getx.Get.width * .80,
             isFixedHeader: true,
-            headerWidgets: _getTitleWidget(),
+            headerWidgets: _getTitleWidget(context),
             leftSideItemBuilder: _generateFirstColumnRow,
             rightSideItemBuilder: _generateRightHandSideColumnRow,
             itemCount: cubit.productModels.length,
@@ -45,12 +46,12 @@ class _TableProductState extends State<TableProduct> {
         });
   }
 
-  List<Widget> _getTitleWidget() {
+  List<Widget> _getTitleWidget(BuildContext context) {
     return [
-      _getTitleItemWidget('image', getx.Get.width * .20),
-      _getTitleItemWidget('Prodcut', getx.Get.width * .40),
-      _getTitleItemWidget('Price', getx.Get.width * .20),
-      _getTitleItemWidget('Quantity', getx.Get.width * .20),
+      _getTitleItemWidget(getLang(context).image, getx.Get.width * .20),
+      _getTitleItemWidget(getLang(context).prodcut, getx.Get.width * .40),
+      _getTitleItemWidget(getLang(context).price, getx.Get.width * .20),
+      _getTitleItemWidget(getLang(context).quantity, getx.Get.width * .20),
     ];
   }
 
