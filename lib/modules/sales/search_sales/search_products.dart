@@ -88,13 +88,11 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
             ? Image.memory(
                 const Base64Decoder().convert(
                     product.image!.split("data:image/png;base64,").last),
-                fit: BoxFit.cover,
                 width: 50.w,
                 height: 50.h,
               )
             : Image.asset(
                 "assets/images/placeholder.png",
-                fit: BoxFit.cover,
                 width: 50.w,
                 height: 50.h,
               ),

@@ -1134,7 +1134,17 @@ class DataCubit extends Cubit<DataState> {
   clearCurrentOrder() {
     itemsCurrentOrder = [];
     productsCurrentOrder = [];
-    currentOrder = OrderResponseModel(id: Uuid().v4());
+    int lastId = 0;
+    orderModels.forEach((element) {
+      if (element.countID! > lastId) {
+        lastId = element.countID!;
+      }
+    });
+    lastId++;
+    currentOrder = OrderResponseModel(
+        id: "${companyModels[0].branchId}${companyModels[0].empId}$lastId",
+        countID: lastId);
+    // currentOrder = OrderResponseModel(id: Uuid().v4());
     total = 0;
     afterDiscount = 0;
     afterTaxes = 0;

@@ -107,22 +107,22 @@ class PdfGenerator {
                     height: 50),
                 pw.Text(
                   cubit.companyModels[0].companyName!,
-                  style: const pw.TextStyle(fontSize: 8),
+                  // style: const pw.TextStyle(fontSize: 8),
                 ),
                 pw.Text(
                   cubit.companyModels[0].compAddress!,
-                  style: const pw.TextStyle(fontSize: 8),
+                  // style: const pw.TextStyle(fontSize: 8),
                 ),
                 pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.center,
                     children: [
                       pw.Text(
                         cubit.companyModels[0].compPhone!,
-                        style: const pw.TextStyle(fontSize: 8),
+                        // style: const pw.TextStyle(fontSize: 8),
                       ),
                       pw.Text(
                         "الهاتف :",
-                        style: const pw.TextStyle(fontSize: 8),
+                        // style: const pw.TextStyle(fontSize: 8),
                       ),
                     ]),
                 pw.Row(
@@ -130,39 +130,67 @@ class PdfGenerator {
                     children: [
                       pw.Text(
                         cubit.companyModels[0].compTaxNumber!,
-                        style: const pw.TextStyle(fontSize: 8),
+                        // style: const pw.TextStyle(fontSize: 8),
                       ),
                       pw.Text(
                         "الرقم الضريبي  :",
-                        style: const pw.TextStyle(fontSize: 8),
+                        // style: const pw.TextStyle(fontSize: 8),
                       ),
                     ]),
                 pw.Divider(),
                 pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.center,
                     children: [
-                      pw.Text(
-                        cubit.currentOrder!.id!.toString(),
-                        style: const pw.TextStyle(fontSize: 8),
+                      pw.Expanded(
+                        flex: 5,
+                        child: pw.Text(
+                          cubit.currentOrder!.id!.toString(),
+                          maxLines: 2,
+                          // style: const pw.TextStyle(fontSize: 8),
+                        ),
                       ),
-                      pw.Text(
-                        "رقم الفاتورة :",
-                        style: const pw.TextStyle(fontSize: 8),
-                      ),
+                      pw.Expanded(
+                        flex: 3,
+                        child: pw.Text(
+                          "رقم الفاتورة :",
+                          // style: const pw.TextStyle(fontSize: 8),
+                        ),
+                      )
                     ]),
                 pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.center,
                     children: [
-                      pw.Text(
-                        DateFormat("yyyy-MM-dd hh:mm aaa").format(
-                            DateTime.parse(cubit.currentOrder!.createDate!)),
-                        style: const pw.TextStyle(fontSize: 8),
+                      pw.Expanded(
+                        flex: 5,
+                        child: pw.Text(
+                          DateFormat("yyyy-MM-dd hh:mm aaa").format(
+                              DateTime.parse(cubit.currentOrder!.createDate!)),
+                          maxLines: 2,
+
+                          // style: const pw.TextStyle(fontSize: 8),
+                        ),
                       ),
-                      pw.Text(
-                        "تاريخ الفاتورة :",
-                        style: const pw.TextStyle(fontSize: 8),
-                      ),
+                      pw.Expanded(
+                        flex: 3,
+                        child: pw.Text(
+                          "تاريخ الفاتورة :",
+                          // style: const pw.TextStyle(fontSize: 8),
+                        ),
+                      )
                     ]),
+                // pw.Row(
+                //     mainAxisAlignment: pw.MainAxisAlignment.center,
+                //     children: [
+                //       pw.Text(
+                //         DateFormat("yyyy-MM-dd hh:mm aaa").format(
+                //             DateTime.parse(cubit.currentOrder!.createDate!)),
+                //         // style: const pw.TextStyle(fontSize: 8),
+                //       ),
+                //       pw.Text(
+                //         "تاريخ الفاتورة :",
+                //         // style: const pw.TextStyle(fontSize: 8),
+                //       ),
+                //     ]),
                 pw.Divider(),
                 pw.Header(
                   child: pw.Column(
@@ -172,7 +200,7 @@ class PdfGenerator {
                           child: pw.Text(
                             "المجموع\n شامل  الضريبة",
                             textAlign: pw.TextAlign.center,
-                            style: const pw.TextStyle(fontSize: 10),
+                            style: const pw.TextStyle(fontSize: 8),
                           ),
                           flex: 4,
                         ),
@@ -180,7 +208,7 @@ class PdfGenerator {
                           child: pw.Text(
                             "السعر",
                             textAlign: pw.TextAlign.center,
-                            style: const pw.TextStyle(fontSize: 10),
+                            style: const pw.TextStyle(fontSize: 8),
                           ),
                           flex: 2,
                         ),
@@ -188,7 +216,7 @@ class PdfGenerator {
                           child: pw.Text(
                             "الكمية",
                             textAlign: pw.TextAlign.center,
-                            style: const pw.TextStyle(fontSize: 10),
+                            style: const pw.TextStyle(fontSize: 8),
                           ),
                           flex: 2,
                         ),
@@ -196,12 +224,13 @@ class PdfGenerator {
                           child: pw.Text(
                             "الصنف",
                             textAlign: pw.TextAlign.center,
-                            style: const pw.TextStyle(fontSize: 10),
+                            style: const pw.TextStyle(fontSize: 8),
                           ),
                           flex: 5,
                         ),
                       ]),
                       pw.Divider(),
+
                       pw.Table(
                         children: [
                           ...cubit.itemsCurrentOrder.map(
@@ -211,31 +240,43 @@ class PdfGenerator {
                                   child: pw.Text(
                                     cubit.companyModels[0].isPriceIncludeTaxes!
                                         ? e.totalCost!.toStringAsFixed(2)
-                                        : (e.totalCost! +
-                                                (e.totalCost! *
+                                        // : (e.totalCost! +
+                                        //         (e.totalCost! *
+                                        //             (double.parse(cubit
+                                        //                     .companyModels[0]
+                                        //                     .taxAmount!) *
+                                        //                 .01)))
+                                        //     .toStringAsFixed(2),
+                                        : (e.totalCost! /
+                                                (1 +
                                                     (double.parse(cubit
                                                             .companyModels[0]
                                                             .taxAmount!) *
                                                         .01)))
                                             .toStringAsFixed(2),
                                     textAlign: pw.TextAlign.center,
-                                    style: const pw.TextStyle(fontSize: 8),
                                   ),
                                   flex: 4,
                                 ),
                                 pw.Expanded(
                                   child: pw.Text(
                                     cubit.companyModels[0].isPriceIncludeTaxes!
-                                        ? (e.unitPrice! -
-                                                (e.unitPrice! *
+                                        ? (e.unitPrice! /
+                                                (1 +
                                                     (double.parse(cubit
                                                             .companyModels[0]
                                                             .taxAmount!) *
                                                         .01)))
-                                            .toString()
+                                            .toStringAsFixed(2)
+                                        // ? (e.unitPrice! -
+                                        //         (e.unitPrice! *
+                                        //             (double.parse(cubit
+                                        //                     .companyModels[0]
+                                        //                     .taxAmount!) *
+                                        //                 .01)))
+                                        //     .toString()
                                         : e.unitPrice!.toStringAsFixed(2),
                                     textAlign: pw.TextAlign.center,
-                                    style: const pw.TextStyle(fontSize: 8),
                                   ),
                                   flex: 2,
                                 ),
@@ -243,7 +284,6 @@ class PdfGenerator {
                                   child: pw.Text(
                                     e.quantity!.toString(),
                                     textAlign: pw.TextAlign.center,
-                                    style: const pw.TextStyle(fontSize: 8),
                                   ),
                                   flex: 2,
                                 ),
@@ -254,7 +294,6 @@ class PdfGenerator {
                                             element.prodId == e.prodId)
                                         .name!,
                                     textAlign: pw.TextAlign.center,
-                                    style: const pw.TextStyle(fontSize: 8),
                                   ),
                                   flex: 5,
                                 ),
@@ -264,6 +303,7 @@ class PdfGenerator {
                         ],
                       ),
                       pw.Divider(),
+
                       pw.Row(
                           mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                           children: [
@@ -271,254 +311,468 @@ class PdfGenerator {
                             pw.Text(cubit.currentOrder!.costNet.toString()),
                             pw.Text("معلومات الدفع : "),
                           ]),
-                      pw.Table(
-                          border: const pw.TableBorder(
+                      pw.Container(
+                          padding: const pw.EdgeInsets.all(5),
+                          decoration: const pw.BoxDecoration(
+                            border: pw.Border(
                               top: pw.BorderSide(width: 1),
-                              // bottom: pw.BorderSide(width: 1),
                               left: pw.BorderSide(width: 1),
-                              right: pw.BorderSide(width: 1)),
-                          children: [
-                            pw.TableRow(children: [
-                              pw.Expanded(
-                                child: pw.Text(
-                                  cubit.companyModels[0].compCurrencyName!,
-                                  textAlign: pw.TextAlign.center,
-                                  style: const pw.TextStyle(fontSize: 5),
-                                ),
-                                flex: 2,
-                              ),
-                              pw.Expanded(
-                                child: pw.Text(
-                                  (cubit.currentOrder!.totalCost! -
-                                          cubit.currentOrder!.taxes!)
-                                      .toStringAsFixed(2),
-                                  textAlign: pw.TextAlign.center,
-                                  style: const pw.TextStyle(fontSize: 10),
-                                ),
-                                flex: 1,
-                              ),
-                              pw.Expanded(
-                                child: pw.Text(
-                                  "الاجمالي الخاضع للضريبة : ",
-                                  textAlign: pw.TextAlign.center,
-                                  style: const pw.TextStyle(fontSize: 10),
-                                ),
-                                flex: 5,
-                              ),
-                              // pw.Row(
-                              //     mainAxisAlignment:
-                              //         pw.MainAxisAlignment.spaceBetween,
-                              //     children: [
-                              //       pw.Text(
-                              //         cubit.companyModels[0].compCurrencyName!,
-                              //         textAlign: pw.TextAlign.center,
-                              //         style: const pw.TextStyle(fontSize: 8),
-                              //       ),
-                              //       pw.Row(children: [
-                              // pw.Text(
-                              //   (cubit.currentOrder!.totalCost! -
-                              //           cubit.currentOrder!.taxes!)
-                              //       .toStringAsFixed(2),
-                              //   textAlign: pw.TextAlign.center,
-                              //   style: const pw.TextStyle(fontSize: 8),
-                              // ),
-                              // pw.Text(
-                              //   "الاجمالي الخاضع للضريبة : ",
-                              //   textAlign: pw.TextAlign.center,
-                              //   style: const pw.TextStyle(fontSize: 8),
-                              // ),
-                              //       ]),
-                              //     ]),
-                            ])
-                          ]),
-                      pw.Table(
-                          border: const pw.TableBorder(
-                            // top: pw.BorderSide(width: 1),
-                            // bottom: pw.BorderSide(width: 1),
-                            left: pw.BorderSide(width: 1),
-                            right: pw.BorderSide(width: 1),
+                              right: pw.BorderSide(width: 1),
+                              bottom: pw.BorderSide(width: 1),
+                            ),
                           ),
-                          children: [
-                            pw.TableRow(children: [
-                              pw.Expanded(
-                                child: pw.Text(
-                                  cubit.companyModels[0].compCurrencyName!,
-                                  textAlign: pw.TextAlign.center,
-                                  style: const pw.TextStyle(fontSize: 5),
-                                ),
-                                flex: 2,
-                              ),
-                              pw.Expanded(
-                                child: pw.Text(
-                                  cubit.currentOrder!.discount!
-                                      .toStringAsFixed(2),
-                                  textAlign: pw.TextAlign.center,
-                                  style: const pw.TextStyle(fontSize: 10),
-                                ),
-                                flex: 1,
-                              ),
-                              pw.Expanded(
-                                child: pw.Text(
-                                  "الخصم : ",
-                                  textAlign: pw.TextAlign.center,
-                                  style: const pw.TextStyle(fontSize: 10),
-                                ),
-                                flex: 5,
-                              ),
-                              // pw.Row(
-                              //     mainAxisAlignment:
-                              //         pw.MainAxisAlignment.spaceBetween,
-                              //     children: [
-                              //       pw.Text(
-                              //         cubit.companyModels[0].compCurrencyName!,
-                              //         textAlign: pw.TextAlign.center,
-                              //         style: const pw.TextStyle(fontSize: 8),
-                              //       ),
-                              //       pw.Row(children: [
-                              // pw.Text(
-                              //   cubit.currentOrder!.discount!
-                              //       .toStringAsFixed(2),
-                              //   textAlign: pw.TextAlign.center,
-                              //   style: const pw.TextStyle(fontSize: 8),
-                              // ),
-                              // pw.Text(
-                              //   "الخصم : ",
-                              //   textAlign: pw.TextAlign.center,
-                              //   style: const pw.TextStyle(fontSize: 8),
-                              // ),
-                              //       ]),
-                              //     ]),
-                            ])
-                          ]),
-                      pw.Table(
-                          border: const pw.TableBorder(
-                              left: pw.BorderSide(width: 1),
-                              right: pw.BorderSide(width: 1)),
-                          children: [
-                            pw.TableRow(children: [
-                              pw.Expanded(
-                                child: pw.Text(
-                                  cubit.companyModels[0].compCurrencyName!,
-                                  textAlign: pw.TextAlign.center,
-                                  style: const pw.TextStyle(fontSize: 5),
-                                ),
-                                flex: 2,
-                              ),
-                              pw.Expanded(
-                                child: pw.Text(
-                                  "${cubit.companyModels[0].taxAmount!}%",
-                                  textAlign: pw.TextAlign.center,
-                                  style: const pw.TextStyle(fontSize: 10),
-                                ),
-                                flex: 1,
-                              ),
-                              pw.Expanded(
-                                child: pw.Text(
-                                  cubit.currentOrder!.taxes!.toStringAsFixed(2),
-                                  textAlign: pw.TextAlign.center,
-                                  style: const pw.TextStyle(fontSize: 10),
-                                ),
-                                flex: 1,
-                              ),
-                              pw.Expanded(
-                                child: pw.Text(
-                                  "ضريبة القيمة المضافة : ",
-                                  textAlign: pw.TextAlign.center,
-                                  style: const pw.TextStyle(fontSize: 10),
-                                ),
-                                flex: 5,
-                              ),
+                          child: pw.Column(children: [
+                            pw.Row(
+                                mainAxisAlignment:
+                                    pw.MainAxisAlignment.spaceBetween,
+                                children: [
+                                  pw.Text(
+                                    cubit.companyModels[0].compCurrencyName!,
+                                    style: const pw.TextStyle(fontSize: 7),
+                                  ),
+                                  pw.Text((cubit.currentOrder!.totalCost! /
+                                              (1 +
+                                                  (double.parse(cubit
+                                                          .companyModels[0]
+                                                          .taxAmount!) *
+                                                      .01)))
+                                          .toStringAsFixed(2)
+                                      // (cubit.currentOrder!.totalCost! -
+                                      //         cubit.currentOrder!.taxes!)
+                                      //     .toStringAsFixed(2),
+                                      ),
+                                  pw.Text(
+                                    "الاجمالي الخاضع للضريبة : ",
+                                    style: const pw.TextStyle(fontSize: 10),
+                                  ),
+                                ]),
+                            pw.Row(
+                                mainAxisAlignment:
+                                    pw.MainAxisAlignment.spaceBetween,
+                                children: [
+                                  pw.Text(
+                                    cubit.companyModels[0].compCurrencyName!,
+                                    style: const pw.TextStyle(fontSize: 7),
+                                  ),
+                                  pw.Text(
+                                    cubit.currentOrder!.discount!
+                                        .toStringAsFixed(2),
+                                  ),
+                                  pw.Text(
+                                    "الخصم                                    : ",
+                                    style: const pw.TextStyle(fontSize: 10),
+                                  ),
+                                ]),
+                            pw.Row(
+                                mainAxisAlignment:
+                                    pw.MainAxisAlignment.spaceBetween,
+                                children: [
+                                  pw.Text(
+                                    cubit.companyModels[0].compCurrencyName!,
+                                    style: const pw.TextStyle(fontSize: 7),
+                                  ),
+                                  pw.Text(
+                                    "${cubit.companyModels[0].taxAmount!}%",
+                                  ),
+                                  pw.Text((cubit.currentOrder!.totalCost! -
+                                          (cubit.currentOrder!.totalCost! /
+                                              (1 +
+                                                  (double.parse(cubit
+                                                          .companyModels[0]
+                                                          .taxAmount!) *
+                                                      .01))))
+                                      .toStringAsFixed(2)),
+                                  pw.Text(
+                                    "ضريبة القيمة المضافة : ",
+                                    style: const pw.TextStyle(fontSize: 10),
+                                  ),
+                                ]),
+                            pw.Row(
+                                mainAxisAlignment:
+                                    pw.MainAxisAlignment.spaceBetween,
+                                children: [
+                                  pw.Text(
+                                    cubit.companyModels[0].compCurrencyName!,
+                                    style: const pw.TextStyle(fontSize: 7),
+                                  ),
+                                  pw.Text(
+                                    cubit.currentOrder!.costNet.toString(),
+                                  ),
+                                  pw.Text(
+                                    "اجمالي المبلغ المستحق: ",
+                                    style: const pw.TextStyle(fontSize: 10),
+                                  ),
+                                ]),
+                          ])),
 
-                              // pw.Row(
-                              //     mainAxisAlignment:
-                              //         pw.MainAxisAlignment.spaceBetween,
-                              //     children: [
-                              // pw.Text(
-                              //   cubit.companyModels[0].compCurrencyName!,
-                              //   textAlign: pw.TextAlign.center,
-                              //   style: const pw.TextStyle(fontSize: 8),
-                              // ),
-                              // pw.Text(
-                              //   "${cubit.companyModels[0].taxAmount!}%",
-                              //   textAlign: pw.TextAlign.center,
-                              //   style: const pw.TextStyle(fontSize: 8),
-                              // ),
-                              //       pw.Row(children: [
-                              // pw.Text(
-                              //   cubit.currentOrder!.taxes!
-                              //       .toStringAsFixed(2),
-                              //   textAlign: pw.TextAlign.center,
-                              //   style: const pw.TextStyle(fontSize: 8),
-                              // ),
-                              // pw.Text(
-                              //   "ضريبة القيمة المضافة : ",
-                              //   textAlign: pw.TextAlign.center,
-                              //   style: const pw.TextStyle(fontSize: 8),
-                              // ),
-                              //       ]),
-                              //     ]),
-                            ])
-                          ]),
-                      pw.Table(
-                          border: const pw.TableBorder(
-                            // top: pw.BorderSide(width: 1),
-                            bottom: pw.BorderSide(width: 1),
-                            left: pw.BorderSide(width: 1),
-                            right: pw.BorderSide(width: 1),
-                          ),
-                          // ),
-                          children: [
-                            pw.TableRow(children: [
-                              pw.Expanded(
-                                child: pw.Text(
-                                  cubit.companyModels[0].compCurrencyName!,
-                                  textAlign: pw.TextAlign.center,
-                                  style: const pw.TextStyle(fontSize: 5),
-                                ),
-                                flex: 2,
-                              ),
-                              pw.Expanded(
-                                child: pw.Text(
-                                  cubit.currentOrder!.costNet.toString(),
-                                  textAlign: pw.TextAlign.center,
-                                  style: const pw.TextStyle(fontSize: 10),
-                                ),
-                                flex: 1,
-                              ),
+                      // pw.Table(
+                      //   border: const pw.TableBorder(
+                      //       top: pw.BorderSide(width: 1),
+                      //       bottom: pw.BorderSide(width: 1),
+                      //       left: pw.BorderSide(width: 1),
+                      //       right: pw.BorderSide(width: 1)),
+                      //   children: [
+                      //     pw.TableRow(
+                      //       children: [
+                      //         pw.Expanded(
+                      //           child: pw.Text(
+                      //             cubit.companyModels[0].compCurrencyName!,
+                      //             style: const pw.TextStyle(fontSize: 7),
+                      //           ),
+                      //           flex: 2,
+                      //         ),
+                      //         pw.Expanded(
+                      //           child: pw.Text(
+                      //             (cubit.currentOrder!.totalCost! -
+                      //                     cubit.currentOrder!.taxes!)
+                      //                 .toStringAsFixed(2),
+                      //           ),
+                      //           flex: 2,
+                      //         ),
+                      //         pw.Expanded(
+                      //           child: pw.Text(
+                      //             "الاجمالي الخاضع للضريبة : ",
+                      //             style: const pw.TextStyle(fontSize: 10),
+                      //           ),
+                      //           flex: 4,
+                      //         ),
+                      //       ],
+                      //     ),
+                      //     pw.TableRow(children: [
+                      //       pw.Expanded(
+                      //         child: pw.Text(
+                      //           cubit.companyModels[0].compCurrencyName!,
+                      //           textAlign: pw.TextAlign.center,
+                      //           style: const pw.TextStyle(fontSize: 7),
+                      //         ),
+                      //         flex: 2,
+                      //       ),
+                      //       pw.Expanded(
+                      //         child: pw.Text(
+                      //           cubit.currentOrder!.discount!
+                      //               .toStringAsFixed(2),
+                      //           textAlign: pw.TextAlign.center,
+                      //         ),
+                      //         flex: 2,
+                      //       ),
+                      //       pw.Expanded(
+                      //         child: pw.Text(
+                      //           "الخصم : ",
+                      //           textAlign: pw.TextAlign.center,
+                      //           style: const pw.TextStyle(fontSize: 10),
+                      //         ),
+                      //         flex: 4,
+                      //       ),
+                      //     ]),
+                      //     pw.TableRow(children: [
+                      //       pw.Expanded(
+                      //         child: pw.Text(
+                      //           cubit.companyModels[0].compCurrencyName!,
+                      //           textAlign: pw.TextAlign.center,
+                      //           style: const pw.TextStyle(fontSize: 7),
+                      //         ),
+                      //         flex: 2,
+                      //       ),
+                      //       pw.Expanded(
+                      //         child: pw.Text(
+                      //           "${cubit.companyModels[0].taxAmount!}%",
+                      //           textAlign: pw.TextAlign.center,
+                      //         ),
+                      //         flex: 1,
+                      //       ),
+                      //       pw.Expanded(
+                      //         child: pw.Text(
+                      //           cubit.currentOrder!.taxes!.toStringAsFixed(2),
+                      //           textAlign: pw.TextAlign.center,
+                      //         ),
+                      //         flex: 1,
+                      //       ),
+                      //       pw.Expanded(
+                      //         child: pw.Text(
+                      //           "ضريبة القيمة المضافة : ",
+                      //           textAlign: pw.TextAlign.center,
+                      //           style: const pw.TextStyle(fontSize: 10),
+                      //         ),
+                      //         flex: 4,
+                      //       ),
+                      //     ]),
+                      //     pw.TableRow(children: [
+                      //       pw.Expanded(
+                      //         child: pw.Text(
+                      //           cubit.companyModels[0].compCurrencyName!,
+                      //           textAlign: pw.TextAlign.center,
+                      //           style: const pw.TextStyle(fontSize: 7),
+                      //         ),
+                      //         flex: 2,
+                      //       ),
+                      //       pw.Expanded(
+                      //         child: pw.Text(
+                      //           cubit.currentOrder!.costNet.toString(),
+                      //           textAlign: pw.TextAlign.center,
+                      //         ),
+                      //         flex: 2,
+                      //       ),
+                      //       pw.Expanded(
+                      //         child: pw.Text(
+                      //           "اجمالي المبلغ المستحق: ",
+                      //           textAlign: pw.TextAlign.center,
+                      //           style: const pw.TextStyle(fontSize: 10),
+                      //         ),
+                      //         flex: 4,
+                      //       ),
+                      //     ])
+                      //   ],
+                      // ),
 
-                              pw.Expanded(
-                                child: pw.Text(
-                                  "اجمالي المبلغ المستحق: ",
-                                  textAlign: pw.TextAlign.center,
-                                  style: const pw.TextStyle(fontSize: 8),
-                                ),
-                                flex: 5,
-                              ),
+                      // pw.Table(
+                      // border: const pw.TableBorder(
+                      //     top: pw.BorderSide(width: 1),
+                      //     // bottom: pw.BorderSide(width: 1),
+                      //     left: pw.BorderSide(width: 1),
+                      //     right: pw.BorderSide(width: 1)),
+                      //     children: [
+                      //       pw.TableRow(children: [
+                      // pw.Expanded(
+                      //   child: pw.Text(
+                      //     cubit.companyModels[0].compCurrencyName!,
+                      //     textAlign: pw.TextAlign.center,
+                      //     style: const pw.TextStyle(fontSize: 5),
+                      //   ),
+                      //   flex: 2,
+                      // ),
+                      // pw.Expanded(
+                      //   child: pw.Text(
+                      //     (cubit.currentOrder!.totalCost! -
+                      //             cubit.currentOrder!.taxes!)
+                      //         .toStringAsFixed(2),
+                      //     textAlign: pw.TextAlign.center,
+                      //     style: const pw.TextStyle(fontSize: 10),
+                      //   ),
+                      //   flex: 1,
+                      // ),
+                      // pw.Expanded(
+                      //   child: pw.Text(
+                      //     "الاجمالي الخاضع للضريبة : ",
+                      //     textAlign: pw.TextAlign.center,
+                      //     style: const pw.TextStyle(fontSize: 10),
+                      //   ),
+                      //   flex: 5,
+                      // ),
+                      //         // pw.Row(
+                      //         //     mainAxisAlignment:
+                      //         //         pw.MainAxisAlignment.spaceBetween,
+                      //         //     children: [
+                      //         //       pw.Text(
+                      //         //         cubit.companyModels[0].compCurrencyName!,
+                      //         //         textAlign: pw.TextAlign.center,
+                      //         //         style: const pw.TextStyle(fontSize: 8),
+                      //         //       ),
+                      //         //       pw.Row(children: [
+                      //         // pw.Text(
+                      //         //   (cubit.currentOrder!.totalCost! -
+                      //         //           cubit.currentOrder!.taxes!)
+                      //         //       .toStringAsFixed(2),
+                      //         //   textAlign: pw.TextAlign.center,
+                      //         //   style: const pw.TextStyle(fontSize: 8),
+                      //         // ),
+                      //         // pw.Text(
+                      //         //   "الاجمالي الخاضع للضريبة : ",
+                      //         //   textAlign: pw.TextAlign.center,
+                      //         //   style: const pw.TextStyle(fontSize: 8),
+                      //         // ),
+                      //         //       ]),
+                      //         //     ]),
+                      //       ])
+                      //     ]),
 
-                              // pw.Row(
-                              //     mainAxisAlignment:
-                              //         pw.MainAxisAlignment.spaceBetween,
-                              //     children: [
-                              // pw.Text(
-                              //   cubit.companyModels[0].compCurrencyName!,
-                              //   textAlign: pw.TextAlign.center,
-                              //   style: const pw.TextStyle(fontSize: 8),
-                              // ),
-                              //       pw.Row(children: [
-                              // pw.Text(
-                              //   cubit.currentOrder!.costNet.toString(),
-                              //   textAlign: pw.TextAlign.center,
-                              //   style: const pw.TextStyle(fontSize: 8),
-                              // ),
-                              // pw.Text(
-                              //   "اجمالي المبلغ المستحق: ",
-                              //   textAlign: pw.TextAlign.center,
-                              //   style: const pw.TextStyle(fontSize: 8),
-                              // ),
-                              //       ]),
-                              //     ]),
-                            ])
-                          ]),
+                      // pw.Table(
+                      //     border: const pw.TableBorder(
+                      //       // top: pw.BorderSide(width: 1),
+                      //       // bottom: pw.BorderSide(width: 1),
+                      //       left: pw.BorderSide(width: 1),
+                      //       right: pw.BorderSide(width: 1),
+                      //     ),
+                      //     children: [
+                      // pw.TableRow(children: [
+                      //   pw.Expanded(
+                      //     child: pw.Text(
+                      //       cubit.companyModels[0].compCurrencyName!,
+                      //       textAlign: pw.TextAlign.center,
+                      //       style: const pw.TextStyle(fontSize: 5),
+                      //     ),
+                      //     flex: 2,
+                      //   ),
+                      //   pw.Expanded(
+                      //     child: pw.Text(
+                      //       cubit.currentOrder!.discount!
+                      //           .toStringAsFixed(2),
+                      //       textAlign: pw.TextAlign.center,
+                      //       style: const pw.TextStyle(fontSize: 10),
+                      //     ),
+                      //     flex: 1,
+                      //   ),
+                      //   pw.Expanded(
+                      //     child: pw.Text(
+                      //       "الخصم : ",
+                      //       textAlign: pw.TextAlign.center,
+                      //       style: const pw.TextStyle(fontSize: 10),
+                      //     ),
+                      //     flex: 5,
+                      //   ),
+                      //   // pw.Row(
+                      //   //     mainAxisAlignment:
+                      //   //         pw.MainAxisAlignment.spaceBetween,
+                      //   //     children: [
+                      //   //       pw.Text(
+                      //   //         cubit.companyModels[0].compCurrencyName!,
+                      //   //         textAlign: pw.TextAlign.center,
+                      //   //         style: const pw.TextStyle(fontSize: 8),
+                      //   //       ),
+                      //   //       pw.Row(children: [
+                      //   // pw.Text(
+                      //   //   cubit.currentOrder!.discount!
+                      //   //       .toStringAsFixed(2),
+                      //   //   textAlign: pw.TextAlign.center,
+                      //   //   style: const pw.TextStyle(fontSize: 8),
+                      //   // ),
+                      //   // pw.Text(
+                      //   //   "الخصم : ",
+                      //   //   textAlign: pw.TextAlign.center,
+                      //   //   style: const pw.TextStyle(fontSize: 8),
+                      //   // ),
+                      //   //       ]),
+                      //   //     ]),
+                      // ])
+                      //     ]),
+
+                      // pw.Table(
+                      //     border: const pw.TableBorder(
+                      //         left: pw.BorderSide(width: 1),
+                      //         right: pw.BorderSide(width: 1)),
+                      //     children: [
+                      // pw.TableRow(children: [
+                      //   pw.Expanded(
+                      //     child: pw.Text(
+                      //       cubit.companyModels[0].compCurrencyName!,
+                      //       textAlign: pw.TextAlign.center,
+                      //       style: const pw.TextStyle(fontSize: 5),
+                      //     ),
+                      //     flex: 2,
+                      //   ),
+                      //   pw.Expanded(
+                      //     child: pw.Text(
+                      //       "${cubit.companyModels[0].taxAmount!}%",
+                      //       textAlign: pw.TextAlign.center,
+                      //       style: const pw.TextStyle(fontSize: 10),
+                      //     ),
+                      //     flex: 1,
+                      //   ),
+                      //   pw.Expanded(
+                      //     child: pw.Text(
+                      //       cubit.currentOrder!.taxes!.toStringAsFixed(2),
+                      //       textAlign: pw.TextAlign.center,
+                      //       style: const pw.TextStyle(fontSize: 10),
+                      //     ),
+                      //     flex: 1,
+                      //   ),
+                      //   pw.Expanded(
+                      //     child: pw.Text(
+                      //       "ضريبة القيمة المضافة : ",
+                      //       textAlign: pw.TextAlign.center,
+                      //       style: const pw.TextStyle(fontSize: 10),
+                      //     ),
+                      //     flex: 5,
+                      //   ),
+                      //   // pw.Row(
+                      //   //     mainAxisAlignment:
+                      //   //         pw.MainAxisAlignment.spaceBetween,
+                      //   //     children: [
+                      //   // pw.Text(
+                      //   //   cubit.companyModels[0].compCurrencyName!,
+                      //   //   textAlign: pw.TextAlign.center,
+                      //   //   style: const pw.TextStyle(fontSize: 8),
+                      //   // ),
+                      //   // pw.Text(
+                      //   //   "${cubit.companyModels[0].taxAmount!}%",
+                      //   //   textAlign: pw.TextAlign.center,
+                      //   //   style: const pw.TextStyle(fontSize: 8),
+                      //   // ),
+                      //   //       pw.Row(children: [
+                      //   // pw.Text(
+                      //   //   cubit.currentOrder!.taxes!
+                      //   //       .toStringAsFixed(2),
+                      //   //   textAlign: pw.TextAlign.center,
+                      //   //   style: const pw.TextStyle(fontSize: 8),
+                      //   // ),
+                      //   // pw.Text(
+                      //   //   "ضريبة القيمة المضافة : ",
+                      //   //   textAlign: pw.TextAlign.center,
+                      //   //   style: const pw.TextStyle(fontSize: 8),
+                      //   // ),
+                      //   //       ]),
+                      //   //     ]),
+                      // ])
+                      //     ]),
+
+                      // pw.Table(
+                      //     border: const pw.TableBorder(
+                      //       // top: pw.BorderSide(width: 1),
+                      //       bottom: pw.BorderSide(width: 1),
+                      //       left: pw.BorderSide(width: 1),
+                      //       right: pw.BorderSide(width: 1),
+                      //     ),
+                      //     // ),
+                      //     children: [
+                      // pw.TableRow(children: [
+                      //   pw.Expanded(
+                      //     child: pw.Text(
+                      //       cubit.companyModels[0].compCurrencyName!,
+                      //       textAlign: pw.TextAlign.center,
+                      //       style: const pw.TextStyle(fontSize: 5),
+                      //     ),
+                      //     flex: 2,
+                      //   ),
+                      //   pw.Expanded(
+                      //     child: pw.Text(
+                      //       cubit.currentOrder!.costNet.toString(),
+                      //       textAlign: pw.TextAlign.center,
+                      //       style: const pw.TextStyle(fontSize: 10),
+                      //     ),
+                      //     flex: 1,
+                      //   ),
+                      //   pw.Expanded(
+                      //     child: pw.Text(
+                      //       "اجمالي المبلغ المستحق: ",
+                      //       textAlign: pw.TextAlign.center,
+                      //       style: const pw.TextStyle(fontSize: 8),
+                      //     ),
+                      //     flex: 5,
+                      //   ),
+                      //   // pw.Row(
+                      //   //     mainAxisAlignment:
+                      //   //         pw.MainAxisAlignment.spaceBetween,
+                      //   //     children: [
+                      //   // pw.Text(
+                      //   //   cubit.companyModels[0].compCurrencyName!,
+                      //   //   textAlign: pw.TextAlign.center,
+                      //   //   style: const pw.TextStyle(fontSize: 8),
+                      //   // ),
+                      //   //       pw.Row(children: [
+                      //   // pw.Text(
+                      //   //   cubit.currentOrder!.costNet.toString(),
+                      //   //   textAlign: pw.TextAlign.center,
+                      //   //   style: const pw.TextStyle(fontSize: 8),
+                      //   // ),
+                      //   // pw.Text(
+                      //   //   "اجمالي المبلغ المستحق: ",
+                      //   //   textAlign: pw.TextAlign.center,
+                      //   //   style: const pw.TextStyle(fontSize: 8),
+                      //   // ),
+                      //   //       ]),
+                      //   //     ]),
+                      // ])
+                      //     ]),
+
                       pw.SizedBox(height: 10),
                       pw.BarcodeWidget(
                         height: 100,
@@ -528,8 +782,9 @@ class PdfGenerator {
                       ),
                       // pw.Text("شكرا لزيارتكم..... نتطلع لرؤيتكم مرة اخرى",
                       //     style: const pw.TextStyle(fontSize: 5)),
-                      pw.Text(cubit.companyModels[0].companyDescription!,
-                          style: const pw.TextStyle(fontSize: 5)),
+                      pw.Text(
+                        cubit.companyModels[0].companyDescription!,
+                      ),
                     ],
                   ),
                 ),
