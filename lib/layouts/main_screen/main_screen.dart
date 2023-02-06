@@ -355,14 +355,17 @@ class _MainScreenState extends State<MainScreen> {
                               borderRadius: BorderRadius.circular(15.0.r),
                             ),
                             child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 25.w, vertical: 2.h),
-                                child: Text(
-                                  getLang(context).testversion,
-                                  style: AppTextStyle.caption().copyWith(
-                                      color: const Color.fromARGB(
-                                          255, 155, 155, 155)),
-                                )),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 25.w, vertical: 2.h),
+                              child: Text(
+                                DataCubit.get(context).companyModels[0].isDemo!
+                                    ? getLang(context).testversion
+                                    : "Production version",
+                                style: AppTextStyle.caption().copyWith(
+                                    color: const Color.fromARGB(
+                                        255, 155, 155, 155)),
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(height: 10.h),
@@ -386,6 +389,9 @@ class _MainScreenState extends State<MainScreen> {
                           onTap: () async {
                             await CacheHelper.saveData(
                                 key: "userToken", value: "NO");
+                            await CacheHelper.saveData(
+                                key: "isFirstTime", value: true);
+
                             getx.Get.offAll(LoginScreen(),
                                 transition: getx.Transition.zoom);
                           },

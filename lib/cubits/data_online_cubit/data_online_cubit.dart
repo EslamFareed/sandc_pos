@@ -522,9 +522,11 @@ class DataOnlineCubit extends Cubit<DataOnlineState> {
       await DioHelper.getDataWithToken(url: GET_INFO_COMPANY).then((value) {
         if (value.statusCode == 200) {
           onlineCompanyInfo = CompanyInfoResponseModel.fromJson(value.data);
+
           emit(GetDataOnlineCompanyInfoSuccessState());
           if (kDebugMode) {
             print("onlineCompanyInfo : ${onlineCompanyInfo!.companyName}");
+            print("is demo : ${onlineCompanyInfo!.isDemo}");
           }
         } else {
           emit(GetDataOnlineErrorState());

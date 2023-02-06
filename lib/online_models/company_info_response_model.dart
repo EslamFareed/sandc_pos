@@ -23,6 +23,7 @@ class CompanyInfoResponseModel {
   int? compId;
   String? empId;
   bool? addClient;
+  bool? isDemo;
 
   CompanyInfoResponseModel(
       {this.companyName,
@@ -46,6 +47,7 @@ class CompanyInfoResponseModel {
       this.branchId,
       this.branchName,
       this.compId,
+      this.isDemo,
       this.empId});
 
   static const String columnId = 'comp_Id';
@@ -70,6 +72,7 @@ class CompanyInfoResponseModel {
   static const String columnBranchId = 'branch_Id';
   static const String columnBranchName = 'branchName';
   static const String columnEmpId = 'emp_id';
+  static const String columnIsDemo = 'isDemo';
 
   CompanyInfoResponseModel.fromJson(Map<String, dynamic> json) {
     companyName = json['companyName'];
@@ -94,6 +97,7 @@ class CompanyInfoResponseModel {
     compId = json['comp_Id'];
     empId = json['emp_id'];
     addClient = json['addClient'];
+    isDemo = json['isDemo'];
   }
 
   CompanyInfoResponseModel.fromJsonEdit(Map<String, dynamic> json) {
@@ -119,6 +123,7 @@ class CompanyInfoResponseModel {
     compId = json['comp_Id'];
     empId = json['emp_id'];
     addClient = json['addClient'] == 1 ? true : false;
+    isDemo = json['isDemo'] == 1 ? true : false;
   }
 
   Map<String, dynamic> toJson() {
@@ -145,6 +150,7 @@ class CompanyInfoResponseModel {
     data['comp_Id'] = this.compId;
     data['emp_id'] = this.empId;
     data['addClient'] = this.addClient;
+    data['isDemo'] = this.isDemo;
     return data;
   }
 }

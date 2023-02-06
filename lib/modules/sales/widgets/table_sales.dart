@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:group_radio_button/group_radio_button.dart';
 import 'dart:io';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 
@@ -103,93 +104,538 @@ class _TableSalesState extends State<TableSales> {
 
   TextEditingController? quantityController;
   var _keyQuantity = GlobalKey<FormState>();
-  var priceChosen = "price1";
 
+  //! Todo
 
-    //! Todo
-
-  Widget showDialogAboutQuantity(BuildContext context, int index) {
+  showDialogAboutQuantity(BuildContext context, int index) {
     quantityController = TextEditingController(
         text: DataCubit.get(context)
             .itemsCurrentOrder[index]
             .quantity
             .toString());
-    return Dialog(
-      child: Container(
-        width: Get.width * .7,
-        height: Get.height * .5,
-        margin: const EdgeInsets.all(5),
-        child: Form(
-          key: _keyQuantity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                getLang(context).prodcut,
-                style: AppTextStyle.bodyText(),
-              ),
-              DefaultTextField(
-                labelText: getLang(context).quantity,
-                controller: quantityController,
-                lines: 1,
-                keyboardType: TextInputType.number,
-                onChanged: (p0) {
-                  _keyQuantity.currentState!.validate();
-                },
-                validator: (p0) {
-                  if (p0!.isEmpty) {
-                    return getLang(context).cannotbeempty;
-                  }
-                },
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                        width: Get.width,
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: const Color.fromARGB(255, 221, 221, 221)),
-                        child: Text(
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        String? _selectedPrice = DataCubit.get(context)
+                    .itemsCurrentOrder[index]
+                    .unitPrice ==
+                DataCubit.get(context)
+                    .productsCurrentOrder
+                    .where((element) =>
+                        element.prodId ==
+                        DataCubit.get(context).itemsCurrentOrder[index].prodId)
+                    .first
+                    .priceOne
+            ? "price1"
+            : DataCubit.get(context).itemsCurrentOrder[index].unitPrice ==
+                    DataCubit.get(context)
+                        .productsCurrentOrder
+                        .where((element) =>
+                            element.prodId ==
                             DataCubit.get(context)
-                                .productsCurrentOrder
-                                .where((element) =>
-                                    element.prodId ==
+                                .itemsCurrentOrder[index]
+                                .prodId)
+                        .first
+                        .priceTwo
+                ? "price2"
+                : DataCubit.get(context).itemsCurrentOrder[index].unitPrice ==
+                        DataCubit.get(context)
+                            .productsCurrentOrder
+                            .where((element) =>
+                                element.prodId ==
+                                DataCubit.get(context)
+                                    .itemsCurrentOrder[index]
+                                    .prodId)
+                            .first
+                            .priceThree
+                    ? "price3"
+                    : "price1";
+        return AlertDialog(
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Container(
+                width: Get.width * .8,
+                height: Get.height * .5,
+                child: Form(
+                  key: _keyQuantity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        getLang(context).prodcut,
+                        style: AppTextStyle.bodyText(),
+                      ),
+                      DefaultTextField(
+                        labelText: getLang(context).quantity,
+                        controller: quantityController,
+                        lines: 1,
+                        keyboardType: TextInputType.number,
+                        onChanged: (p0) {
+                          _keyQuantity.currentState!.validate();
+                        },
+                        validator: (p0) {
+                          if (p0!.isEmpty) {
+                            return getLang(context).cannotbeempty;
+                          }
+                        },
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                                width: Get.width,
+                                padding: EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: const Color.fromARGB(
+                                        255, 221, 221, 221)),
+                                child: Text(
                                     DataCubit.get(context)
-                                        .itemsCurrentOrder[index]
-                                        .prodId)
-                                .first
-                                .priceOne
-                                .toString(),
-                            style: AppTextStyle.bodyText())),
+                                        .productsCurrentOrder
+                                        .where((element) =>
+                                            element.prodId ==
+                                            DataCubit.get(context)
+                                                .itemsCurrentOrder[index]
+                                                .prodId)
+                                        .first
+                                        .priceOne
+                                        .toString(),
+                                    style: AppTextStyle.bodyText())),
+                          ),
+                          Expanded(
+                            child: RadioListTile<String>(
+                              title: Text(
+                                getLang(context).priceone,
+                                style: AppTextStyle.caption(),
+                              ),
+                              value: 'price1',
+                              groupValue: _selectedPrice,
+                              onChanged: (String? value) {
+                                setState(() => _selectedPrice = value);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                                width: Get.width,
+                                padding: EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: const Color.fromARGB(
+                                        255, 221, 221, 221)),
+                                child: Text(
+                                    DataCubit.get(context)
+                                        .productsCurrentOrder
+                                        .where((element) =>
+                                            element.prodId ==
+                                            DataCubit.get(context)
+                                                .itemsCurrentOrder[index]
+                                                .prodId)
+                                        .first
+                                        .priceTwo
+                                        .toString(),
+                                    style: AppTextStyle.bodyText())),
+                          ),
+                          Expanded(
+                            child: RadioListTile<String>(
+                              title: Text(
+                                getLang(context).pricetwo,
+                                style: AppTextStyle.caption(),
+                              ),
+                              value: 'price2',
+                              groupValue: _selectedPrice,
+                              onChanged: (String? value) {
+                                setState(() => _selectedPrice = value);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                                width: Get.width,
+                                padding: EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: const Color.fromARGB(
+                                        255, 221, 221, 221)),
+                                child: Text(
+                                    DataCubit.get(context)
+                                        .productsCurrentOrder
+                                        .where((element) =>
+                                            element.prodId ==
+                                            DataCubit.get(context)
+                                                .itemsCurrentOrder[index]
+                                                .prodId)
+                                        .first
+                                        .priceThree
+                                        .toString(),
+                                    style: AppTextStyle.bodyText())),
+                          ),
+                          Expanded(
+                            child: RadioListTile<String>(
+                              title: Text(
+                                getLang(context).pricethree,
+                                style: AppTextStyle.caption(),
+                              ),
+                              value: 'price3',
+                              groupValue: _selectedPrice,
+                              onChanged: (String? value) {
+                                setState(() => _selectedPrice = value);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      DefaultButton(
+                        onPress: () {
+                          double price = _selectedPrice == "price1"
+                              ? DataCubit.get(context)
+                                  .productsCurrentOrder
+                                  .where((element) =>
+                                      element.prodId ==
+                                      DataCubit.get(context)
+                                          .itemsCurrentOrder[index]
+                                          .prodId)
+                                  .first
+                                  .priceOne!
+                              : _selectedPrice == "price2"
+                                  ? DataCubit.get(context)
+                                      .productsCurrentOrder
+                                      .where((element) =>
+                                          element.prodId ==
+                                          DataCubit.get(context)
+                                              .itemsCurrentOrder[index]
+                                              .prodId)
+                                      .first
+                                      .priceTwo!
+                                  : _selectedPrice == "price3"
+                                      ? DataCubit.get(context)
+                                          .productsCurrentOrder
+                                          .where((element) =>
+                                              element.prodId ==
+                                              DataCubit.get(context)
+                                                  .itemsCurrentOrder[index]
+                                                  .prodId)
+                                          .first
+                                          .priceThree!
+                                      : 0;
+
+                          int quanitiy =
+                              int.parse(quantityController!.text.toString());
+
+                          DataCubit.get(context).changeProductDesc(
+                              quantity: quanitiy, price: price, index: index);
+
+                          Get.back();
+                        },
+                        buttonText: "save",
+                        buttonHeight: 50,
+                      )
+                    ],
                   ),
-                  Expanded(
-                    child: RadioListTile(
-                      title: Text(getLang(context).priceone),
-                      value: "price1",
-                      groupValue: "price",
-                      onChanged: (value) async {
-                        await DataCubit.get(context).changePrice();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                ),
+              );
+              // return Column(
+              //   mainAxisSize: MainAxisSize.min,
+              //   children: List<Widget>.generate(4, (int index) {
+              // return Radio<int>(
+              //   value: index,
+              //   groupValue: selectedRadio,
+              //   onChanged: (int? value) {
+              //     setState(() => selectedRadio = value!);
+              //   },
+              // );
+              //   }),
+              // );
+            },
           ),
-        ),
-      ),
+        );
+      },
     );
+
+    // String _chosenPrice = "price1";
+    // // DataCubit.get(context).itemsCurrentOrder[index].unitPrice.toString();
+
+    // return Dialog(
+    //   child: Container(
+    //       width: Get.width * .7,
+    //       height: Get.height * .5,
+    //       margin: const EdgeInsets.all(20),
+    //       child: BlocBuilder<DataCubit, DataState>(
+    //         builder: (context, state) {
+    //           return Form(
+    //             key: _keyQuantity,
+    //             child: Column(
+    //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //               children: [
+    //                 Text(
+    //                   getLang(context).prodcut,
+    //                   style: AppTextStyle.bodyText(),
+    //                 ),
+    //                 DefaultTextField(
+    //                   labelText: getLang(context).quantity,
+    //                   controller: quantityController,
+    //                   lines: 1,
+    //                   keyboardType: TextInputType.number,
+    //                   onChanged: (p0) {
+    //                     _keyQuantity.currentState!.validate();
+    //                   },
+    //                   validator: (p0) {
+    //                     if (p0!.isEmpty) {
+    //                       return getLang(context).cannotbeempty;
+    //                     }
+    //                   },
+    //                 ),
+
+    //                 RadioButton<String>(
+    //                     description: "price 1",
+    //                     value: "price1",
+    //                     groupValue: _chosenPrice,
+    //                     onChanged: (value) {
+    //                       setState(
+    //                         () {
+    //                           _chosenPrice = value!;
+    //                         },
+    //                       );
+    //                     }),
+    //                 RadioButton<String>(
+    //                     description: "price 2",
+    //                     value: "price2",
+    //                     groupValue: _chosenPrice,
+    //                     onChanged: (value) {
+    //                       setState(
+    //                         () {
+    //                           _chosenPrice = value!;
+    //                         },
+    //                       );
+    //                     }),
+    //                 RadioButton<String>(
+    //                     description: "price 3",
+    //                     value: "price3",
+    //                     groupValue: _chosenPrice,
+    //                     onChanged: (value) {
+    //                       setState(
+    //                         () {
+    //                           _chosenPrice = value!;
+    //                         },
+    //                       );
+    //                     }),
+    // Row(
+    //   children: [
+    //     Expanded(
+    //       child: Container(
+    //           width: Get.width,
+    //           padding: EdgeInsets.all(15),
+    //           decoration: BoxDecoration(
+    //               borderRadius: BorderRadius.circular(16),
+    //               color:
+    //                   const Color.fromARGB(255, 221, 221, 221)),
+    //           child: Text(
+    // DataCubit.get(context)
+    //     .productsCurrentOrder
+    //     .where((element) =>
+    //         element.prodId ==
+    //         DataCubit.get(context)
+    //             .itemsCurrentOrder[index]
+    //             .prodId)
+    //     .first
+    //     .priceOne
+    //                   .toString(),
+    //               style: AppTextStyle.bodyText())),
+    //     ),
+    //     Expanded(
+    //       child: RadioListTile(
+    //         // selected: DataCubit.get(context).chosenPrice ==
+    //         //     DataCubit.get(context)
+    //         //         .productsCurrentOrder
+    //         //         .where((element) =>
+    //         //             element.prodId ==
+    //         //             DataCubit.get(context)
+    //         //                 .itemsCurrentOrder[index]
+    //         //                 .prodId)
+    //         //         .first
+    //         //         .priceOne
+    //         //         .toString(),
+    //         title: Text(
+    //           getLang(context).priceone,
+    //           style: AppTextStyle.caption(),
+    //         ),
+    // value: DataCubit.get(context)
+    //     .productsCurrentOrder
+    //     .where((element) =>
+    //         element.prodId ==
+    //         DataCubit.get(context)
+    //             .itemsCurrentOrder[index]
+    //             .prodId)
+    //     .first
+    //     .priceOne
+    //     .toString(),
+    //         groupValue: DataCubit.get(context).chosenPrice,
+    //         onChanged: (value) async {
+    //           await DataCubit.get(context).changePrice(
+    //               index, double.parse(value.toString()));
+    //         },
+    //       ),
+    //     ),
+    //   ],
+    // ),
+    // Row(
+    //   children: [
+    //     Expanded(
+    //       child: Container(
+    //           width: Get.width,
+    //           padding: EdgeInsets.all(15),
+    //           decoration: BoxDecoration(
+    //               borderRadius: BorderRadius.circular(16),
+    //               color:
+    //                   const Color.fromARGB(255, 221, 221, 221)),
+    //           child: Text(
+    //               DataCubit.get(context)
+    //                   .productsCurrentOrder
+    //                   .where((element) =>
+    //                       element.prodId ==
+    //                       DataCubit.get(context)
+    //                           .itemsCurrentOrder[index]
+    //                           .prodId)
+    //                   .first
+    //                   .priceTwo
+    //                   .toString(),
+    //               style: AppTextStyle.bodyText())),
+    //     ),
+    //     Expanded(
+    //       child: RadioListTile(
+    //         // selected: DataCubit.get(context).chosenPrice ==
+    //         //     DataCubit.get(context)
+    //         //         .productsCurrentOrder
+    //         //         .where((element) =>
+    //         //             element.prodId ==
+    //         //             DataCubit.get(context)
+    //         //                 .itemsCurrentOrder[index]
+    //         //                 .prodId)
+    //         //         .first
+    //         //         .priceTwo
+    //         //         .toString(),
+    //         title: Text(
+    //           getLang(context).pricetwo,
+    //           style: AppTextStyle.caption(),
+    //         ),
+    //         value: DataCubit.get(context)
+    //             .productsCurrentOrder
+    //             .where((element) =>
+    //                 element.prodId ==
+    //                 DataCubit.get(context)
+    //                     .itemsCurrentOrder[index]
+    //                     .prodId)
+    //             .first
+    //             .priceTwo
+    //             .toString(),
+    //         groupValue: DataCubit.get(context).chosenPrice,
+    //         onChanged: (value) async {
+    //           await DataCubit.get(context).changePrice(
+    //               index, double.parse(value.toString()));
+    //         },
+    //       ),
+    //     ),
+    //   ],
+    // ),
+    // Row(
+    //   children: [
+    //     Expanded(
+    //       child: Container(
+    //           width: Get.width,
+    //           padding: EdgeInsets.all(15),
+    //           decoration: BoxDecoration(
+    //               borderRadius: BorderRadius.circular(16),
+    //               color:
+    //                   const Color.fromARGB(255, 221, 221, 221)),
+    //           child: Text(
+    //               DataCubit.get(context)
+    //                   .productsCurrentOrder
+    //                   .where((element) =>
+    //                       element.prodId ==
+    //                       DataCubit.get(context)
+    //                           .itemsCurrentOrder[index]
+    //                           .prodId)
+    //                   .first
+    //                   .priceThree
+    //                   .toString(),
+    //               style: AppTextStyle.bodyText())),
+    //     ),
+    //     Expanded(
+    //       child: RadioListTile(
+    //         title: Text(
+    //           getLang(context).pricethree,
+    //           style: AppTextStyle.caption(),
+    //         ),
+    //         // selected: DataCubit.get(context).chosenPrice ==
+    //         //     DataCubit.get(context)
+    //         //         .productsCurrentOrder
+    //         //         .where((element) =>
+    //         //             element.prodId ==
+    //         //             DataCubit.get(context)
+    //         //                 .itemsCurrentOrder[index]
+    //         //                 .prodId)
+    //         //         .first
+    //         //         .priceThree
+    //         //         .toString(),
+    //         value: DataCubit.get(context)
+    //             .productsCurrentOrder
+    //             .where((element) =>
+    //                 element.prodId ==
+    //                 DataCubit.get(context)
+    //                     .itemsCurrentOrder[index]
+    //                     .prodId)
+    //             .first
+    //             .priceThree
+    //             .toString(),
+    //         groupValue: DataCubit.get(context).chosenPrice,
+    //         onChanged: (value) async {
+    //           await DataCubit.get(context).changePrice(
+    //               index, double.parse(value.toString()));
+    //         },
+    //       ),
+    //     ),
+    //   ],
+    // ),
+
+    //                 DefaultButton(
+    //                   onPress: () {},
+    //                   buttonText: "save",
+    //                   buttonHeight: 50,
+    //                 )
+    //               ],
+    //             ),
+    //           );
+    //         },
+    //       )),
+    // );
   }
 
   Widget _generateRightHandSideColumnRow(BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
-        Get.dialog(
-          showDialogAboutQuantity(context, index),
-          // barrierDismissible: false,
-        );
+        showDialogAboutQuantity(context, index);
+        // showDialog(
+        //   context: context,
+        //   builder: (context) {
+        //     return StatefulBuilder(
+        //       builder: (BuildContext context, setState) {
+        //         return showDialogAboutQuantity(context, index, setState);
+        //       },
+        //     );
+        //   },
+        // );
+        // Get.dialog(
+        //   ,
+        //   // barrierDismissible: false,
+        // );
       },
       child: Row(
         children: [

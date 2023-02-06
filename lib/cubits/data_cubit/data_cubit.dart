@@ -1000,7 +1000,8 @@ class DataCubit extends Cubit<DataState> {
       "${CompanyInfoResponseModel.columnCompTaxNumber}" TEXT ,
       "${CompanyInfoResponseModel.columnCompTaxAmount}" TEXT ,
       "${CompanyInfoResponseModel.columnCurrencyName}" TEXT ,
-      "${CompanyInfoResponseModel.columnTaxAmount}" TEXT
+      "${CompanyInfoResponseModel.columnTaxAmount}" TEXT ,
+      "${CompanyInfoResponseModel.columnIsDemo}" INTEGER
     )
     ''');
   }
@@ -1031,7 +1032,8 @@ class DataCubit extends Cubit<DataState> {
       "${CompanyInfoResponseModel.columnCompTaxNumber}",
       "${CompanyInfoResponseModel.columnCompTaxAmount}",
       "${CompanyInfoResponseModel.columnCurrencyName}",
-      "${CompanyInfoResponseModel.columnTaxAmount}")
+      "${CompanyInfoResponseModel.columnTaxAmount}",
+      "${CompanyInfoResponseModel.columnIsDemo}")
           VALUES (
             '${item.compId}',
           '${item.isMustChoosePayCash! ? 1 : 0}',
@@ -1054,7 +1056,8 @@ class DataCubit extends Cubit<DataState> {
           '${item.compTaxNumber}',
           '${item.compTaxAmount}',
           '${item.compCurrencyName}',
-          '${item.taxAmount}'
+          '${item.taxAmount}',
+          '${item.isDemo! ? 1 : 0}'
           )
           ''');
     } catch (e) {
@@ -1315,12 +1318,58 @@ class DataCubit extends Cubit<DataState> {
     });
     calcDiscount();
 
-    emit(AddQuantityProdcutSuccess());  
+    emit(AddQuantityProdcutSuccess());
   }
 
+  changeProductDesc(
+      {required int quantity, required double price, required int index}) {
+    changeQuantity(index, quantity);
+    changePrice(index, price);
+  }
 
-    //! Todo
-  changePrice() {
+  changeQuantity(int index, int quan) {
+    itemsCurrentOrder[index].quantity = quan;
+    itemsCurrentOrder[index].totalCost = itemsCurrentOrder[index].quantity! *
+        itemsCurrentOrder[index].unitPrice!;
+
+    productModels[productModels.indexWhere(
+            (element) => element.prodId == itemsCurrentOrder[index].prodId)]
+        .stockQuantity = productModels[productModels.indexWhere(
+                (element) => element.prodId == itemsCurrentOrder[index].prodId)]
+            .stockQuantity! -
+        quan;
+
+    total = 0;
+    itemsCurrentOrder.forEach((element) {
+      total += element.totalCost!;
+    });
+
+    calcDiscount();
+
+    emit(ChangePriceChosen());
+  }
+
+  String? chosenPrice = "";
+  //! Todo
+  changePrice(int index, double price) {
+    chosenPrice = price.toString();
+    itemsCurrentOrder[index].unitPrice = price;
+    itemsCurrentOrder[index].totalCost = itemsCurrentOrder[index].quantity! *
+        itemsCurrentOrder[index].unitPrice!;
+
+    // productModels[productModels.indexWhere(
+    //         (element) => element.prodId == itemsCurrentOrder[index].prodId)]
+    //     .stockQuantity = productModels[productModels.indexWhere(
+    //             (element) => element.prodId == itemsCurrentOrder[index].prodId)]
+    //         .stockQuantity! -
+    //     quan;
+
+    total = 0;
+    itemsCurrentOrder.forEach((element) {
+      total += element.totalCost!;
+    });
+
+    calcDiscount();
     emit(ChangePriceChosen());
   }
 
