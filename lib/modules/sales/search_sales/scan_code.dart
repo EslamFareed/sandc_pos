@@ -90,19 +90,19 @@ class _ScanCodeScreenState extends State<ScanCodeScreen> {
       if (DataCubit.get(context).productsCurrentOrder.contains(
           DataCubit.get(context)
               .productModels
-              .where((element) => element.qrCode == scanData.code)
+              .where((element) => element.productNumber == scanData.code)
               .first)) {
         DataCubit.get(context).addQuantityProdcut(
             DataCubit.get(context)
                 .productModels
-                .where((element) => element.qrCode == scanData.code)
+                .where((element) => element.productNumber == scanData.code)
                 .first,
             context);
       } else {
         DataCubit.get(context).addNewProduct(
             DataCubit.get(context)
                 .productModels
-                .where((element) => element.qrCode == scanData.code)
+                .where((element) => element.productNumber == scanData.code)
                 .first,
             context);
       }
