@@ -196,7 +196,16 @@ class AddCustomer extends StatelessWidget {
               if (double.parse(amountOnHimController.text) <=
                       double.parse(maxDebitController.text) &&
                   int.parse(maxDebitBillsController.text) > 0) {
-                _saveOffline(context);
+                if (DataCubit.get(context).clientModels.length == 10 &&
+                    DataCubit.get(context).companyModels[0].isDemo!) {
+                  Get.showSnackbar(
+                    const GetSnackBar(
+                      title: "limited access",
+                    ),
+                  );
+                } else {
+                  _saveOffline(context);
+                }
               } else {
                 Get.showSnackbar(GetSnackBar(
                   message: getLang(context).createError,

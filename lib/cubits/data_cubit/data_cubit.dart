@@ -1405,42 +1405,50 @@ class DataCubit extends Cubit<DataState> {
   }
 
   addNewProduct(ProductResponseModel product, BuildContext context) {
-    emit(AddNewProductLoading());
+    if (clientModels.length == 10 && companyModels[0].isDemo!) {
+      Get.showSnackbar(
+        const GetSnackBar(
+          title: "limited access",
+        ),
+      );
+    } else {
+      emit(AddNewProductLoading());
 
-    Get.showSnackbar(const GetSnackBar(
-      message: "Product added successfully",
-      duration: Duration(milliseconds: 500),
-      animationDuration: Duration(milliseconds: 100),
-    ));
+      Get.showSnackbar(const GetSnackBar(
+        message: "Product added successfully",
+        duration: Duration(milliseconds: 500),
+        animationDuration: Duration(milliseconds: 100),
+      ));
 
-    productsCurrentOrder.add(product);
+      productsCurrentOrder.add(product);
 
-    itemsCurrentOrder.add(
-      GetInVoiceDetails(
-          id: Uuid().v4(),
-          isReturn: false,
-          orderID: currentOrder!.id,
-          prodId: product.prodId,
-          quantity: 1,
-          quantReturns: 0,
-          reasonForReturn: "no",
-          totalCost: product.priceOne!,
-          // (product.priceOne! *
-          //     (double.parse(companyModels[0].taxAmount!) / 100)),
-          unitPrice: product.priceOne,
-          updateDate: "no",
-          offlineDatabase: false,
-          updateDataBase: false),
-    );
-    product.stockQuantity = product.stockQuantity! - 1;
+      itemsCurrentOrder.add(
+        GetInVoiceDetails(
+            id: Uuid().v4(),
+            isReturn: false,
+            orderID: currentOrder!.id,
+            prodId: product.prodId,
+            quantity: 1,
+            quantReturns: 0,
+            reasonForReturn: "no",
+            totalCost: product.priceOne!,
+            // (product.priceOne! *
+            //     (double.parse(companyModels[0].taxAmount!) / 100)),
+            unitPrice: product.priceOne,
+            updateDate: "no",
+            offlineDatabase: false,
+            updateDataBase: false),
+      );
+      product.stockQuantity = product.stockQuantity! - 1;
 
-    total = 0;
-    itemsCurrentOrder.forEach((element) {
-      total += element.totalCost!;
-    });
-    calcDiscount();
+      total = 0;
+      itemsCurrentOrder.forEach((element) {
+        total += element.totalCost!;
+      });
+      calcDiscount();
 
-    emit(AddNewProductSuccess());
+      emit(AddNewProductSuccess());
+    }
   }
 }
 
