@@ -49,6 +49,8 @@ class SearchProdcutLoading extends DataState {}
 
 class AddQuantityProdcutLoading extends DataState {}
 
+class ChangePriceChosen extends DataState {}
+
 class AddQuantityProdcutSuccess extends DataState {}
 
 class AddNewProductLoading extends DataState {}

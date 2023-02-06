@@ -1315,7 +1315,13 @@ class DataCubit extends Cubit<DataState> {
     });
     calcDiscount();
 
-    emit(AddQuantityProdcutSuccess());
+    emit(AddQuantityProdcutSuccess());  
+  }
+
+
+    //! Todo
+  changePrice() {
+    emit(ChangePriceChosen());
   }
 
   addQuantityProdcut(ProductResponseModel product, BuildContext context) {
