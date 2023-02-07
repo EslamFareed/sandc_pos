@@ -1405,7 +1405,7 @@ class DataCubit extends Cubit<DataState> {
   }
 
   addNewProduct(ProductResponseModel product, BuildContext context) {
-    if (clientModels.length == 10 && companyModels[0].isDemo!) {
+    if (orderModels.length == 10 && companyModels[0].isDemo!) {
       Get.showSnackbar(
         const GetSnackBar(
           title: "limited access",
