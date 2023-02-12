@@ -1,4 +1,4 @@
-const BASE_URL = "http://project-pos.somee.com/api/";
+const BASE_URL = "http://testproject12.somee.com/api/";
 
 ///////////////////////////////////////////////////
 const LOGIN = "Login/login";
