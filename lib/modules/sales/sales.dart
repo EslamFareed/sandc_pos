@@ -246,196 +246,418 @@ class _SalesScreenState extends State<SalesScreen> {
       paidController!.text = "";
       restController!.text = "";
       DataCubit.get(context).chosenClient = null;
-      getx.Get.dialog(
-        Dialog(
-          child: BlocConsumer<DataCubit, DataState>(
-            listener: (context, state) {},
-            builder: (context, state) {
-              return Directionality(
-                textDirection: TextDirection.ltr,
-                child: Form(
-                  key: _keyFinishOrder,
-                  child: Container(
-                    margin: const EdgeInsets.all(5),
-                    width: getx.Get.width,
-                    height: getx.Get.height * .8,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Text(
-                            getLang(context).recietDetails,
-                            style: AppTextStyle.bodyText(),
-                          ),
-                          SizedBox(height: 15.h),
-                          FittedBox(
-                            child: RadioGroup<String>.builder(
-                              groupValue: DataCubit.get(context).isPayingCash!,
-                              direction: Axis.horizontal,
-                              onChanged: (value) {
-                                DataCubit.get(context)
-                                    .changeIsPayingCash(value);
-                              },
-                              items: ["Cash", "Deferred payment"],
-                              itemBuilder: (item) => RadioButtonBuilder(
-                                item,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 15.h),
-                          FittedBox(
-                            child: RadioGroup<String>.builder(
-                              groupValue: DataCubit.get(context).payingType!,
-                              direction: Axis.horizontal,
-                              onChanged: (value) {
-                                DataCubit.get(context).changePayingType(value);
-                              },
-                              items: DataCubit.get(context)
-                                  .payTypeModels
-                                  .map((e) => e.name!)
-                                  .toList(),
-                              itemBuilder: (item) => RadioButtonBuilder(
-                                item,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 15.h),
-                          Row(
+      showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          isDismissible: true,
+          builder: (BuildContext context) {
+            return DraggableScrollableSheet(
+                initialChildSize: 1, //set this as you want
+                maxChildSize: 1, //set this as you want
+                minChildSize: 1, //set this as you want
+                expand: true,
+                builder: (context, scrollController) {
+                  return Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Form(
+                      key: _keyFinishOrder,
+                      child: Container(
+                        margin: const EdgeInsets.all(5),
+                        // width: getx.Get.width,
+                        // height: getx.Get.height * .8,
+                        child: SingleChildScrollView(
+                          child: Column(
                             children: [
                               Text(
-                                getLang(context).total,
+                                getLang(context).recietDetails,
                                 style: AppTextStyle.bodyText(),
                               ),
-                              SizedBox(width: 10.w),
-                              Expanded(
-                                child: TextFormField(
-                                  controller: totalController,
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder()),
+                              SizedBox(height: 15.h),
+                              FittedBox(
+                                child: RadioGroup<String>.builder(
+                                  groupValue:
+                                      DataCubit.get(context).isPayingCash!,
+                                  direction: Axis.horizontal,
+                                  onChanged: (value) {
+                                    DataCubit.get(context)
+                                        .changeIsPayingCash(value);
+                                  },
+                                  items: ["Cash", "Deferred payment"],
+                                  itemBuilder: (item) => RadioButtonBuilder(
+                                    item,
+                                  ),
                                 ),
-                              )
-                            ],
-                          ),
-                          ElevatedButton(
-                              onPressed: () {
-                                paidController!.text = totalController!.text;
-                                restController!.text =
-                                    (double.parse(totalController!.text) -
+                              ),
+                              SizedBox(height: 15.h),
+                              FittedBox(
+                                child: RadioGroup<String>.builder(
+                                  groupValue:
+                                      DataCubit.get(context).payingType!,
+                                  direction: Axis.horizontal,
+                                  onChanged: (value) {
+                                    DataCubit.get(context)
+                                        .changePayingType(value);
+                                  },
+                                  items: DataCubit.get(context)
+                                      .payTypeModels
+                                      .map((e) => e.name!)
+                                      .toList(),
+                                  itemBuilder: (item) => RadioButtonBuilder(
+                                    item,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 15.h),
+                              Row(
+                                children: [
+                                  Text(
+                                    getLang(context).total,
+                                    style: AppTextStyle.bodyText(),
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: totalController,
+                                      keyboardType: TextInputType.number,
+                                      decoration: InputDecoration(
+                                          border: OutlineInputBorder()),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    paidController!.text =
+                                        totalController!.text;
+                                    restController!.text = (double.parse(
+                                                totalController!.text) -
                                             double.parse(paidController!.text))
                                         .toString();
-                              },
-                              child: Text(getLang(context).payAll)),
-                          SizedBox(height: 25.h),
-                          Row(
-                            children: [
-                              Text(
-                                getLang(context).paid,
-                                style: AppTextStyle.bodyText(),
-                              ),
-                              SizedBox(width: 10.w),
-                              Expanded(
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  controller: paidController,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return getLang(context)
-                                          .pleaseenterpaidamount;
-                                    }
                                   },
-                                  onChanged: (value) {
-                                    restController!.text =
-                                        (double.parse(totalController!.text) -
+                                  child: Text(getLang(context).payAll)),
+                              SizedBox(height: 25.h),
+                              Row(
+                                children: [
+                                  Text(
+                                    getLang(context).paid,
+                                    style: AppTextStyle.bodyText(),
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  Expanded(
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      controller: paidController,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return getLang(context)
+                                              .pleaseenterpaidamount;
+                                        }
+                                      },
+                                      onChanged: (value) {
+                                        restController!.text = (double.parse(
+                                                    totalController!.text) -
                                                 double.parse(value))
                                             .toString();
-                                  },
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder()),
-                                ),
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 25.h),
-                          Row(
-                            children: [
-                              Text(
-                                getLang(context).rest,
-                                style: AppTextStyle.bodyText(),
+                                      },
+                                      decoration: InputDecoration(
+                                          border: OutlineInputBorder()),
+                                    ),
+                                  )
+                                ],
                               ),
-                              SizedBox(width: 10.w),
-                              Expanded(
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  controller: restController,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder()),
-                                ),
+                              SizedBox(height: 25.h),
+                              Row(
+                                children: [
+                                  Text(
+                                    getLang(context).rest,
+                                    style: AppTextStyle.bodyText(),
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  Expanded(
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      controller: restController,
+                                      decoration: InputDecoration(
+                                          border: OutlineInputBorder()),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(height: 25.h),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(getLang(context).makerecietforcustomer),
+                                  GestureDetector(
+                                      onTap: () {
+                                        DataCubit.get(context)
+                                            .chooseClient(null);
+                                        getx.Get.to(AddCustomer(),
+                                            transition: getx.Transition.zoom);
+                                      },
+                                      child: Text(
+                                        getLang(context).newCustomer,
+                                        style: AppTextStyle.caption(),
+                                      )),
+                                ],
+                              ),
+                              DropdownButton<ClientResponseModel>(
+                                isExpanded: true,
+                                value: DataCubit.get(context).chosenClient,
+                                hint: Text(getLang(context).chooseCustomer),
+                                items: DataCubit.get(context)
+                                    .clientModels
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e.name!),
+                                        ))
+                                    .toList(),
+                                onChanged: (ClientResponseModel? value) {
+                                  DataCubit.get(context).chooseClient(value);
+                                },
+                              ),
+                              SizedBox(height: 25.h),
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: ElevatedButton(
+                                    child: Text(getLang(context).saveReciet),
+                                    onPressed: () async {
+                                      await _validateAndFinishOrder();
+                                    },
+                                  )),
+                                  SizedBox(width: 10.w),
+                                  Expanded(
+                                      child: ElevatedButton(
+                                    child: Text(getLang(context).cancel),
+                                    onPressed: () {
+                                      getx.Get.back();
+                                    },
+                                  ))
+                                ],
                               )
                             ],
                           ),
-                          SizedBox(height: 25.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(getLang(context).makerecietforcustomer),
-                              GestureDetector(
-                                  onTap: () {
-                                    DataCubit.get(context).chooseClient(null);
-                                    getx.Get.to(AddCustomer(),
-                                        transition: getx.Transition.zoom);
-                                  },
-                                  child: Text(
-                                    getLang(context).newCustomer,
-                                    style: AppTextStyle.caption(),
-                                  )),
-                            ],
-                          ),
-                          DropdownButton<ClientResponseModel>(
-                            isExpanded: true,
-                            value: DataCubit.get(context).chosenClient,
-                            hint: Text(getLang(context).chooseCustomer),
-                            items: DataCubit.get(context)
-                                .clientModels
-                                .map((e) => DropdownMenuItem(
-                                      value: e,
-                                      child: Text(e.name!),
-                                    ))
-                                .toList(),
-                            onChanged: (ClientResponseModel? value) {
-                              DataCubit.get(context).chooseClient(value);
-                            },
-                          ),
-                          SizedBox(height: 25.h),
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: ElevatedButton(
-                                child: Text(getLang(context).saveReciet),
-                                onPressed: () async {
-                                  await _validateAndFinishOrder();
-                                },
-                              )),
-                              SizedBox(width: 10.w),
-                              Expanded(
-                                  child: ElevatedButton(
-                                child: Text(getLang(context).cancel),
-                                onPressed: () {
-                                  getx.Get.back();
-                                },
-                              ))
-                            ],
-                          )
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        barrierDismissible: false,
-      );
+                  );
+                });
+          });
+
+      // getx.Get.bottomSheet(BottomSheet(
+      //   enableDrag: true,
+      //   onClosing: () {},
+      //   builder: (context) {
+      //     return BlocConsumer<DataCubit, DataState>(
+      //       listener: (context, state) {},
+      //       builder: (context, state) {
+      //         return DraggableScrollableSheet(
+      //           initialChildSize: 0.75, //set this as you want
+      //           maxChildSize: 0.75, //set this as you want
+      //           minChildSize: 0.75, //set this as you want
+      //           expand: true,
+      //           builder: (context, scrollController) {
+      //             return Directionality(
+      //               textDirection: TextDirection.ltr,
+      //               child: Form(
+      //                 key: _keyFinishOrder,
+      //                 child: Container(
+      //                   margin: const EdgeInsets.all(5),
+      //                   // width: getx.Get.width,
+      //                   // height: getx.Get.height * .8,
+      //                   child: SingleChildScrollView(
+      //                     child: Column(
+      //                       children: [
+      //                         Text(
+      //                           getLang(context).recietDetails,
+      //                           style: AppTextStyle.bodyText(),
+      //                         ),
+      //                         SizedBox(height: 15.h),
+      //                         FittedBox(
+      //                           child: RadioGroup<String>.builder(
+      //                             groupValue:
+      //                                 DataCubit.get(context).isPayingCash!,
+      //                             direction: Axis.horizontal,
+      //                             onChanged: (value) {
+      //                               DataCubit.get(context)
+      //                                   .changeIsPayingCash(value);
+      //                             },
+      //                             items: ["Cash", "Deferred payment"],
+      //                             itemBuilder: (item) => RadioButtonBuilder(
+      //                               item,
+      //                             ),
+      //                           ),
+      //                         ),
+      //                         SizedBox(height: 15.h),
+      //                         FittedBox(
+      //                           child: RadioGroup<String>.builder(
+      //                             groupValue:
+      //                                 DataCubit.get(context).payingType!,
+      //                             direction: Axis.horizontal,
+      //                             onChanged: (value) {
+      //                               DataCubit.get(context)
+      //                                   .changePayingType(value);
+      //                             },
+      //                             items: DataCubit.get(context)
+      //                                 .payTypeModels
+      //                                 .map((e) => e.name!)
+      //                                 .toList(),
+      //                             itemBuilder: (item) => RadioButtonBuilder(
+      //                               item,
+      //                             ),
+      //                           ),
+      //                         ),
+      //                         SizedBox(height: 15.h),
+      //                         Row(
+      //                           children: [
+      //                             Text(
+      //                               getLang(context).total,
+      //                               style: AppTextStyle.bodyText(),
+      //                             ),
+      //                             SizedBox(width: 10.w),
+      //                             Expanded(
+      //                               child: TextFormField(
+      //                                 controller: totalController,
+      //                                 keyboardType: TextInputType.number,
+      //                                 decoration: InputDecoration(
+      //                                     border: OutlineInputBorder()),
+      //                               ),
+      //                             )
+      //                           ],
+      //                         ),
+      //                         ElevatedButton(
+      //                             onPressed: () {
+      //                               paidController!.text =
+      //                                   totalController!.text;
+      //                               restController!.text = (double.parse(
+      //                                           totalController!.text) -
+      //                                       double.parse(paidController!.text))
+      //                                   .toString();
+      //                             },
+      //                             child: Text(getLang(context).payAll)),
+      //                         SizedBox(height: 25.h),
+      //                         Row(
+      //                           children: [
+      //                             Text(
+      //                               getLang(context).paid,
+      //                               style: AppTextStyle.bodyText(),
+      //                             ),
+      //                             SizedBox(width: 10.w),
+      //                             Expanded(
+      //                               child: TextFormField(
+      //                                 keyboardType: TextInputType.number,
+      //                                 controller: paidController,
+      //                                 validator: (value) {
+      //                                   if (value!.isEmpty) {
+      //                                     return getLang(context)
+      //                                         .pleaseenterpaidamount;
+      //                                   }
+      //                                 },
+      //                                 onChanged: (value) {
+      //                                   restController!.text = (double.parse(
+      //                                               totalController!.text) -
+      //                                           double.parse(value))
+      //                                       .toString();
+      //                                 },
+      //                                 decoration: InputDecoration(
+      //                                     border: OutlineInputBorder()),
+      //                               ),
+      //                             )
+      //                           ],
+      //                         ),
+      //                         SizedBox(height: 25.h),
+      //                         Row(
+      //                           children: [
+      //                             Text(
+      //                               getLang(context).rest,
+      //                               style: AppTextStyle.bodyText(),
+      //                             ),
+      //                             SizedBox(width: 10.w),
+      //                             Expanded(
+      //                               child: TextFormField(
+      //                                 keyboardType: TextInputType.number,
+      //                                 controller: restController,
+      //                                 decoration: InputDecoration(
+      //                                     border: OutlineInputBorder()),
+      //                               ),
+      //                             )
+      //                           ],
+      //                         ),
+      //                         SizedBox(height: 25.h),
+      //                         Row(
+      //                           mainAxisAlignment:
+      //                               MainAxisAlignment.spaceAround,
+      //                           children: [
+      //                             Text(getLang(context).makerecietforcustomer),
+      //                             GestureDetector(
+      //                                 onTap: () {
+      //                                   DataCubit.get(context)
+      //                                       .chooseClient(null);
+      //                                   getx.Get.to(AddCustomer(),
+      //                                       transition: getx.Transition.zoom);
+      //                                 },
+      //                                 child: Text(
+      //                                   getLang(context).newCustomer,
+      //                                   style: AppTextStyle.caption(),
+      //                                 )),
+      //                           ],
+      //                         ),
+      //                         DropdownButton<ClientResponseModel>(
+      //                           isExpanded: true,
+      //                           value: DataCubit.get(context).chosenClient,
+      //                           hint: Text(getLang(context).chooseCustomer),
+      //                           items: DataCubit.get(context)
+      //                               .clientModels
+      //                               .map((e) => DropdownMenuItem(
+      //                                     value: e,
+      //                                     child: Text(e.name!),
+      //                                   ))
+      //                               .toList(),
+      //                           onChanged: (ClientResponseModel? value) {
+      //                             DataCubit.get(context).chooseClient(value);
+      //                           },
+      //                         ),
+      //                         SizedBox(height: 25.h),
+      //                         Row(
+      //                           children: [
+      //                             Expanded(
+      //                                 child: ElevatedButton(
+      //                               child: Text(getLang(context).saveReciet),
+      //                               onPressed: () async {
+      //                                 await _validateAndFinishOrder();
+      //                               },
+      //                             )),
+      //                             SizedBox(width: 10.w),
+      //                             Expanded(
+      //                                 child: ElevatedButton(
+      //                               child: Text(getLang(context).cancel),
+      //                               onPressed: () {
+      //                                 getx.Get.back();
+      //                               },
+      //                             ))
+      //                           ],
+      //                         )
+      //                       ],
+      //                     ),
+      //                   ),
+      //                 ),
+      //               ),
+      //             );
+      //           },
+      //         );
+      //       },
+      //     );
+      //   },
+      // ));
+
+      // getx.Get.dialog(
+      //   Dialog(
+      //     child: ,
+      //   ),
+      //   barrierDismissible: false,
+      // );
     } else {
       getx.Get.showSnackbar(getx.GetSnackBar(
         message: getLang(context).addSomeProducts,

@@ -5,6 +5,7 @@ import 'package:native_pdf_renderer/native_pdf_renderer.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sandc_pos/cubits/data_cubit/data_cubit.dart';
+import 'package:sandc_pos/reposetories/shared_pref/cache_helper.dart';
 
 import '../../../reposetories/shared_pref/cache_keys.dart';
 
@@ -14,7 +15,10 @@ class PdfConverter {
     PdfPage page = await doc.getPage(1);
 
     final PdfPageImage? pageImg = await page.render(
-        width: 575, height: page.height + 500, backgroundColor: "#ffffff");
+        width: (double.parse(CacheKeysManger.getPrinterWidthPaperFromCache()) *
+            (96 / 25.4)),
+        height: page.height,
+        backgroundColor: "#ffffff");
 
     if (pageImg != null) {
       // String path = (await getApplicationDocumentsDirectory()).path;
